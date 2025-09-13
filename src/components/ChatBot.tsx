@@ -484,5 +484,9 @@ export default function ChatBot() {
         </div>
       </div>
     </div>
+<<<<<<< HEAD
   );
+=======
+  )
+>>>>>>> 40b0503b668a8de297432e352abccaadffb61779
 }
