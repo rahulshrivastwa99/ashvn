@@ -181,3 +181,13 @@ To run from source:
 # Go >= 1.22
 go run . help
 ``` -->
+
+## make .env file in gloal directory
+
+### take env variable content form me and paste it into .env created file
+
+## then do npm install
+
+## npm install @supabase/supabase-js
+
+# then npm run dev
