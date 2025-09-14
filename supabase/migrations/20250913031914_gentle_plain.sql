@@ -200,6 +200,17 @@ ALTER TABLE forum_replies ENABLE ROW LEVEL SECURITY;
 ALTER TABLE mood_entries ENABLE ROW LEVEL SECURITY;
 ALTER TABLE chat_sessions ENABLE ROW LEVEL SECURITY;
 
+CREATE OR REPLACE FUNCTION is_counsellor_or_admin(uid uuid)
+RETURNS boolean
+LANGUAGE sql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+  SELECT role IN ('counsellor', 'admin')
+  FROM profiles
+  WHERE id = uid;
+$$;
+
 -- Create RLS policies for profiles
 CREATE POLICY "Users can read own profile"
   ON profiles
@@ -218,11 +229,8 @@ CREATE POLICY "Counsellors can read student profiles"
   FOR SELECT
   TO authenticated
   USING (
-    role = 'student' AND 
-    EXISTS (
-      SELECT 1 FROM profiles 
-      WHERE id = auth.uid() AND role IN ('counsellor', 'admin')
-    )
+    role = 'student'
+    AND is_counsellor_or_admin(auth.uid())
   );
 
 -- Create RLS policies for appointments
@@ -357,7 +365,7 @@ BEGIN
   INSERT INTO profiles (id, email, full_name, role)
   VALUES (
     NEW.id,
-    NEW.email,
+    COALESCE(NEW.email, NEW.raw_user_meta_data->>'email'),
     COALESCE(NEW.raw_user_meta_data->>'full_name', 'User'),
     COALESCE(NEW.raw_user_meta_data->>'role', 'student')::user_role
   );

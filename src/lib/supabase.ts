@@ -1,18 +1,24 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  global: {
+    headers: {
+      apikey: supabaseAnonKey,
+    },
+  },
+});
 
-export type UserRole = 'student' | 'counsellor' | 'admin'
+export type UserRole = "student" | "counsellor" | "admin";
 
 export interface Profile {
-  id: string
-  email: string
-  full_name: string
-  role: UserRole
-  institution_id?: string
-  created_at: string
-  updated_at: string
+  id: string;
+  email: string;
+  full_name: string;
+  role: UserRole;
+  institution_id?: string;
+  created_at: string;
+  updated_at: string;
 }
