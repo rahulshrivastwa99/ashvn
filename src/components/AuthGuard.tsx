@@ -1,6 +1,8 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import Auth from "./Auth";
+import GetStarted from "./GetStarted";
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -9,6 +11,7 @@ interface AuthGuardProps {
 
 export default function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
   const { user, profile, loading } = useAuth();
+  const location = useLocation();
 
   if (loading) {
     return (
@@ -21,8 +24,18 @@ export default function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
     );
   }
 
+  // Show GetStarted page for welcome route regardless of auth status
+  if (location.pathname === '/welcome') {
+    return <GetStarted />;
+  }
+
   if (!user || !profile) {
-    return <Auth />;
+    // If user is not authenticated and not on welcome page, redirect to welcome
+    if (location.pathname !== '/welcome') {
+      window.location.href = '/welcome';
+      return null;
+    }
+    return <GetStarted />;
   }
 
   if (allowedRoles && !allowedRoles.includes(profile.role)) {
