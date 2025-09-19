@@ -21,29 +21,86 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
+const navItems = [
+  {
+    name: "Dashboard",
+    href: "/",
+    icon: BarChart3,
+    allowedRoles: ["admin", "student", "counsellor"],
+  },
+  {
+    name: "AI Assistant",
+    href: "/chat",
+    icon: MessageCircle,
+    allowedRoles: ["admin", "student", "counsellor"],
+  },
+  {
+    name: "Appointments",
+    href: "/appointments",
+    icon: Calendar,
+    allowedRoles: ["admin", "counsellor"],
+  },
+  {
+    name: "Mood Tracker",
+    href: "/mood",
+    icon: Activity,
+    allowedRoles: ["admin", "student"],
+  },
+  {
+    name: "Resources",
+    href: "/resources",
+    icon: BookOpen,
+    allowedRoles: ["admin", "student", "counsellor"],
+  },
+  {
+    name: "Peer Support",
+    href: "/forum",
+    icon: Heart,
+    allowedRoles: ["admin", "student", "counsellor"],
+  },
+  {
+    name: "Crisis Support",
+    href: "/crisis",
+    icon: AlertTriangle,
+    allowedRoles: ["admin", "student", "counsellor"],
+  },
+  {
+    name: "Profile",
+    href: "/profile",
+    icon: User,
+    allowedRoles: ["admin", "student", "counsellor"],
+  },
+  { name: "Students", href: "/students", icon: User, allowedRoles: ["admin"] },
+  {
+    name: "Analytics",
+    href: "/analytics",
+    icon: BarChart3,
+    allowedRoles: ["admin"],
+  },
+  {
+    name: "ML Insights",
+    href: "/ml-insights",
+    icon: Brain,
+    allowedRoles: ["admin"],
+  },
+  { name: "Users", href: "/users", icon: User, allowedRoles: ["admin"] },
+  {
+    name: "Settings",
+    href: "/settings",
+    icon: Settings,
+    allowedRoles: ["admin", "student", "counsellor"],
+  },
+];
+
 export default function Layout({ children }: LayoutProps) {
   const { profile, signOut } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
+  const role = profile?.role || "student"; // default for safety
 
-  const getNavItems = () => {
-    // Sabhi routes bina role check ke show karenge
-    return [
-      { name: "Dashboard", href: "/", icon: BarChart3 },
-      { name: "AI Assistant", href: "/chat", icon: MessageCircle },
-      { name: "Appointments", href: "/appointments", icon: Calendar },
-      { name: "Mood Tracker", href: "/mood", icon: Activity },
-      { name: "Resources", href: "/resources", icon: BookOpen },
-      { name: "Peer Support", href: "/forum", icon: Heart },
-      { name: "Crisis Support", href: "/crisis", icon: AlertTriangle },
-      { name: "Profile", href: "/profile", icon: User },
-      { name: "Students", href: "/students", icon: User },
-      { name: "Analytics", href: "/analytics", icon: BarChart3 },
-      { name: "ML Insights", href: "/ml-insights", icon: Brain },
-      { name: "Users", href: "/users", icon: User },
-      { name: "Settings", href: "/settings", icon: Settings },
-    ];
-  };
+  const filteredNavItems = navItems.filter((item) =>
+    item.allowedRoles.includes(role)
+  );
 
   const handleLogout = async () => {
     try {
@@ -52,8 +109,6 @@ export default function Layout({ children }: LayoutProps) {
       console.error("Error signing out:", error);
     }
   };
-
-  const navItems = getNavItems();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -78,7 +133,7 @@ export default function Layout({ children }: LayoutProps) {
             </div>
             <div className="p-4">
               <div className="space-y-2">
-                {navItems.map((item) => (
+                {filteredNavItems.map((item) => (
                   <Link
                     key={item.name}
                     to={item.href}
@@ -115,7 +170,7 @@ export default function Layout({ children }: LayoutProps) {
         </div>
         <div className="flex-1 p-4">
           <div className="space-y-2">
-            {navItems.map((item) => (
+            {filteredNavItems.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
