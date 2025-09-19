@@ -108,7 +108,7 @@ export default function Layout({ children }: LayoutProps) {
       )}
 
       {/* Desktop sidebar */}
-      <nav className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col bg-white shadow-lg">
+      <nav className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col bg-white shadow-lg h-screen overflow-y-auto">
         <div className="p-6 border-b">
           <h1 className="text-2xl font-bold text-teal-600">Ashvaan</h1>
           <p className="text-sm text-gray-600 mt-1">Mental Health Support</p>
