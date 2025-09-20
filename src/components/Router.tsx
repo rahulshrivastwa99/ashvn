@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import GetStarted from "./GetStarted";
 import Layout from "./Layout";
 import Dashboard from "./Dashboard";
-import ChatBot from "./ChatBot";
+import Assitant from "./Assitant";
 import Appointments from "./Appointments";
 import Resources from "./Resources";
 import Forum from "./Forum";
@@ -19,52 +19,55 @@ export default function Router() {
     <Routes>
       {/* Public routes - no layout needed */}
       <Route path="/welcome" element={<GetStarted />} />
-      
+
       {/* Protected routes with layout */}
-      <Route path="/*" element={
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
+      <Route
+        path="/*"
+        element={
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
 
-            {/* All routes accessible after login */}
-            <Route path="/chat" element={<ChatBot />} />
-            <Route path="/appointments" element={<Appointments />} />
-            <Route path="/resources" element={<Resources />} />
-            <Route path="/forum" element={<Forum />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/mood" element={<MoodTracker />} />
-            <Route path="/crisis" element={<CrisisSupport />} />
-            <Route
-              path="/students"
-              element={
-                <div className="p-6">
-                  <h1 className="text-2xl font-bold">Students Management</h1>
-                  <p className="text-gray-600">
-                    Manage your assigned students and their progress.
-                  </p>
-                </div>
-              }
-            />
-            <Route path="/analytics" element={<Analytics />} />
-            <Route
-              path="/users"
-              element={
-                <div className="p-6">
-                  <h1 className="text-2xl font-bold">User Management</h1>
-                  <p className="text-gray-600">
-                    Manage platform users and permissions.
-                  </p>
-                </div>
-              }
-            />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/ml-insights" element={<MLInsights />} />
+              {/* All routes accessible after login */}
+              <Route path="/chat" element={<Assitant />} />
+              <Route path="/appointments" element={<Appointments />} />
+              <Route path="/resources" element={<Resources />} />
+              <Route path="/forum" element={<Forum />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/mood" element={<MoodTracker />} />
+              <Route path="/crisis" element={<CrisisSupport />} />
+              <Route
+                path="/students"
+                element={
+                  <div className="p-6">
+                    <h1 className="text-2xl font-bold">Students Management</h1>
+                    <p className="text-gray-600">
+                      Manage your assigned students and their progress.
+                    </p>
+                  </div>
+                }
+              />
+              <Route path="/analytics" element={<Analytics />} />
+              <Route
+                path="/users"
+                element={
+                  <div className="p-6">
+                    <h1 className="text-2xl font-bold">User Management</h1>
+                    <p className="text-gray-600">
+                      Manage platform users and permissions.
+                    </p>
+                  </div>
+                }
+              />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/ml-insights" element={<MLInsights />} />
 
-            {/* Redirect unknown routes */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </Layout>
-      } />
+              {/* Redirect unknown routes */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </Layout>
+        }
+      />
     </Routes>
   );
 }
