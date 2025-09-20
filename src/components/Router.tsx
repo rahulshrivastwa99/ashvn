@@ -4,6 +4,7 @@ import GetStarted from "./GetStarted";
 import Layout from "./Layout";
 import Dashboard from "./Dashboard";
 import Assitant from "./Assitant";
+import ChatBot from "./ChatBot";
 import Appointments from "./Appointments";
 import Resources from "./Resources";
 import Forum from "./Forum";
@@ -30,6 +31,7 @@ export default function Router() {
 
               {/* All routes accessible after login */}
               <Route path="/chat" element={<Assitant />} />
+              <Route path="/chatbot" element={<ChatBot />} />
               <Route path="/appointments" element={<Appointments />} />
               <Route path="/resources" element={<Resources />} />
               <Route path="/forum" element={<Forum />} />
