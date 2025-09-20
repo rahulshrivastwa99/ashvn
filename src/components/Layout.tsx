@@ -15,6 +15,7 @@ import {
   Settings,
   LogOut,
   User,
+  Bot,
 } from "lucide-react";
 
 interface LayoutProps {
@@ -32,6 +33,12 @@ const navItems = [
     name: "AI Assistant",
     href: "/chat",
     icon: MessageCircle,
+    allowedRoles: ["admin", "student", "counsellor"],
+  },
+  {
+    name: "Chatbot",
+    href: "/chatbot",
+    icon: Bot,
     allowedRoles: ["admin", "student", "counsellor"],
   },
   {
