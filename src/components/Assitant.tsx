@@ -53,7 +53,7 @@ const assessmentQuestions = {
   ],
 };
 
-export default function ChatBot() {
+export default function Assitant() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
