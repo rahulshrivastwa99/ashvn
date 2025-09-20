@@ -1,7 +1,15 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { Heart, Shield, Users, Brain, MessageCircle, Calendar, BookOpen, AlertTriangle } from "lucide-react";
+import {
+  Heart,
+  Shield,
+  Users,
+  Brain,
+  MessageCircle,
+  Calendar,
+  BookOpen,
+  AlertTriangle,
+} from "lucide-react";
 
 export default function GetStarted() {
   const [showAuth, setShowAuth] = useState(false);
@@ -38,7 +46,7 @@ export default function GetStarted() {
       <div className="min-h-screen bg-gradient-to-br from-teal-50 to-blue-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
-            <div className="mx-auto h-16 w-16 bg-teal-600 rounded-full flex items-center justify-center">
+            <div className="mx-auto h-16 w-16 bg-teal-600 rounded-full flex items-center justify-center shadow-lg">
               <Heart className="h-8 w-8 text-white" />
             </div>
             <h1 className="mt-6 text-3xl font-bold text-gray-900">Ashvaan</h1>
@@ -47,7 +55,7 @@ export default function GetStarted() {
             </p>
           </div>
 
-          <div className="bg-white py-8 px-6 shadow-lg rounded-lg">
+          <div className="bg-white py-8 px-6 shadow-xl rounded-lg border border-gray-100">
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="flex border-b border-gray-200">
                 <button
@@ -93,7 +101,7 @@ export default function GetStarted() {
                     name="fullName"
                     type="text"
                     required={!isLogin}
-                    className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-teal-500 focus:border-teal-500 focus:z-10 sm:text-sm"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
                     placeholder="Enter your full name"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
@@ -114,7 +122,7 @@ export default function GetStarted() {
                   type="email"
                   autoComplete="email"
                   required
-                  className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-teal-500 focus:border-teal-500 focus:z-10 sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -134,7 +142,7 @@ export default function GetStarted() {
                   type="password"
                   autoComplete="current-password"
                   required
-                  className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-teal-500 focus:border-teal-500 focus:z-10 sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -166,7 +174,7 @@ export default function GetStarted() {
               <button
                 type="submit"
                 disabled={loading}
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="group relative w-full flex justify-center py-2 px-4 text-sm font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:opacity-50"
               >
                 {loading ? "Processing..." : isLogin ? "Sign In" : "Sign Up"}
               </button>
@@ -182,15 +190,15 @@ export default function GetStarted() {
             </div>
 
             <div className="mt-6 grid grid-cols-3 gap-3 text-center text-xs text-gray-500">
-              <div className="flex items-center">
+              <div className="flex items-center justify-center">
                 <Shield className="h-4 w-4 mr-1 text-teal-500" />
                 Secure
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center justify-center">
                 <Users className="h-4 w-4 mr-1 text-teal-500" />
                 Anonymous
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center justify-center">
                 <Heart className="h-4 w-4 mr-1 text-teal-500" />
                 Confidential
               </div>
@@ -204,7 +212,7 @@ export default function GetStarted() {
   return (
     <div className="text-gray-800 flex flex-col min-h-screen bg-gradient-to-b from-teal-50 via-white to-gray-50">
       {/* Navigation */}
-      <nav className="bg-white shadow-sm border-b border-gray-200">
+      <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow-md border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center">
@@ -235,156 +243,185 @@ export default function GetStarted() {
         </div>
       </nav>
 
-    <main className="relative flex flex-col items-center justify-between flex-1 px-6 py-16 overflow-hidden">
-      <div className="absolute top-10 left-10 text-6xl opacity-10">🧠</div>
-      <div className="absolute bottom-20 right-16 text-7xl opacity-10">❤️</div>
-      <div className="absolute top-40 right-1/3 text-5xl opacity-10">💬</div>
-      <div className="absolute bottom-10 left-1/4 text-6xl opacity-10">🤝</div>
+      <main className="relative flex flex-col items-center justify-between flex-1 px-6 py-16 overflow-hidden">
+        {/* Decorative emojis */}
+        <div className="absolute top-10 left-10 text-6xl opacity-10">🧠</div>
+        <div className="absolute bottom-20 right-16 text-7xl opacity-10">❤️</div>
+        <div className="absolute top-40 right-1/3 text-5xl opacity-10">💬</div>
+        <div className="absolute bottom-10 left-1/4 text-6xl opacity-10">🤝</div>
 
-      <div className="text-center mb-10 relative z-10">
-        <h1 className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-primary via-teal-500 to-primary bg-clip-text text-transparent animate-gradient">
-          Welcome to Ashvaan
-        </h1>
-        <p className="text-lg text-gray-700 mt-3 animate-slide-up">
-          A safe space for students to prioritize mental health and well-being
-          💬
-        </p>
-      </div>
-
-      {/* Content Section */}
-      <div className="max-w-4xl text-center mb-16">
-        <div className="flex items-center justify-center mt-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-teal-600">
-            Helping You Thrive, Not Just Survive
-          </h2>
+        {/* Hero Section */}
+        <div className="text-center mb-10 relative z-10">
+          <h1
+            className="text-5xl md:text-6xl font-extrabold 
+            bg-gradient-to-r from-cyan-400 via-teal-500 to-emerald-400 
+            bg-clip-text text-transparent animate-gradient 
+            drop-shadow-[0_4px_8px_rgba(0,0,0,0.25)]"
+          >
+            Welcome to Ashvaan
+          </h1>
+          <p className="text-lg text-gray-700 mt-3 animate-slide-up">
+            A safe space for students to prioritize mental health and well-being 💬
+          </p>
         </div>
-        <p className="text-lg text-gray-600 mb-8 mt-4 max-w-2xl mx-auto">
-          College life can be exciting, but also overwhelming. Whether it’s
-          exams, homesickness, or stress, you don’t have to face it alone.
-        </p>
-        <button
-          onClick={() => {
-            setShowAuth(true);
-            setIsLogin(false);
-          }}
-          className="px-8 py-4 bg-teal-600 text-white rounded-lg hover:bg-teal-700 shadow-lg text-lg font-medium transition-colors"
-        >
-          Start Your Journey
-        </button>
-      </div>
 
-      {/* Features Section */}
-      <div className="w-full max-w-6xl mx-auto mb-16">
-        <h3 className="text-3xl font-bold text-center mb-12 text-gray-900">
-          How Ashvaan Supports Your Mental Health
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition-shadow">
-            <div className="bg-teal-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-              <MessageCircle className="h-8 w-8 text-teal-600" />
-            </div>
-            <h4 className="font-semibold text-lg mb-2 text-gray-900">AI Assistant</h4>
-            <p className="text-gray-600 text-sm">
-              24/7 AI-powered mental health support and coping strategies
-            </p>
+        {/* Content Section */}
+        <div className="max-w-4xl text-center mb-16">
+          <div className="flex items-center justify-center mt-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-teal-600">
+              Helping You Thrive, Not Just Survive
+            </h2>
           </div>
-
-          <div className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition-shadow">
-            <div className="bg-blue-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-              <Calendar className="h-8 w-8 text-blue-600" />
-            </div>
-            <h4 className="font-semibold text-lg mb-2 text-gray-900">Counseling</h4>
-            <p className="text-gray-600 text-sm">
-              Book confidential sessions with licensed mental health professionals
-            </p>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition-shadow">
-            <div className="bg-purple-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-              <Heart className="h-8 w-8 text-purple-600" />
-            </div>
-            <h4 className="font-semibold text-lg mb-2 text-gray-900">Peer Support</h4>
-            <p className="text-gray-600 text-sm">
-              Connect anonymously with other students who understand your struggles
-            </p>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition-shadow">
-            <div className="bg-red-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-              <AlertTriangle className="h-8 w-8 text-red-600" />
-            </div>
-            <h4 className="font-semibold text-lg mb-2 text-gray-900">Crisis Support</h4>
-            <p className="text-gray-600 text-sm">
-              Immediate access to crisis resources and emergency support
-            </p>
-          </div>
+          <p className="text-lg text-gray-600 mb-8 mt-4 max-w-2xl mx-auto">
+            College life can be exciting, but also overwhelming. Whether it’s exams,
+            homesickness, or stress, you don’t have to face it alone.
+          </p>
+          <button
+            onClick={() => {
+              setShowAuth(true);
+              setIsLogin(false);
+            }}
+            className="px-8 py-4 bg-teal-600 text-white rounded-lg hover:bg-teal-700 shadow-lg text-lg font-medium transition-colors"
+          >
+            Start Your Journey
+          </button>
         </div>
-      </div>
 
-      {/* Hero Image */}
-      <div className="mb-16">
-        <img
-          src="https://i.pinimg.com/1200x/3b/06/c2/3b06c29e50f5369f87c4c958ee71c3ff.jpg"
-          alt="Student Mental Health"
-          className="w-80 h-80 object-cover rounded-full shadow-xl hover:scale-105 transition-transform duration-300 border-4 border-teal-600 mx-auto"
-        />
+        {/* Features Section */}
+       {/* Features Section */}
+<div className="w-full max-w-6xl mx-auto mb-16">
+  <h3 className="text-3xl font-bold text-center mb-12 text-gray-900">
+    How Ashvaan Supports Your Mental Health
+  </h3>
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+    {/* AI Assistant */}
+    <div className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition-shadow">
+      <div className="bg-teal-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+        <MessageCircle className="h-8 w-8 text-teal-600" />
       </div>
+      <h4 className="font-semibold text-lg mb-2 text-gray-900">AI Assistant</h4>
+      <p className="text-gray-600 text-sm">
+        24/7 AI-powered mental health support and coping strategies
+      </p>
+    </div>
 
-      {/* Testimonials */}
-      <div className="w-full max-w-4xl mx-auto mb-16">
-        <h3 className="text-2xl font-bold text-center mb-8 text-gray-900">
-          What Students Say
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white shadow-md rounded-lg p-6">
-            <p className="text-gray-700 italic mb-4">
-              "Ashvaan helped me through my toughest semester. The AI assistant was always there when I needed someone to talk to."
-            </p>
-            <div className="text-sm text-gray-500">- Anonymous Student</div>
-          </div>
-          <div className="bg-white shadow-md rounded-lg p-6">
-            <p className="text-gray-700 italic mb-4">
-              "The peer support forum made me realize I wasn't alone. It's comforting to know other students face similar challenges."
-            </p>
-            <div className="text-sm text-gray-500">- Anonymous Student</div>
-          </div>
-        </div>
+    {/* Counseling */}
+    <div className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition-shadow">
+      <div className="bg-blue-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+        <Calendar className="h-8 w-8 text-blue-600" />
       </div>
+      <h4 className="font-semibold text-lg mb-2 text-gray-900">Counseling</h4>
+      <p className="text-gray-600 text-sm">
+        Book confidential sessions with licensed mental health professionals
+      </p>
+    </div>
 
-      {/* Call to Action */}
-      <div className="bg-teal-600 rounded-lg p-8 text-white text-center max-w-2xl mx-auto">
-        <h3 className="text-2xl font-bold mb-4">Ready to Start Your Mental Health Journey?</h3>
-        <p className="mb-6">Join thousands of students who have found support and healing through Ashvaan.</p>
-        <button
-          onClick={() => {
-            setShowAuth(true);
-            setIsLogin(false);
-          }}
-          className="bg-white text-teal-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-        >
-          Create Your Account
-        </button>
+    {/* Peer Support */}
+    <div className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition-shadow">
+      <div className="bg-purple-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+        <Heart className="h-8 w-8 text-purple-600" />
       </div>
-    </main>
+      <h4 className="font-semibold text-lg mb-2 text-gray-900">Peer Support</h4>
+      <p className="text-gray-600 text-sm">
+        Connect anonymously with other students who understand your struggles
+      </p>
+    </div>
 
-    {/* Footer */}
-    <footer className="bg-gray-900 text-white py-8">
-      <div className="max-w-4xl mx-auto px-6 text-center">
-        <div className="flex items-center justify-center mb-4">
-          <Heart className="h-6 w-6 text-teal-400 mr-2" />
-          <span className="text-xl font-bold">Ashvaan</span>
-        </div>
-        <p className="text-gray-400 mb-4">
-          Stigma-free mental health support for students
-        </p>
-        <div className="flex justify-center space-x-6 text-sm text-gray-400">
-          <span>Privacy Policy</span>
-          <span>Terms of Service</span>
-          <span>Contact Us</span>
-        </div>
+    {/* Crisis Support */}
+    <div className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition-shadow">
+      <div className="bg-red-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+        <AlertTriangle className="h-8 w-8 text-red-600" />
       </div>
-    </footer>
+      <h4 className="font-semibold text-lg mb-2 text-gray-900">Crisis Support</h4>
+      <p className="text-gray-600 text-sm">
+        Immediate access to crisis resources and emergency support
+      </p>
+    </div>
+
+    {/* Multilingual Chatbot */}
+    <div className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition-shadow">
+      <div className="bg-green-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+        <Brain className="h-8 w-8 text-green-600" />
+      </div>
+      <h4 className="font-semibold text-lg mb-2 text-gray-900">Multilingual Chatbot</h4>
+      <p className="text-gray-600 text-sm">
+        Talk in Hindi, Marathi, English, and more — support in your language.
+      </p>
+    </div>
   </div>
+</div>
+
+
+        {/* Hero Image */}
+        <div className="mb-16">
+          <img
+            src="https://i.pinimg.com/1200x/3b/06/c2/3b06c29e50f5369f87c4c958ee71c3ff.jpg"
+            alt="Student Mental Health"
+            className="w-96 h-96 object-cover rounded-full shadow-2xl hover:scale-105 transition-transform duration-500 border-4 border-teal-500 mx-auto"
+          />
+        </div>
+
+        {/* Testimonials */}
+        <div className="w-full max-w-4xl mx-auto mb-16">
+          <h3 className="text-2xl font-bold text-center mb-8 text-gray-900">
+            What Students Say
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-gradient-to-r from-teal-50 to-white shadow-md rounded-lg p-6 hover:shadow-lg transition-all duration-300">
+              <p className="text-gray-700 italic mb-4">
+                "Ashvaan helped me through my toughest semester. The AI assistant
+                was always there when I needed someone to talk to."
+              </p>
+              <div className="text-sm text-gray-500">- Anonymous Student</div>
+            </div>
+            <div className="bg-gradient-to-r from-teal-50 to-white shadow-md rounded-lg p-6 hover:shadow-lg transition-all duration-300">
+              <p className="text-gray-700 italic mb-4">
+                "The peer support forum made me realize I wasn't alone. It's
+                comforting to know other students face similar challenges."
+              </p>
+              <div className="text-sm text-gray-500">- Anonymous Student</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Call to Action */}
+        <div className="bg-teal-600 rounded-lg p-8 text-white text-center max-w-2xl mx-auto shadow-xl">
+          <h3 className="text-2xl font-bold mb-4">
+            Ready to Start Your Mental Health Journey?
+          </h3>
+          <p className="mb-6">
+            Join thousands of students who have found support and healing through
+            Ashvaan.
+          </p>
+          <button
+            onClick={() => {
+              setShowAuth(true);
+              setIsLogin(false);
+            }}
+            className="bg-white text-teal-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+          >
+            Create Your Account
+          </button>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-8 border-t border-gray-700">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <div className="flex items-center justify-center mb-4">
+            <Heart className="h-6 w-6 text-teal-400 mr-2" />
+            <span className="text-xl font-bold">Ashvaan</span>
+          </div>
+          <p className="text-gray-400 mb-4">
+            Stigma-free mental health support for students
+          </p>
+          <div className="flex justify-center space-x-6 text-sm text-gray-400">
+            <span>Privacy Policy</span>
+            <span>Terms of Service</span>
+            <span>Contact Us</span>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 }
-
