@@ -24,50 +24,56 @@ export default function CrisisSupport() {
   const crisisResources: CrisisResource[] = [
     {
       name: "Vandrevala Foundation Helpline",
-      type: "hotline",
-      contact: "1860-2662-345",
-      description: "Mental health support and crisis intervention in India",
+      type: "text",
+      contact: "1860-266-2345",
+      description:
+        "24/7 mental health support and crisis intervention across India.",
       availability: "24/7",
       language: ["English", "Hindi", "Tamil", "Telugu"],
     },
     {
-      name: "iCall Psychosocial Helpline",
+      name: "iCALL Psychosocial Helpline",
       type: "hotline",
-      contact: "+9152987821",
-      description: "Psychosocial support and crisis intervention",
+      contact: "+91 9519470503",
+      description:
+        "Psychosocial support and professional counseling for individuals in distress.",
       availability: "Mon-Sat 8AM-10PM",
       language: ["English", "Hindi", "Marathi"],
     },
     {
-      name: "AASRA Foundation Helpline",
+      name: "AASRA Suicide Prevention Helpline",
       type: "hotline",
-      contact: "+91-22275 46669",
-      description: "24/7 Suicide Prevention Helpline in India",
+      contact: "+91 22 2754 6669",
+      description:
+        "24/7 confidential suicide prevention and emotional support helpline.",
       availability: "24/7",
       language: ["English", "Hindi"],
     },
     {
-      name: "Snehi India Helpline",
-      type: "hotline",
-      contact: "91-22-2772-6771",
-      description: "Emotional support and counseling in Mumbai",
+      name: "Snehi Emotional Support Helpline",
+      type: "text",
+      contact: "+91 22 2772 6771",
+      description:
+        "24/7 emotional support and counseling services based in Mumbai.",
       availability: "24/7",
       language: ["English", "Hindi", "Marathi"],
     },
     {
       name: "The Live Love Laugh Foundation",
       type: "chat",
-      contact: "www.thelivelovelaughfoundation.org/chat",
-      description: "Mental health support and resources",
+      contact: "https://thelivelovelaughfoundation.org/chat",
+      description:
+        "Mental health awareness, support, and resources through chat services.",
       availability: "Mon-Fri 10AM-6PM",
       language: ["English"],
     },
     {
-      name: "Snehalaya Shelter and Support",
+      name: "Snehalaya Shelter & Support",
       type: "local",
-      contact: "+91 98220 47480",
-      description: "Local crisis support and shelter services in Maharashtra",
-      availability: "9AM-6PM Mon-Sat",
+      contact: "+91 9318340791",
+      description:
+        "Shelter, rehabilitation, and crisis support services in Maharashtra.",
+      availability: "Mon-Sat 9AM-6PM",
       language: ["English", "Marathi"],
     },
   ];
@@ -123,7 +129,7 @@ export default function CrisisSupport() {
             </p>
             <div className="flex flex-wrap gap-4">
               <a
-                href="tel:988"
+                href="tel:112"
                 className="bg-red-600 text-white px-6 py-3 rounded-md hover:bg-red-700 transition-colors flex items-center font-medium"
               >
                 <Phone className="h-5 w-5 mr-2" />
@@ -227,24 +233,55 @@ export default function CrisisSupport() {
                     Call Now
                   </a>
                 )}
+
                 {resource.type === "text" && (
+                  <div className="flex flex-col gap-3">
+                    {/* SMS Option */}
+                    <a
+                      href={`sms:${resource.contact.replace(
+                        /[^\d]/g,
+                        ""
+                      )}&body=Hello I need support`}
+                      className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center font-medium"
+                    >
+                      <MessageCircle className="h-4 w-4 mr-2" />
+                      Send SMS
+                    </a>
+                    {/* WhatsApp Option */}
+                    <a
+                      href={`https://wa.me/${resource.contact.replace(
+                        /[^\d]/g,
+                        ""
+                      )}?text=Hello%2C%20I%20need%20support`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full bg-green-600 text-white py-3 px-4 rounded-md hover:bg-green-700 transition-colors flex items-center justify-center font-medium"
+                    >
+                      <MessageCircle className="h-4 w-4 mr-2" />
+                      Message on WhatsApp
+                    </a>
+                  </div>
+                )}
+
+                {resource.type === "chat" && (
                   <a
-                    href={`sms:${resource.contact.match(/\d+/)?.[0]}&body=${
-                      resource.contact.match(/\b[A-Z]+\b/)?.[0] || ""
-                    }`}
-                    className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center font-medium"
+                    href={resource.contact}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full bg-green-600 text-white py-3 px-4 rounded-md hover:bg-green-700 transition-colors flex items-center justify-center font-medium"
                   >
                     <MessageCircle className="h-4 w-4 mr-2" />
-                    Send Text
+                    Open Chat
                   </a>
                 )}
+
                 {resource.type === "local" && (
                   <a
                     href={`tel:${resource.contact.replace(/[^\d]/g, "")}`}
                     className="w-full bg-purple-600 text-white py-3 px-4 rounded-md hover:bg-purple-700 transition-colors flex items-center justify-center font-medium"
                   >
                     <MapPin className="h-4 w-4 mr-2" />
-                    Contact Campus
+                    Contact Local Center
                   </a>
                 )}
               </div>
