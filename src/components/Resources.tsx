@@ -38,7 +38,7 @@ const mockResources: Resource[] = [
     rating: 4.8,
     thumbnail:
       "https://images.pexels.com/photos/3820296/pexels-photo-3820296.jpeg?auto=compress&cs=tinysrgb&w=300",
-    url: "https://youtu.be/tEmt1Znux58?si=clpKv-pz9XQS1AIV",
+    url: "https://www.youtube-nocookie.com/embed/tEmt1Znux58?rel=0",
   },
   {
     id: "2",
