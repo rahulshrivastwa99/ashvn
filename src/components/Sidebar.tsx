@@ -30,14 +30,14 @@ const navItems = [
     allowedRoles: ["admin", "student", "counsellor"],
   },
   {
-    name: "AI Assistant",
-    href: "/chat",
+    name: "Self-Assessment",
+    href: "/selfassessment",
     icon: MessageCircle,
     allowedRoles: ["admin", "student", "counsellor"],
   },
   {
-    name: "Chatbot",
-    href: "/chatbot",
+    name: "AI Assitant",
+    href: "/aiassitant",
     icon: Bot,
     allowedRoles: ["admin", "student", "counsellor"],
   },
@@ -47,6 +47,7 @@ const navItems = [
     icon: Calendar,
     allowedRoles: ["student", "counsellor"],
   },
+
   {
     name: "Mood Tracker",
     href: "/mood",

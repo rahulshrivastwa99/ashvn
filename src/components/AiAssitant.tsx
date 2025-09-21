@@ -1,8 +1,16 @@
 import React from "react";
-import { Bot, MessageCircle, Shield, Clock, Zap, Heart, Brain } from "lucide-react";
+import {
+  Bot,
+  MessageCircle,
+  Shield,
+  Clock,
+  Zap,
+  Heart,
+  Brain,
+} from "lucide-react";
 import ChatbotEmbed from "./index/ChatbotEmbed";
 
-const ChatBot: React.FC = () => {
+const AiAssitant: React.FC = () => {
   return (
     <div className="space-y-8">
       {/* Welcome Header - Matching Dashboard Style */}
@@ -46,8 +54,12 @@ const ChatBot: React.FC = () => {
                   <Bot className="h-5 w-5 text-teal-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">Ashvaan AI Assistant</h3>
-                  <p className="text-sm text-gray-600">Powered by advanced mental health AI</p>
+                  <h3 className="font-semibold text-gray-900">
+                    Ashvaan AI Assistant
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    Powered by advanced mental health AI
+                  </p>
                 </div>
                 <div className="ml-auto">
                   <div className="flex items-center text-sm text-green-600">
@@ -57,7 +69,7 @@ const ChatBot: React.FC = () => {
                 </div>
               </div>
             </div>
-            
+
             {/* Chatbot iframe */}
             <div className="h-[600px]">
               <ChatbotEmbed width="100%" height="100%" />
@@ -75,16 +87,26 @@ const ChatBot: React.FC = () => {
             </h3>
             <div className="space-y-3">
               <button className="w-full text-left p-3 rounded-lg border border-gray-200 hover:bg-teal-50 hover:border-teal-300 transition-colors">
-                <div className="font-medium text-gray-900">Start New Conversation</div>
-                <div className="text-sm text-gray-600">Begin a fresh chat session</div>
+                <div className="font-medium text-gray-900">
+                  Start New Conversation
+                </div>
+                <div className="text-sm text-gray-600">
+                  Begin a fresh chat session
+                </div>
               </button>
               <button className="w-full text-left p-3 rounded-lg border border-gray-200 hover:bg-teal-50 hover:border-teal-300 transition-colors">
-                <div className="font-medium text-gray-900">Mental Health Assessment</div>
-                <div className="text-sm text-gray-600">Take PHQ-9 or GAD-7 screening</div>
+                <div className="font-medium text-gray-900">
+                  Mental Health Assessment
+                </div>
+                <div className="text-sm text-gray-600">
+                  Take PHQ-9 or GAD-7 screening
+                </div>
               </button>
               <button className="w-full text-left p-3 rounded-lg border border-gray-200 hover:bg-teal-50 hover:border-teal-300 transition-colors">
                 <div className="font-medium text-gray-900">Crisis Support</div>
-                <div className="text-sm text-gray-600">Get immediate help if needed</div>
+                <div className="text-sm text-gray-600">
+                  Get immediate help if needed
+                </div>
               </button>
             </div>
           </div>
@@ -101,8 +123,12 @@ const ChatBot: React.FC = () => {
                   <Clock className="h-4 w-4 text-blue-600" />
                 </div>
                 <div>
-                  <div className="font-medium text-gray-900">24/7 Availability</div>
-                  <div className="text-sm text-gray-600">Always here when you need support</div>
+                  <div className="font-medium text-gray-900">
+                    24/7 Availability
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    Always here when you need support
+                  </div>
                 </div>
               </div>
               <div className="flex items-start">
@@ -111,7 +137,9 @@ const ChatBot: React.FC = () => {
                 </div>
                 <div>
                   <div className="font-medium text-gray-900">Confidential</div>
-                  <div className="text-sm text-gray-600">Your conversations are private and secure</div>
+                  <div className="text-sm text-gray-600">
+                    Your conversations are private and secure
+                  </div>
                 </div>
               </div>
               <div className="flex items-start">
@@ -119,8 +147,12 @@ const ChatBot: React.FC = () => {
                   <Zap className="h-4 w-4 text-purple-600" />
                 </div>
                 <div>
-                  <div className="font-medium text-gray-900">Instant Response</div>
-                  <div className="text-sm text-gray-600">Get immediate answers and guidance</div>
+                  <div className="font-medium text-gray-900">
+                    Instant Response
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    Get immediate answers and guidance
+                  </div>
                 </div>
               </div>
               <div className="flex items-start">
@@ -129,7 +161,9 @@ const ChatBot: React.FC = () => {
                 </div>
                 <div>
                   <div className="font-medium text-gray-900">AI-Powered</div>
-                  <div className="text-sm text-gray-600">Advanced mental health AI technology</div>
+                  <div className="text-sm text-gray-600">
+                    Advanced mental health AI technology
+                  </div>
                 </div>
               </div>
             </div>
@@ -137,9 +171,12 @@ const ChatBot: React.FC = () => {
 
           {/* Support Resources */}
           <div className="bg-gradient-to-br from-teal-50 to-blue-50 rounded-lg p-6 border border-teal-200">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Need More Help?</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-3">
+              Need More Help?
+            </h3>
             <p className="text-sm text-gray-600 mb-4">
-              If you're experiencing a mental health crisis or need immediate support, please reach out to our human counselors.
+              If you're experiencing a mental health crisis or need immediate
+              support, please reach out to our human counselors.
             </p>
             <div className="space-y-2">
               <button className="w-full bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition-colors text-sm font-medium">
@@ -156,4 +193,4 @@ const ChatBot: React.FC = () => {
   );
 };
 
-export default ChatBot;
+export default AiAssitant;

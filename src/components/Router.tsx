@@ -3,8 +3,8 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import GetStarted from "./GetStarted";
 import Layout from "./Layout";
 import Dashboard from "./Dashboard";
-import Assitant from "./Assitant";
-import ChatBot from "./ChatBot";
+import SelfAssessment from "./SelfAssessment";
+import AiAssitant from "./AiAssitant";
 import DailyJournal from "./DailyJournal";
 import Appointments from "./Appointments";
 import Resources from "./Resources";
@@ -31,8 +31,8 @@ export default function Router() {
               <Route path="/" element={<Dashboard />} />
 
               {/* All routes accessible after login */}
-              <Route path="/chat" element={<Assitant />} />
-              <Route path="/chatbot" element={<ChatBot />} />
+              <Route path="/selfassessment" element={<SelfAssessment />} />
+              <Route path="/aiassitant" element={<AiAssitant />} />
               <Route path="/appointments" element={<Appointments />} />
               <Route path="/resources" element={<Resources />} />
               <Route path="/forum" element={<Forum />} />
