@@ -1,9 +1,16 @@
 // src/components/DailyJournal.tsx
 
-import React from "react";
-import { FaHeart } from "react-icons/fa"; // Using react-icons for the heart icon
+import React, { useState, useEffect } from "react";
+import { Trash2, Edit } from "lucide-react";
 
-// Helper function to check if a date is yesterday
+// --- TypeScript type for a single journal entry ---
+type JournalEntry = {
+  id: number;
+  text: string;
+  date: string;
+};
+
+// Helper functions
 const isYesterday = (date: Date): boolean => {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
@@ -14,7 +21,6 @@ const isYesterday = (date: Date): boolean => {
   );
 };
 
-// Helper function to check if a date is today
 const isToday = (date: Date): boolean => {
   const today = new Date();
   return (
@@ -26,95 +32,181 @@ const isToday = (date: Date): boolean => {
 
 const DailyJournal: React.FC = () => {
   // --- STATE MANAGEMENT ---
-  // In a real app, you would fetch 'streak' and 'lastEntryDate' from your database for the logged-in user.
-  const [streak, setStreak] = React.useState<number>(7); // Example streak
-  const [lastEntryDate, setLastEntryDate] = React.useState<Date | null>(
-    new Date("2025-09-20")
-  ); // NOTE: This is yesterday's date based on current time
-  const [entry, setEntry] = React.useState<string>("");
-  const [feedbackMessage, setFeedbackMessage] = React.useState<string>("");
+  const [journalTitle, setJournalTitle] = useState<string>(
+    "My Wellness Journal"
+  );
+  const [streak, setStreak] = useState<number>(6);
+  const [lastEntryDate, setLastEntryDate] = useState<Date | null>(
+    new Date("2025-09-20") // Yesterday's date
+  );
+  const [entry, setEntry] = useState<string>("");
+  const [feedbackMessage, setFeedbackMessage] = useState<string>("");
+
+  const [pastEntries, setPastEntries] = useState<JournalEntry[]>([
+    {
+      id: 6,
+      text: "Feeling positive about hitting my 7-day goal tomorrow.",
+      date: "9/20/2025",
+    },
+    {
+      id: 5,
+      text: "A bit stressed, but writing it down helped clear my head.",
+      date: "9/19/2025",
+    },
+    {
+      id: 4,
+      text: "Went for a long walk today. The fresh air was wonderful.",
+      date: "9/18/2025",
+    },
+    {
+      id: 3,
+      text: "Felt a bit anxious about the upcoming week, but also hopeful.",
+      date: "9/17/2025",
+    },
+    {
+      id: 2,
+      text: "Had a really productive day. It felt great to check things off my list.",
+      date: "9/16/2025",
+    },
+    {
+      id: 1,
+      text: "A quiet day. Spent some time reading which was relaxing.",
+      date: "9/15/2025",
+    },
+  ]);
 
   const handleSaveEntry = () => {
     if (entry.trim() === "") {
       setFeedbackMessage("Please write something before saving.");
       return;
     }
-
-    // --- STREAK LOGIC ---
     const today = new Date();
     let newStreak = streak;
-
     if (lastEntryDate) {
       if (isYesterday(lastEntryDate)) {
-        // Continued the streak
-        newStreak++;
+        newStreak = streak < 7 ? streak + 1 : 7;
       } else if (!isToday(lastEntryDate)) {
-        // Broke the streak, reset to 1
-        newStreak = 1;
+        newStreak = 0;
       }
-      // If it's the same day, streak remains unchanged.
     } else {
-      // First entry ever
       newStreak = 1;
     }
-
+    if (streak === 0 && newStreak === 0) {
+      newStreak = 1;
+    }
+    const newEntry: JournalEntry = {
+      id: Date.now(),
+      text: entry,
+      date: today.toLocaleDateString(),
+    };
+    setPastEntries([newEntry, ...pastEntries]);
     setStreak(newStreak);
     setLastEntryDate(today);
-
-    // In a real application, you would make an API call here to save the entry and update the user's streak.
-    console.log("Saving Entry:", {
-      userId: "current-user-id", // Replace with actual user ID
-      entryText: entry,
-      newStreak: newStreak,
-      entryDate: today.toISOString(),
-    });
-
-    // Reset the text area and show a success message
     setEntry("");
-    setFeedbackMessage(`Entry saved! Your new streak is ${newStreak} days.`);
-    setTimeout(() => setFeedbackMessage(""), 3000); // Clear message after 3 seconds
+    setFeedbackMessage(`Entry saved! Your streak is now ${newStreak} days.`);
+    setTimeout(() => setFeedbackMessage(""), 3000);
+  };
+
+  const handleDeleteEntry = (idToDelete: number) => {
+    const updatedEntries = pastEntries.filter(
+      (entry) => entry.id !== idToDelete
+    );
+    setPastEntries(updatedEntries);
+  };
+
+  const handleTitleChange = () => {
+    const newTitle = prompt("Enter a new name for your journal:", journalTitle);
+    if (newTitle) {
+      setJournalTitle(newTitle);
+    }
   };
 
   return (
     <div className="bg-white p-6 md:p-8 rounded-xl shadow-md border border-gray-200 w-full">
       {/* Header Section */}
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-start mb-6">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">Daily Journal</h2>
+          {/* Editable Journal Title */}
+          <div className="flex items-center group">
+            <h2 className="text-2xl font-bold text-gray-800">{journalTitle}</h2>
+            <button
+              onClick={handleTitleChange}
+              className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity"
+              aria-label="Edit journal title"
+            >
+              <Edit className="h-4 w-4 text-gray-500 hover:text-teal-600" />
+            </button>
+          </div>
           <p className="text-gray-500">How are you feeling today?</p>
         </div>
-        {/* Streak Counter */}
-        <div className="flex items-center space-x-3 bg-red-50 p-3 rounded-full border border-red-200">
-          <FaHeart className="text-red-500 text-2xl" />
-          <div className="text-center">
-            <span className="font-bold text-xl text-red-600">{streak}</span>
-            <p className="text-xs text-red-500 -mt-1">day streak</p>
-          </div>
+
+        {/* Text-based Streak Counter */}
+        <div className="text-right border border-gray-200 bg-gray-50 rounded-lg px-4 py-2">
+          <p className="text-lg font-medium text-gray-500">Streak</p>
+          <p className="text-2xl font-bold text-teal-600">
+            {streak}{" "}
+            <span className="text-base font-medium text-gray-600">
+              / 7 days
+            </span>
+          </p>
         </div>
       </div>
 
-      {/* Text Area for Entry */}
       <textarea
         value={entry}
         onChange={(e) => setEntry(e.target.value)}
         placeholder="Write about your thoughts, feelings, or anything on your mind..."
-        className="w-full h-40 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-teal-400 transition-shadow duration-200 resize-none"
+        className="w-full h-40 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-teal-400"
       />
-
-      {/* Action Button */}
+      {/* <<< CHANGE IS HERE: Replaced gradient with solid teal and new hover state */}
       <button
         onClick={handleSaveEntry}
-        className="w-full mt-4 py-3 px-6 text-white font-bold rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 hover:opacity-90 transition-opacity duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+        className="w-full mt-4 py-3 px-6 text-white font-bold rounded-lg bg-teal-600 hover:bg-teal-700 transition-colors"
       >
         Save Today's Entry
       </button>
-
-      {/* Feedback Message */}
       {feedbackMessage && (
         <p className="text-center mt-4 text-sm text-gray-600">
           {feedbackMessage}
         </p>
       )}
+
+      {/* Diary-style Past Entries */}
+      <div className="mt-8">
+        <h3 className="text-lg font-bold text-gray-700 mb-4 border-b pb-2">
+          Past Entries
+        </h3>
+        <div className="space-y-4 max-h-96 overflow-y-auto pr-2">
+          {pastEntries.length > 0 ? (
+            pastEntries.map((pastEntry) => (
+              <div
+                key={pastEntry.id}
+                className="bg-gray-50 p-4 rounded-lg border border-gray-200 flex justify-between items-start group"
+              >
+                <div>
+                  <p className="text-xs font-semibold text-gray-500 mb-1">
+                    {pastEntry.date}
+                  </p>
+                  <p className="text-sm text-gray-800 break-words pr-4 whitespace-pre-wrap">
+                    {pastEntry.text}
+                  </p>
+                </div>
+                <button
+                  onClick={() => handleDeleteEntry(pastEntry.id)}
+                  className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded-full hover:bg-red-100"
+                  aria-label="Delete entry"
+                >
+                  <Trash2 className="h-4 w-4 text-gray-500 hover:text-red-600" />
+                </button>
+              </div>
+            ))
+          ) : (
+            <p className="text-sm text-gray-500 text-center py-4">
+              Your previous journal entries will appear here.
+            </p>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
