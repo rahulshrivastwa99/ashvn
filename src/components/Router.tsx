@@ -5,6 +5,7 @@ import Layout from "./Layout";
 import Dashboard from "./Dashboard";
 import Assitant from "./Assitant";
 import ChatBot from "./ChatBot";
+import DailyJournal from "./DailyJournal";
 import Appointments from "./Appointments";
 import Resources from "./Resources";
 import Forum from "./Forum";
@@ -36,6 +37,7 @@ export default function Router() {
               <Route path="/resources" element={<Resources />} />
               <Route path="/forum" element={<Forum />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/daily-journal" element={<DailyJournal />} />
               <Route path="/mood" element={<MoodTracker />} />
               <Route path="/crisis" element={<CrisisSupport />} />
               <Route
@@ -49,6 +51,7 @@ export default function Router() {
                   </div>
                 }
               />
+
               <Route path="/analytics" element={<Analytics />} />
               <Route
                 path="/users"

@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from "react";
+// src/pages/StudentDashboard.tsx
+
+import React, { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
+import { FaHeart } from "react-icons/fa";
 import {
   MessageCircle,
   Calendar,
@@ -11,9 +14,111 @@ import {
   Brain,
   Phone,
 } from "lucide-react";
-import ChatbotEmbed from "../index/ChatbotEmbed"; // Added import
 import ChatbotWidget from "../index/ChatbotWidget";
-import ChatbotPanel from "../index/ChatbotPanel";
+
+//==================================================================
+// DailyJournal Component Code is now INSIDE this file
+//==================================================================
+
+const isYesterday = (date: Date): boolean => {
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  return (
+    date.getFullYear() === yesterday.getFullYear() &&
+    date.getMonth() === yesterday.getMonth() &&
+    date.getDate() === yesterday.getDate()
+  );
+};
+
+const isToday = (date: Date): boolean => {
+  const today = new Date();
+  return (
+    date.getFullYear() === today.getFullYear() &&
+    date.getMonth() === today.getMonth() &&
+    date.getDate() === today.getDate()
+  );
+};
+
+const DailyJournal: React.FC = () => {
+  const [streak, setStreak] = useState<number>(7);
+  const [lastEntryDate, setLastEntryDate] = useState<Date | null>(
+    new Date("2025-09-20")
+  );
+  const [entry, setEntry] = useState<string>("");
+  const [feedbackMessage, setFeedbackMessage] = useState<string>("");
+
+  const handleSaveEntry = () => {
+    if (entry.trim() === "") {
+      setFeedbackMessage("Please write something before saving.");
+      return;
+    }
+
+    const today = new Date();
+    let newStreak = streak;
+
+    if (lastEntryDate) {
+      if (isYesterday(lastEntryDate)) {
+        newStreak++;
+      } else if (!isToday(lastEntryDate)) {
+        newStreak = 1;
+      }
+    } else {
+      newStreak = 1;
+    }
+
+    setStreak(newStreak);
+    setLastEntryDate(today);
+
+    console.log("Saving Entry:", {
+      entryText: entry,
+      newStreak: newStreak,
+      entryDate: today.toISOString(),
+    });
+
+    setEntry("");
+    setFeedbackMessage(`Entry saved! Your new streak is ${newStreak} days.`);
+    setTimeout(() => setFeedbackMessage(""), 3000);
+  };
+
+  return (
+    <div className="bg-white p-6 md:p-8 rounded-xl shadow-md border border-gray-200 w-full">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-800">Daily Journal</h2>
+          <p className="text-gray-500">How are you feeling today?</p>
+        </div>
+        <div className="flex items-center space-x-3 bg-red-50 p-3 rounded-full border border-red-200">
+          <FaHeart className="text-red-500 text-2xl" />
+          <div className="text-center">
+            <span className="font-bold text-xl text-red-600">{streak}</span>
+            <p className="text-xs text-red-500 -mt-1">day streak</p>
+          </div>
+        </div>
+      </div>
+      <textarea
+        value={entry}
+        onChange={(e) => setEntry(e.target.value)}
+        placeholder="Write about your thoughts, feelings, or anything on your mind..."
+        className="w-full h-40 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-teal-400 transition-shadow duration-200 resize-none"
+      />
+      <button
+        onClick={handleSaveEntry}
+        className="w-full mt-4 py-3 px-6 text-white font-bold rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 hover:opacity-90 transition-opacity duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+      >
+        Save Today's Entry
+      </button>
+      {feedbackMessage && (
+        <p className="text-center mt-4 text-sm text-gray-600">
+          {feedbackMessage}
+        </p>
+      )}
+    </div>
+  );
+};
+
+//==================================================================
+// Main StudentDashboard Component
+//==================================================================
 
 export default function StudentDashboard() {
   const { profile } = useAuth();
@@ -186,6 +291,9 @@ export default function StudentDashboard() {
         </div>
       </div>
 
+      {/* Daily Journal Component */}
+      <DailyJournal />
+
       {/* Wellness Tools */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200">
         <div className="p-6 border-b border-gray-200">
@@ -225,9 +333,6 @@ export default function StudentDashboard() {
 
       {/* Embedded Chatbot */}
       <ChatbotWidget />
-      {/* <div className="flex justify-end">
-        <ChatbotPanel />
-      </div> */}
     </div>
   );
 }
