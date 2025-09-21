@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import studentMentalHealth from "../assets/Homepage.jpg";
 import {
   Heart,
   Shield,
@@ -246,22 +247,27 @@ export default function GetStarted() {
       <main className="relative flex flex-col items-center justify-between flex-1 px-6 py-16 overflow-hidden">
         {/* Decorative emojis */}
         <div className="absolute top-10 left-10 text-6xl opacity-10">🧠</div>
-        <div className="absolute bottom-20 right-16 text-7xl opacity-10">❤️</div>
+        <div className="absolute bottom-20 right-16 text-7xl opacity-10">
+          ❤️
+        </div>
         <div className="absolute top-40 right-1/3 text-5xl opacity-10">💬</div>
-        <div className="absolute bottom-10 left-1/4 text-6xl opacity-10">🤝</div>
+        <div className="absolute bottom-10 left-1/4 text-6xl opacity-10">
+          🤝
+        </div>
 
         {/* Hero Section */}
         <div className="text-center mb-10 relative z-10">
           <h1
             className="text-5xl md:text-6xl font-extrabold 
-            bg-gradient-to-r from-cyan-400 via-teal-500 to-emerald-400 
+            bg-gradient-to-r from-emerald-400  via-teal-500 to-emerald-400 
             bg-clip-text text-transparent animate-gradient 
             drop-shadow-[0_4px_8px_rgba(0,0,0,0.25)]"
           >
             Welcome to Ashvaan
           </h1>
           <p className="text-lg text-gray-700 mt-3 animate-slide-up">
-            A safe space for students to prioritize mental health and well-being 💬
+            A safe space for students to prioritize mental health and well-being
+            💬
           </p>
         </div>
 
@@ -273,8 +279,8 @@ export default function GetStarted() {
             </h2>
           </div>
           <p className="text-lg text-gray-600 mb-8 mt-4 max-w-2xl mx-auto">
-            College life can be exciting, but also overwhelming. Whether it’s exams,
-            homesickness, or stress, you don’t have to face it alone.
+            College life can be exciting, but also overwhelming. Whether it’s
+            exams, homesickness, or stress, you don’t have to face it alone.
           </p>
           <button
             onClick={() => {
@@ -288,74 +294,117 @@ export default function GetStarted() {
         </div>
 
         {/* Features Section */}
-       {/* Features Section */}
-<div className="w-full max-w-6xl mx-auto mb-16">
-  <h3 className="text-3xl font-bold text-center mb-12 text-gray-900">
-    How Ashvaan Supports Your Mental Health
-  </h3>
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-    {/* AI Assistant */}
-    <div className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition-shadow">
-      <div className="bg-teal-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-        <MessageCircle className="h-8 w-8 text-teal-600" />
-      </div>
-      <h4 className="font-semibold text-lg mb-2 text-gray-900">AI Assistant</h4>
-      <p className="text-gray-600 text-sm">
-        24/7 AI-powered mental health support and coping strategies
-      </p>
-    </div>
+        {/* Features Section */}
+        <div className="w-full max-w-6xl mx-auto mb-16">
+          <h3 className="text-3xl font-bold text-center mb-12 text-gray-900">
+            How Ashvaan Supports Your Mental Health
+          </h3>
+          {/* Dashboard Important Features */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+            {/* Self-Assessment */}
+            <div className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-xl hover:scale-[1.05] transition-shadow transition-transform duration-300">
+              <div className="bg-teal-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center shadow-md">
+                <MessageCircle className="h-8 w-8 text-teal-600" />
+              </div>
+              <h4 className="font-semibold text-lg mb-2 text-gray-900">
+                Self-Assessment
+              </h4>
+              <p className="text-gray-600 text-sm">
+                Take control by understanding your mental health better with
+                guided self-assessments.
+              </p>
+            </div>
 
-    {/* Counseling */}
-    <div className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition-shadow">
-      <div className="bg-blue-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-        <Calendar className="h-8 w-8 text-blue-600" />
-      </div>
-      <h4 className="font-semibold text-lg mb-2 text-gray-900">Counseling</h4>
-      <p className="text-gray-600 text-sm">
-        Book confidential sessions with licensed mental health professionals
-      </p>
-    </div>
+            {/* AI Assistant */}
+            <div className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-xl hover:scale-[1.05] transition-shadow transition-transform duration-300">
+              <div className="bg-blue-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center shadow-md">
+                <Brain className="h-8 w-8 text-blue-600" />
+              </div>
+              <h4 className="font-semibold text-lg mb-2 text-gray-900">
+                AI Assistant
+              </h4>
+              <p className="text-gray-600 text-sm">
+                Receive personalized, compassionate AI support anytime to help
+                you cope and thrive.
+              </p>
+            </div>
 
-    {/* Peer Support */}
-    <div className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition-shadow">
-      <div className="bg-purple-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-        <Heart className="h-8 w-8 text-purple-600" />
-      </div>
-      <h4 className="font-semibold text-lg mb-2 text-gray-900">Peer Support</h4>
-      <p className="text-gray-600 text-sm">
-        Connect anonymously with other students who understand your struggles
-      </p>
-    </div>
+            {/* Appointments */}
+            <div className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-xl hover:scale-[1.05] transition-shadow transition-transform duration-300">
+              <div className="bg-green-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center shadow-md">
+                <Calendar className="h-8 w-8 text-green-600" />
+              </div>
+              <h4 className="font-semibold text-lg mb-2 text-gray-900">
+                Appointments
+              </h4>
+              <p className="text-gray-600 text-sm">
+                Easily book private sessions with trusted mental health
+                professionals.
+              </p>
+            </div>
 
-    {/* Crisis Support */}
-    <div className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition-shadow">
-      <div className="bg-red-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-        <AlertTriangle className="h-8 w-8 text-red-600" />
-      </div>
-      <h4 className="font-semibold text-lg mb-2 text-gray-900">Crisis Support</h4>
-      <p className="text-gray-600 text-sm">
-        Immediate access to crisis resources and emergency support
-      </p>
-    </div>
+            {/* Mood Tracker */}
+            <div className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-xl hover:scale-[1.05] transition-shadow transition-transform duration-300">
+              <div className="bg-purple-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center shadow-md">
+                <Heart className="h-8 w-8 text-purple-600" />
+              </div>
+              <h4 className="font-semibold text-lg mb-2 text-gray-900">
+                Mood Tracker
+              </h4>
+              <p className="text-gray-600 text-sm">
+                Gain insight into your emotions and build awareness with simple
+                mood tracking.
+              </p>
+            </div>
 
-    {/* Multilingual Chatbot */}
-    <div className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition-shadow">
-      <div className="bg-green-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-        <Brain className="h-8 w-8 text-green-600" />
-      </div>
-      <h4 className="font-semibold text-lg mb-2 text-gray-900">Multilingual Chatbot</h4>
-      <p className="text-gray-600 text-sm">
-        Talk in Hindi, Marathi, English, and more — support in your language.
-      </p>
-    </div>
-  </div>
-</div>
+            {/* Daily Journal */}
+            <div className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-xl hover:scale-[1.05] transition-shadow transition-transform duration-300">
+              <div className="bg-yellow-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center shadow-md">
+                <BookOpen className="h-8 w-8 text-yellow-600" />
+              </div>
+              <h4 className="font-semibold text-lg mb-2 text-gray-900">
+                Daily Journal
+              </h4>
+              <p className="text-gray-600 text-sm">
+                Reflect safely on your day and nurture your mental wellness
+                through journaling.
+              </p>
+            </div>
 
+            {/* Peer Support */}
+            <div className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-xl hover:scale-[1.05] transition-shadow transition-transform duration-300">
+              <div className="bg-cyan-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center shadow-md">
+                <Users className="h-8 w-8 text-cyan-600" />
+              </div>
+              <h4 className="font-semibold text-lg mb-2 text-gray-900">
+                Peer Support
+              </h4>
+              <p className="text-gray-600 text-sm">
+                Join a compassionate community that understands your journey and
+                supports you anonymously.
+              </p>
+            </div>
+
+            {/* Crisis Support */}
+            <div className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-xl hover:scale-[1.05] transition-shadow transition-transform duration-300">
+              <div className="bg-red-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center shadow-md">
+                <AlertTriangle className="h-8 w-8 text-red-600" />
+              </div>
+              <h4 className="font-semibold text-lg mb-2 text-gray-900">
+                Crisis Support
+              </h4>
+              <p className="text-gray-600 text-sm">
+                Get immediate, reliable help in times of need from trusted
+                crisis resources.
+              </p>
+            </div>
+          </div>
+        </div>
 
         {/* Hero Image */}
         <div className="mb-16">
           <img
-            src="https://i.pinimg.com/1200x/3b/06/c2/3b06c29e50f5369f87c4c958ee71c3ff.jpg"
+            src={studentMentalHealth}
             alt="Student Mental Health"
             className="w-96 h-96 object-cover rounded-full shadow-2xl hover:scale-105 transition-transform duration-500 border-4 border-teal-500 mx-auto"
           />
@@ -369,8 +418,8 @@ export default function GetStarted() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-gradient-to-r from-teal-50 to-white shadow-md rounded-lg p-6 hover:shadow-lg transition-all duration-300">
               <p className="text-gray-700 italic mb-4">
-                "Ashvaan helped me through my toughest semester. The AI assistant
-                was always there when I needed someone to talk to."
+                "Ashvaan helped me through my toughest semester. The AI
+                assistant was always there when I needed someone to talk to."
               </p>
               <div className="text-sm text-gray-500">- Anonymous Student</div>
             </div>
@@ -390,8 +439,8 @@ export default function GetStarted() {
             Ready to Start Your Mental Health Journey?
           </h3>
           <p className="mb-6">
-            Join thousands of students who have found support and healing through
-            Ashvaan.
+            Join thousands of students who have found support and healing
+            through Ashvaan.
           </p>
           <button
             onClick={() => {
