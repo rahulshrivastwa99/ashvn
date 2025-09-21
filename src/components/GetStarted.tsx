@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { toast } from "react-toastify";
+
 import studentMentalHealth from "../assets/Homepage.jpg";
 import {
   Heart,
@@ -32,11 +34,17 @@ export default function GetStarted() {
     try {
       if (isLogin) {
         await signIn(email, password);
+        console.log("Signin success toast triggered");
+        toast.success("Signed in successfully!");
       } else {
         await signUp(email, password, fullName, role);
+        console.log("Signup success toast triggered");
+        toast.success("Sign up successful! Please check your email to verify.");
       }
     } catch (error: any) {
+      console.error(error);
       setError(error.message);
+      toast.error(`Error: ${error.message}`);
     } finally {
       setLoading(false);
     }

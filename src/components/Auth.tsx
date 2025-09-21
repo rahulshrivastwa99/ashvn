@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
+
 import { Heart, Shield, Users } from "lucide-react";
 
 export default function Auth() {
@@ -10,6 +12,10 @@ export default function Auth() {
   const [role, setRole] = useState("student");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  // <-- Add test toast here
+  useEffect(() => {
+    toast.info("Toast system working!");
+  }, []);
 
   const { signIn, signUp } = useAuth();
 
@@ -21,11 +27,17 @@ export default function Auth() {
     try {
       if (isLogin) {
         await signIn(email, password);
+        console.log("Signin success toast triggered");
+        toast.success("Signed in successfully!");
       } else {
         await signUp(email, password, fullName, role);
+        console.log("Signup success toast triggered");
+        toast.success("Sign up successful! Please check your email to verify.");
       }
     } catch (error: any) {
+      console.error(error);
       setError(error.message);
+      toast.error(`Error: ${error.message}`);
     } finally {
       setLoading(false);
     }
