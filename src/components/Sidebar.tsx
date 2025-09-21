@@ -56,13 +56,13 @@ const navItems = [
   {
     name: "Daily Journal",
     href: "/daily-journal",
-    icon: Heart,
+    icon: BookOpen,
     allowedRoles: ["student"],
   },
   {
     name: "Resources",
     href: "/resources",
-    icon: BookOpen,
+    icon: Brain,
     allowedRoles: ["student", "counsellor"],
   },
   {
