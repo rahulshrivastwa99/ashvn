@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import { FaHeart } from "react-icons/fa";
 import {
   MessageCircle,
   Calendar,
@@ -13,125 +12,23 @@ import {
   Activity,
   Brain,
   Phone,
+  Notebook,
 } from "lucide-react";
 import ChatbotWidget from "../index/ChatbotWidget";
-
-//==================================================================
-// DailyJournal Component Code is now INSIDE this file
-//==================================================================
-
-const isYesterday = (date: Date): boolean => {
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-  return (
-    date.getFullYear() === yesterday.getFullYear() &&
-    date.getMonth() === yesterday.getMonth() &&
-    date.getDate() === yesterday.getDate()
-  );
-};
-
-const isToday = (date: Date): boolean => {
-  const today = new Date();
-  return (
-    date.getFullYear() === today.getFullYear() &&
-    date.getMonth() === today.getMonth() &&
-    date.getDate() === today.getDate()
-  );
-};
-
-const DailyJournal: React.FC = () => {
-  const [streak, setStreak] = useState<number>(7);
-  const [lastEntryDate, setLastEntryDate] = useState<Date | null>(
-    new Date("2025-09-20")
-  );
-  const [entry, setEntry] = useState<string>("");
-  const [feedbackMessage, setFeedbackMessage] = useState<string>("");
-
-  const handleSaveEntry = () => {
-    if (entry.trim() === "") {
-      setFeedbackMessage("Please write something before saving.");
-      return;
-    }
-
-    const today = new Date();
-    let newStreak = streak;
-
-    if (lastEntryDate) {
-      if (isYesterday(lastEntryDate)) {
-        newStreak++;
-      } else if (!isToday(lastEntryDate)) {
-        newStreak = 1;
-      }
-    } else {
-      newStreak = 1;
-    }
-
-    setStreak(newStreak);
-    setLastEntryDate(today);
-
-    console.log("Saving Entry:", {
-      entryText: entry,
-      newStreak: newStreak,
-      entryDate: today.toISOString(),
-    });
-
-    setEntry("");
-    setFeedbackMessage(`Entry saved! Your new streak is ${newStreak} days.`);
-    setTimeout(() => setFeedbackMessage(""), 3000);
-  };
-
-  return (
-    <div className="bg-white p-6 md:p-8 rounded-xl shadow-md border border-gray-200 w-full">
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-800">Daily Journal</h2>
-          <p className="text-gray-500">How are you feeling today?</p>
-        </div>
-        <div className="flex items-center space-x-3 bg-red-50 p-3 rounded-full border border-red-200">
-          <FaHeart className="text-red-500 text-2xl" />
-          <div className="text-center">
-            <span className="font-bold text-xl text-red-600">{streak}</span>
-            <p className="text-xs text-red-500 -mt-1">day streak</p>
-          </div>
-        </div>
-      </div>
-      <textarea
-        value={entry}
-        onChange={(e) => setEntry(e.target.value)}
-        placeholder="Write about your thoughts, feelings, or anything on your mind..."
-        className="w-full h-40 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-teal-400 transition-shadow duration-200 resize-none"
-      />
-      <button
-        onClick={handleSaveEntry}
-        className="w-full mt-4 py-3 px-6 text-white font-bold rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 hover:opacity-90 transition-opacity duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-      >
-        Save Today's Entry
-      </button>
-      {feedbackMessage && (
-        <p className="text-center mt-4 text-sm text-gray-600">
-          {feedbackMessage}
-        </p>
-      )}
-    </div>
-  );
-};
-
-//==================================================================
-// Main StudentDashboard Component
-//==================================================================
+import { Link } from "react-router-dom";
 
 export default function StudentDashboard() {
   const { profile } = useAuth();
   const [moodScore, setMoodScore] = useState(7);
-  const [upcomingAppointments, setUpcomingAppointments] = useState(1);
+  const [upcomingAppointments, setUpcomingAppointments] = useState(2);
   const [unreadMessages, setUnreadMessages] = useState(3);
 
   const quickActions = [
     {
-      name: "AI Mental Health Assistant",
-      description: "Get immediate support and coping strategies",
+      name: "Self-Assessment",
+      description: "Assess your mental well-being",
       icon: MessageCircle,
-      href: "/chat",
+      href: "/selfassessment",
       color: "bg-teal-500",
     },
     {
@@ -162,6 +59,13 @@ export default function StudentDashboard() {
       href: "/mood",
       color: "bg-green-500",
     },
+    {
+      name: "Daily Journal",
+      description: "Write down your thoughts and feelings",
+      icon: Notebook,
+      href: "/daily-journal",
+      color: "bg-yellow-500",
+    },
   ];
 
   const wellnessTools = [
@@ -169,21 +73,25 @@ export default function StudentDashboard() {
       name: "PHQ-9 Assessment",
       description: "Depression screening questionnaire",
       status: "Due",
+      href: "/selfassessment", // Link for assessments
     },
     {
       name: "GAD-7 Assessment",
       description: "Anxiety screening questionnaire",
       status: "Completed",
+      href: "/selfassessment", // Link for assessments
     },
     {
       name: "Breathing Exercise",
       description: "5-minute guided breathing",
       status: "Available",
+      href: "/resources", // Link for resources
     },
     {
       name: "Mindfulness Session",
       description: "10-minute meditation",
       status: "Available",
+      href: "/resources", // Link for resources
     },
   ];
 
@@ -222,19 +130,21 @@ export default function StudentDashboard() {
               immediately.
             </p>
           </div>
-          <button className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors flex items-center">
-            <Phone className="h-4 w-4 mr-2" />
-            Emergency Help
-          </button>
+          <Link to="/crisis-support">
+            <button className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors flex items-center">
+              <Phone className="h-4 w-4 mr-2" />
+              Emergency Help
+            </button>
+          </Link>
         </div>
       </div>
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {quickActions.map((action) => (
-          <a
+          <Link
             key={action.name}
-            href={action.href}
+            to={action.href}
             className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow group"
           >
             <div
@@ -244,12 +154,13 @@ export default function StudentDashboard() {
             </div>
             <h3 className="font-semibold text-gray-900 mb-2">{action.name}</h3>
             <p className="text-sm text-gray-600">{action.description}</p>
-          </a>
+          </Link>
         ))}
       </div>
 
       {/* Dashboard Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* vvv CHANGE IS HERE: Changed md:grid-cols-3 to md:grid-cols-2 vvv */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <div className="flex items-center">
             <Calendar className="h-8 w-8 text-blue-500 mr-3" />
@@ -259,20 +170,6 @@ export default function StudentDashboard() {
               </p>
               <p className="text-2xl font-bold text-gray-900">
                 {upcomingAppointments}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <div className="flex items-center">
-            <MessageCircle className="h-8 w-8 text-teal-500 mr-3" />
-            <div>
-              <p className="text-sm font-medium text-gray-600">
-                Unread Messages
-              </p>
-              <p className="text-2xl font-bold text-gray-900">
-                {unreadMessages}
               </p>
             </div>
           </div>
@@ -291,9 +188,6 @@ export default function StudentDashboard() {
         </div>
       </div>
 
-      {/* Daily Journal Component */}
-      <DailyJournal />
-
       {/* Wellness Tools */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200">
         <div className="p-6 border-b border-gray-200">
@@ -306,27 +200,29 @@ export default function StudentDashboard() {
         </div>
         <div className="divide-y divide-gray-200">
           {wellnessTools.map((tool, index) => (
-            <div key={index} className="p-6 hover:bg-gray-50 cursor-pointer">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="font-medium text-gray-900">{tool.name}</h3>
-                  <p className="text-sm text-gray-600 mt-1">
-                    {tool.description}
-                  </p>
+            <Link to={tool.href} key={index} className="block hover:bg-gray-50">
+              <div className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-medium text-gray-900">{tool.name}</h3>
+                    <p className="text-sm text-gray-600 mt-1">
+                      {tool.description}
+                    </p>
+                  </div>
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-medium ${
+                      tool.status === "Due"
+                        ? "bg-red-100 text-red-800"
+                        : tool.status === "Completed"
+                        ? "bg-green-100 text-green-800"
+                        : "bg-blue-100 text-blue-800"
+                    }`}
+                  >
+                    {tool.status}
+                  </span>
                 </div>
-                <span
-                  className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    tool.status === "Due"
-                      ? "bg-red-100 text-red-800"
-                      : tool.status === "Completed"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-blue-100 text-blue-800"
-                  }`}
-                >
-                  {tool.status}
-                </span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
