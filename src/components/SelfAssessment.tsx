@@ -53,7 +53,7 @@ const assessmentQuestions = {
   ],
 };
 
-export default function SelfAssessment() {
+export default function Assitant() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",

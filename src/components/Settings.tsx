@@ -10,8 +10,8 @@ import {
   Sun,
   Moon,
   Shield,
-  UserSwitch,
 } from "lucide-react";
+import { useAuth } from "../contexts/AuthContext";
 
 // --- Type Definitions for Clarity ---
 type NotificationSettingsType = {
@@ -63,18 +63,17 @@ const UserNotificationSettings = ({
   settings: NotificationSettingsType;
   onUpdate: (key: keyof NotificationSettingsType, value: any) => void;
 }) => (
-  <div className="p-6">
-    <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">
-      My Notification Settings
+  <div className="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-gray-200">
+    <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+      <Bell className="h-5 w-5 mr-3 text-teal-600" />
+      Notification Settings
     </h2>
     <div className="space-y-6">
       {/* Email Alerts Toggle */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
         <div>
-          <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">
-            Email Alerts
-          </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <h3 className="text-sm font-medium text-gray-900">Email Alerts</h3>
+          <p className="text-sm text-gray-600">
             Receive email notifications for important events.
           </p>
         </div>
@@ -86,12 +85,10 @@ const UserNotificationSettings = ({
         />
       </div>
       {/* SMS Alerts Toggle */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
         <div>
-          <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">
-            SMS Alerts
-          </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <h3 className="text-sm font-medium text-gray-900">SMS Alerts</h3>
+          <p className="text-sm text-gray-600">
             Receive SMS for critical alerts and emergencies.
           </p>
         </div>
@@ -103,12 +100,12 @@ const UserNotificationSettings = ({
         />
       </div>
       {/* Push Notifications Toggle */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
         <div>
-          <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">
+          <h3 className="text-sm font-medium text-gray-900">
             Push Notifications
           </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-sm text-gray-600">
             Receive browser push notifications.
           </p>
         </div>
@@ -120,14 +117,14 @@ const UserNotificationSettings = ({
         />
       </div>
       {/* Risk Threshold Select */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+      <div className="p-4 bg-gray-50 rounded-lg">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
           Risk Alert Threshold
         </label>
         <select
           value={settings.riskThreshold}
           onChange={(e) => onUpdate("riskThreshold", e.target.value)}
-          className="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 bg-white dark:bg-gray-800 focus:ring-teal-500 focus:border-teal-500"
+          className="w-full border border-gray-300 rounded-md px-3 py-2 bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
         >
           <option value="medium">Medium Risk and Above</option>
           <option value="high">High Risk and Above</option>
@@ -148,21 +145,20 @@ const UserAppearanceSettings = ({
   theme: "light" | "dark";
   setTheme: (theme: "light" | "dark") => void;
 }) => (
-  <div className="p-6">
-    <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">
+  <div className="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-gray-200">
+    <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+      <Palette className="h-5 w-5 mr-3 text-teal-600" />
       Appearance
     </h2>
-    <div className="flex items-center justify-between">
-      <span className="text-sm text-gray-700 dark:text-gray-300">
-        Theme Mode
-      </span>
+    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+      <span className="text-sm font-medium text-gray-900">Theme Mode</span>
       <div className="flex space-x-3">
         <button
           onClick={() => setTheme("light")}
           className={`flex items-center px-4 py-2 rounded-md transition ${
             theme === "light"
-              ? "bg-teal-600 text-white"
-              : "bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+              ? "bg-teal-600 text-white shadow-md"
+              : "bg-white border border-gray-300 hover:bg-gray-50"
           }`}
         >
           <Sun className="h-4 w-4 mr-2" /> Light
@@ -171,8 +167,8 @@ const UserAppearanceSettings = ({
           onClick={() => setTheme("dark")}
           className={`flex items-center px-4 py-2 rounded-md transition ${
             theme === "dark"
-              ? "bg-teal-600 text-white"
-              : "bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+              ? "bg-teal-600 text-white shadow-md"
+              : "bg-white border border-gray-300 hover:bg-gray-50"
           }`}
         >
           <Moon className="h-4 w-4 mr-2" /> Dark
@@ -192,17 +188,18 @@ const AdminSystemSettings = ({
   settings: GlobalSettingsType["system"];
   onUpdate: (key: keyof GlobalSettingsType["system"], value: any) => void;
 }) => (
-  <div className="p-6">
-    <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">
+  <div className="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-gray-200">
+    <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+      <SettingsIcon className="h-5 w-5 mr-3 text-teal-600" />
       System Configuration
     </h2>
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
         <div>
-          <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">
+          <h3 className="text-sm font-medium text-gray-900">
             Maintenance Mode
           </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-sm text-gray-600">
             Temporarily disable access for system updates.
           </p>
         </div>
@@ -213,12 +210,12 @@ const AdminSystemSettings = ({
           className="h-5 w-5 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
         />
       </div>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
         <div>
-          <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">
+          <h3 className="text-sm font-medium text-gray-900">
             Open Registration
           </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-sm text-gray-600">
             Allow new students to register on the platform.
           </p>
         </div>
@@ -237,9 +234,7 @@ const AdminSystemSettings = ({
 // Main Settings Component
 // =================================================================
 export default function Settings() {
-  const [currentUserRole, setCurrentUserRole] = useState<"student" | "admin">(
-    "student"
-  );
+  const { profile, loading } = useAuth();
 
   // State for user-specific settings
   const [userSettings, setUserSettings] = useState(defaultUserSettings);
@@ -249,6 +244,9 @@ export default function Settings() {
 
   // State for global (admin-only) settings
   const [globalSettings, setGlobalSettings] = useState(initialGlobalSettings);
+
+  // Get user role from auth context
+  const userRole = profile?.role || "student";
 
   // Determine the active tab, defaulting to the first available tab
   const adminTabs = [
@@ -264,19 +262,45 @@ export default function Settings() {
     { id: "appearance", name: "Appearance", icon: Palette },
   ];
 
-  const availableTabs = currentUserRole === "admin" ? adminTabs : studentTabs;
+  const availableTabs = userRole === "admin" ? adminTabs : studentTabs;
   const [activeTab, setActiveTab] = useState(availableTabs[0].id);
 
   // This effect resets the active tab if the role changes to prevent errors
   useEffect(() => {
     setActiveTab(availableTabs[0].id);
-  }, [currentUserRole]);
+  }, [userRole]);
 
   // Apply theme to the document
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
     localStorage.setItem("theme", theme);
   }, [theme]);
+
+  // Show loading state while auth is loading
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading settings...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show message if user is not logged in
+  if (!profile) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            Access Denied
+          </h2>
+          <p className="text-gray-600">Please log in to access settings.</p>
+        </div>
+      </div>
+    );
+  }
 
   // --- Update Handlers ---
   const updateUserSettings = (
@@ -303,7 +327,7 @@ export default function Settings() {
 
   // --- Save Handler ---
   const handleSave = () => {
-    if (currentUserRole === "admin") {
+    if (userRole === "admin") {
       console.log("Saving Global Settings:", globalSettings);
       // API call to save global settings would go here
     }
@@ -326,7 +350,7 @@ export default function Settings() {
       case "appearance":
         return <UserAppearanceSettings theme={theme} setTheme={setTheme} />;
       case "system":
-        return currentUserRole === "admin" ? (
+        return userRole === "admin" ? (
           <AdminSystemSettings
             settings={globalSettings.system}
             onUpdate={(key, value) =>
@@ -337,11 +361,11 @@ export default function Settings() {
       // Add cases for 'institution', 'localization' etc. for the admin view
       default:
         return (
-          <div className="p-6 text-center">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+          <div className="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-gray-200 text-center">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">
               {availableTabs.find((t) => t.id === activeTab)?.name}
             </h2>
-            <p className="mt-4 text-gray-600 dark:text-gray-400">
+            <p className="text-gray-600">
               Content for this section is under construction.
             </p>
           </div>
@@ -350,78 +374,57 @@ export default function Settings() {
   };
 
   return (
-    <div className="space-y-6 p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-            {currentUserRole === "admin" ? "System Settings" : "My Settings"}
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Configure platform and personal preferences.
-          </p>
-        </div>
-        <div className="flex items-center gap-4">
-          {/* --- DEMO ONLY: Role Switcher --- */}
-          <div className="flex items-center rounded-lg bg-gray-200 dark:bg-gray-700 p-1">
-            <button
-              onClick={() => setCurrentUserRole("student")}
-              className={`px-3 py-1 text-sm rounded-md transition ${
-                currentUserRole === "student"
-                  ? "bg-white dark:bg-gray-900 shadow"
-                  : ""
-              }`}
-            >
-              Student View
-            </button>
-            <button
-              onClick={() => setCurrentUserRole("admin")}
-              className={`px-3 py-1 text-sm rounded-md transition ${
-                currentUserRole === "admin"
-                  ? "bg-white dark:bg-gray-900 shadow"
-                  : ""
-              }`}
-            >
-              Admin View
-            </button>
-          </div>
-          <button
-            onClick={handleSave}
-            className="bg-teal-600 text-white px-6 py-2 rounded-md hover:bg-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 flex items-center"
-          >
-            <Save className="h-4 w-4 mr-2" />
-            Save Changes
-          </button>
-        </div>
+      <div className="bg-gradient-to-r from-teal-500 to-blue-600 rounded-lg p-6 text-white mb-8">
+        <h1 className="text-2xl font-bold mb-2">
+          {userRole === "admin" ? "System Settings" : "My Settings"}
+        </h1>
+        <p className="text-teal-100">
+          Configure platform and personal preferences.
+        </p>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-8">
+      <div className="flex flex-col lg:flex-row gap-8 p-6">
         {/* Sidebar */}
         <nav className="w-full lg:w-64 flex-shrink-0">
-          <div className="space-y-2">
-            {availableTabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`w-full flex items-center px-3 py-2 rounded-md text-left transition-colors ${
-                  activeTab === tab.id
-                    ? "bg-teal-100 dark:bg-teal-900 text-teal-700 dark:text-teal-200 font-medium"
-                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                }`}
-              >
-                <tab.icon className="h-5 w-5 mr-3" />
-                {tab.name}
-              </button>
-            ))}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+            <div className="space-y-2">
+              {availableTabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`w-full flex items-center px-4 py-3 rounded-lg text-left transition-colors ${
+                    activeTab === tab.id
+                      ? "bg-teal-50 text-teal-600 font-medium shadow-sm"
+                      : "text-gray-700 hover:bg-teal-50 hover:text-teal-600"
+                  }`}
+                >
+                  <tab.icon className="h-5 w-5 mr-3" />
+                  {tab.name}
+                </button>
+              ))}
+            </div>
           </div>
         </nav>
 
         {/* Content */}
         <div className="flex-1">
-          <div className="bg-white dark:bg-gray-800/50 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200">
             {renderContent()}
           </div>
         </div>
+      </div>
+
+      {/* Save Button */}
+      <div className="fixed bottom-6 right-6">
+        <button
+          onClick={handleSave}
+          className="bg-teal-600 text-white px-6 py-3 rounded-lg hover:bg-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 flex items-center shadow-lg hover:shadow-xl transition-all"
+        >
+          <Save className="h-4 w-4 mr-2" />
+          Save Changes
+        </button>
       </div>
     </div>
   );
