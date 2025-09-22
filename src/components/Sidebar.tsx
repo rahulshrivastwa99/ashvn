@@ -36,7 +36,7 @@ const navItems = [
     allowedRoles: ["admin", "student", "counsellor"],
   },
   {
-    name: "AI Assitant",
+    name: "AI Assistant",
     href: "/aiassitant",
     icon: Bot,
     allowedRoles: ["admin", "student", "counsellor"],
