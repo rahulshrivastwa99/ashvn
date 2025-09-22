@@ -11,6 +11,7 @@ import {
   CheckCircle,
   XCircle,
 } from "lucide-react";
+import toast, { Toaster } from "react-hot-toast";
 
 interface Appointment {
   id: string;
@@ -50,6 +51,35 @@ const mockCounsellors = [
   },
 ];
 
+const initialAppointments: Appointment[] = [
+  {
+    id: "1",
+    date: "2025-10-18",
+    time: "10:00",
+    counsellor: "Dr. Meera Kapoor",
+    type: "video",
+    status: "scheduled",
+    notes: "Follow-up session for anxiety management",
+  },
+  {
+    id: "2",
+    date: "2025-09-15",
+    time: "14:30",
+    counsellor: "Dr. Rajesh Khanna",
+    type: "in-person",
+    status: "completed",
+    location: "Student Counseling Center, Room 203",
+  },
+  {
+    id: "3",
+    date: "2025-10-22",
+    time: "11:00",
+    counsellor: "Dr. Arjun Menon",
+    type: "phone",
+    status: "scheduled",
+  },
+];
+
 export default function Appointments() {
   const { profile } = useAuth();
   const [showBooking, setShowBooking] = useState(false);
@@ -60,35 +90,8 @@ export default function Appointments() {
     "video" | "phone" | "in-person"
   >("video");
   const [notes, setNotes] = useState("");
-
-  const [appointments] = useState<Appointment[]>([
-    {
-      id: "1",
-      date: "2025-01-18",
-      time: "10:00",
-      counsellor: "Dr. Meera Kapoor",
-      type: "video",
-      status: "scheduled",
-      notes: "Follow-up session for anxiety management",
-    },
-    {
-      id: "2",
-      date: "2025-01-15",
-      time: "14:30",
-      counsellor: "Dr. Rajesh Khanna",
-      type: "in-person",
-      status: "completed",
-      location: "Student Counseling Center, Room 203",
-    },
-    {
-      id: "3",
-      date: "2025-01-22",
-      time: "11:00",
-      counsellor: "Dr. Arjun Menon",
-      type: "phone",
-      status: "scheduled",
-    },
-  ]);
+  const [appointments, setAppointments] =
+    useState<Appointment[]>(initialAppointments);
 
   const availableTimes = [
     "09:00",
@@ -107,14 +110,32 @@ export default function Appointments() {
 
   const handleBookAppointment = () => {
     if (!selectedCounsellor || !selectedDate || !selectedTime) {
-      alert("Please fill in all required fields");
+      toast.error("Please select a counsellor, date, and time.");
       return;
     }
+    const counsellorInfo = mockCounsellors.find(
+      (c) => c.id === selectedCounsellor
+    );
+    if (!counsellorInfo) {
+      toast.error("Selected counsellor not found.");
+      return;
+    }
+    const newAppointment: Appointment = {
+      id: Date.now().toString(),
+      date: selectedDate,
+      time: selectedTime,
+      counsellor: counsellorInfo.name,
+      type: appointmentType,
+      status: "scheduled",
+      notes: notes,
+    };
 
-    // Here you would typically make an API call to book the appointment
-    alert("Appointment booked successfully!");
+    setAppointments((prevAppointments) => [
+      newAppointment,
+      ...prevAppointments,
+    ]);
+    toast.success("Appointment booked successfully!");
     setShowBooking(false);
-    // Reset form
     setSelectedCounsellor("");
     setSelectedDate("");
     setSelectedTime("");
@@ -160,9 +181,10 @@ export default function Appointments() {
     }
   };
 
-  const upcomingAppointments = appointments.filter(
-    (apt) => apt.status === "scheduled"
-  );
+  const upcomingAppointments = appointments
+    .filter((apt) => apt.status === "scheduled")
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
   const pastAppointments = appointments.filter(
     (apt) => apt.status !== "scheduled"
   );
@@ -182,9 +204,7 @@ export default function Appointments() {
               ✕
             </button>
           </div>
-
           <div className="space-y-6">
-            {/* Counsellor Selection */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-3">
                 Select a Counsellor
@@ -220,8 +240,6 @@ export default function Appointments() {
                 ))}
               </div>
             </div>
-
-            {/* Date Selection */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Select Date
@@ -234,8 +252,6 @@ export default function Appointments() {
                 className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-teal-500 focus:border-teal-500"
               />
             </div>
-
-            {/* Time Selection */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Select Time
@@ -256,8 +272,6 @@ export default function Appointments() {
                 ))}
               </div>
             </div>
-
-            {/* Appointment Type */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Appointment Type
@@ -281,8 +295,6 @@ export default function Appointments() {
                 ))}
               </div>
             </div>
-
-            {/* Notes */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Additional Notes (Optional)
@@ -295,34 +307,6 @@ export default function Appointments() {
                 className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-teal-500 focus:border-teal-500"
               />
             </div>
-
-            {/* Privacy Notice */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <svg
-                    className="h-5 w-5 text-blue-400"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm text-blue-700">
-                    <strong>Privacy Guarantee:</strong> Your appointment details
-                    are completely confidential. Only you and your assigned
-                    counsellor have access to this information.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Action Buttons */}
             <div className="flex space-x-4">
               <button
                 onClick={handleBookAppointment}
@@ -345,7 +329,7 @@ export default function Appointments() {
 
   return (
     <div className="space-y-8">
-      {/* Header */}
+      <Toaster position="bottom-right" />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">My Appointments</h1>
@@ -360,7 +344,6 @@ export default function Appointments() {
         </button>
       </div>
 
-      {/* Emergency Support */}
       <div className="bg-red-50 border border-red-200 rounded-lg p-4">
         <div className="flex items-center">
           <Phone className="h-5 w-5 text-red-600 mr-3" />
@@ -375,7 +358,6 @@ export default function Appointments() {
         </div>
       </div>
 
-      {/* Upcoming Appointments */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200">
         <div className="p-6 border-b border-gray-200">
           <h2 className="text-lg font-semibold text-gray-900">
@@ -439,12 +421,11 @@ export default function Appointments() {
                     </div>
                   </div>
                   <div className="flex space-x-2">
-                    <button className="text-teal-600 hover:text-teal-700 text-sm font-medium">
-                      Join Call
-                    </button>
-                    <button className="text-gray-500 hover:text-gray-700 text-sm font-medium">
-                      Reschedule
-                    </button>
+                    {appointment.status === "scheduled" && (
+                      <button className="text-gray-500 hover:text-gray-700 text-sm font-medium">
+                        Reschedule
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -463,7 +444,6 @@ export default function Appointments() {
         )}
       </div>
 
-      {/* Past Appointments */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200">
         <div className="p-6 border-b border-gray-200">
           <h2 className="text-lg font-semibold text-gray-900">
