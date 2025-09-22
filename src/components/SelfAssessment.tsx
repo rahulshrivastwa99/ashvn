@@ -18,7 +18,6 @@ const assessmentQuestions = {
     "Over the last 2 weeks, how often have you been bothered by little interest or pleasure in doing things?",
     "Over the last 2 weeks, how often have you felt down, depressed, or hopeless?",
     "Over the last 2 weeks, how often have you had trouble falling or staying asleep, or sleeping too much?",
-    "Over the last 2 weeks, how often have you felt tired or had little energy?",
     "Over the last 2 weeks, how often have you had poor appetite or been overeating?",
     "Over the last 2 weeks, how often have you felt bad about yourself — or that you are a failure or have let yourself or your family down?",
     "Over the last 2 weeks, how often have you had trouble concentrating on things, such as reading the newspaper or watching television?",
@@ -36,13 +35,11 @@ const assessmentQuestions = {
   ],
 };
 
-// vvv NEW: More polite off-topic replies vvv
 const offTopicReplies = [
   "I appreciate you sharing, but my main role right now is to help with the PHQ-9 and GAD-7 assessments. Would you like to start one of them?",
   "Thank you for reaching out. At the moment, I can only guide you through the official assessments. Please feel free to choose one of the options below.",
   "I'm here to support you with a self-assessment. To get started, please select either the PHQ-9 or GAD-7 tool.",
 ];
-// ^^^ NEW: More polite off-topic replies ^^^
 
 export default function Assitant() {
   const [messages, setMessages] = useState<Message[]>([
@@ -64,9 +61,8 @@ export default function Assitant() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  // Note: We remove the useEffect because we don't want scrolling.
+  // The layout will be fixed to a single view.
 
   const startAssessment = (type: "PHQ-9" | "GAD-7") => {
     setCurrentAssessment({ type, questionIndex: 0, scores: [] });
@@ -237,7 +233,7 @@ export default function Assitant() {
   const quickReplies = ["Start PHQ-9 assessment", "Start GAD-7 assessment"];
 
   return (
-    <div className="h-full flex flex-col bg-gray-50">
+    <div className="h-screen flex flex-col bg-gray-50">
       {/* Header */}
       <div className="bg-white shadow-sm border-b px-6 py-4">
         <div className="flex items-center">
@@ -256,7 +252,7 @@ export default function Assitant() {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-4">
+      <div className="flex-1 flex flex-col p-6 space-y-4">
         {messages.map((message) => (
           <div
             key={message.id}
@@ -275,7 +271,6 @@ export default function Assitant() {
             </div>
           </div>
         ))}
-
         {isTyping && (
           <div className="flex justify-start">
             <div className="bg-white text-gray-900 shadow-sm border border-gray-200 px-4 py-3 rounded-2xl rounded-bl-none">
@@ -293,7 +288,6 @@ export default function Assitant() {
             </div>
           </div>
         )}
-        <div ref={messagesEndRef} />
       </div>
 
       {/* Quick Replies */}
