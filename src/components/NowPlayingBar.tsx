@@ -1,6 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useMusicPlayer } from "../contexts/MusicPlayerContext";
-import { Play, Pause, SkipForward, X } from "lucide-react";
+import { Play, Pause, SkipForward, SkipBack, X } from "lucide-react";
+
+// Helper function to format time
+const formatTime = (seconds: number) => {
+  if (isNaN(seconds) || seconds === 0) return "00:00";
+  const floorSeconds = Math.floor(seconds);
+  const min = Math.floor(floorSeconds / 60);
+  const sec = floorSeconds % 60;
+  return `${min.toString().padStart(2, "0")}:${sec
+    .toString()
+    .padStart(2, "0")}`;
+};
 
 const NowPlayingBar = () => {
   const {
@@ -14,12 +25,11 @@ const NowPlayingBar = () => {
 
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // update current time
+  // This logic for updating time remains the same
   useEffect(() => {
-    const updateTime = async () => {
-      if (playerRef.current) {
+    const timer = setInterval(async () => {
+      if (isPlaying && playerRef.current) {
         try {
           const time = await playerRef.current.getCurrentTime?.();
           const dur = await playerRef.current.getDuration?.();
@@ -27,34 +37,21 @@ const NowPlayingBar = () => {
           if (typeof dur === "number" && !isNaN(dur)) setDuration(dur);
         } catch {}
       }
-    };
-    if (isPlaying) {
-      updateTime();
-      timerRef.current = setInterval(updateTime, 1000);
-    } else if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
+    }, 1000);
+    return () => clearInterval(timer);
   }, [isPlaying, playerRef]);
 
   const handleSeek = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTime = parseFloat(e.target.value);
     setCurrentTime(newTime);
     if (playerRef.current?.seekTo) {
-      try {
-        await playerRef.current.seekTo(newTime, true);
-      } catch {}
+      await playerRef.current.seekTo(newTime, true);
     }
   };
 
   const handleStopAndClose = () => {
     if (playerRef.current?.stopVideo) {
-      try {
-        playerRef.current.stopVideo();
-      } catch {}
+      playerRef.current.stopVideo();
     }
     setIsPlaying(false);
     setCurrentTrack(undefined);
@@ -63,80 +60,70 @@ const NowPlayingBar = () => {
   if (!currentTrack) return null;
 
   return (
-    <div
-      className="fixed bottom-0 right-0 z-10 text-white bg-gradient-to-r from-teal-500 to-blue-600 px-2 py-1 flex items-center justify-between shadow-lg"
-      style={{
-        left: "256px",
-        width: "calc(100vw - 256px)",
-        height: "50px", // <-- reduced height
-      }}
-    >
-      {/* Left: track info */}
-      <div className="flex items-center gap-2 min-w-0">
-        <img
-          src={`https://img.youtube.com/vi/${currentTrack.youtubeId}/mqdefault.jpg`}
-          alt={currentTrack.title}
-          className="w-8 h-8 rounded object-cover border border-white/30"
-        />
-        <div className="min-w-0">
-          <p className="font-medium text-xs truncate">{currentTrack.title}</p>
-          <p className="text-[10px] text-blue-100 truncate">
+    // Main container: A fixed card in the bottom-right corner
+    <div className="fixed bottom-5 right-5 z-50 bg-white rounded-lg shadow-2xl p-4 w-full max-w-md flex items-center gap-4 text-left">
+      {/* Album Art */}
+      <img
+        src={`https://img.youtube.com/vi/${currentTrack.youtubeId}/mqdefault.jpg`}
+        alt={currentTrack.title}
+        className="w-20 h-20 rounded-md object-cover"
+      />
+
+      {/* Player content */}
+      <div className="flex-grow flex flex-col justify-center">
+        {/* Track Info */}
+        <div className="mb-2">
+          <p className="font-bold text-md text-gray-800 truncate">
+            {currentTrack.title}
+          </p>
+          <p className="text-sm text-gray-500 truncate">
             {currentTrack.artist}
           </p>
         </div>
+
+        {/* Player Controls */}
+        <div className="flex items-center gap-3">
+          <button className="text-gray-500 hover:text-gray-800 transition-colors">
+            <SkipBack size={20} />
+          </button>
+          <button
+            onClick={() => setIsPlaying(!isPlaying)}
+            className="p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-colors shadow-md"
+          >
+            {isPlaying ? <Pause size={22} /> : <Play size={22} />}
+          </button>
+          <button
+            onClick={playNextTrack}
+            className="text-gray-500 hover:text-gray-800 transition-colors"
+          >
+            <SkipForward size={20} />
+          </button>
+        </div>
       </div>
 
-      {/* Middle: progress bar */}
-      <div className="flex-1 mx-3">
+      {/* Progress Bar & Time (now vertical) */}
+      <div className="w-full flex-grow mx-4">
         <input
           type="range"
           min="0"
           max={duration || 0}
           value={currentTime}
           onChange={handleSeek}
-          className="w-full h-[2px] bg-white/40 rounded-full cursor-pointer appearance-none accent-teal-400"
-          style={{ WebkitAppearance: "none" }}
+          className="w-full h-1.5 bg-gray-200 rounded-full cursor-pointer appearance-none accent-blue-500"
         />
-        <style jsx>{`
-          input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: white;
-            cursor: pointer;
-          }
-          input[type="range"]::-moz-range-thumb {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: white;
-            cursor: pointer;
-          }
-        `}</style>
+        <div className="flex justify-between text-xs text-gray-400 mt-1">
+          <span>{formatTime(currentTime)}</span>
+          <span>{formatTime(duration)}</span>
+        </div>
       </div>
 
-      {/* Right: controls */}
-      <div className="flex items-center gap-2">
-        <button
-          onClick={() => setIsPlaying(!isPlaying)}
-          className="p-1 rounded-full bg-white text-teal-600 hover:bg-teal-100 transition-colors"
-        >
-          {isPlaying ? <Pause size={14} /> : <Play size={14} />}
-        </button>
-        <button
-          onClick={playNextTrack}
-          className="p-1 rounded-full border border-white text-white hover:bg-white hover:text-teal-600 transition-colors"
-        >
-          <SkipForward size={14} />
-        </button>
-        <button
-          onClick={handleStopAndClose}
-          className="p-1 rounded-full border border-white text-white hover:bg-white hover:text-red-600 transition-colors"
-        >
-          <X size={14} />
-        </button>
-      </div>
+      {/* Close button inside the card */}
+      <button
+        onClick={handleStopAndClose}
+        className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 transition-colors"
+      >
+        <X size={20} />
+      </button>
     </div>
   );
 };
