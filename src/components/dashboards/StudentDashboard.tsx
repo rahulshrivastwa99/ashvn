@@ -7,12 +7,14 @@ import {
   Calendar,
   BookOpen,
   Heart,
-  AlertCircle,
+  AlertTriangle,
   TrendingUp,
   Activity,
   Brain,
   Phone,
   Notebook,
+  Music,
+  Bot,
 } from "lucide-react";
 import ChatbotWidget from "../index/ChatbotWidget";
 import { Link } from "react-router-dom";
@@ -21,9 +23,15 @@ export default function StudentDashboard() {
   const { profile } = useAuth();
   const [moodScore, setMoodScore] = useState(7);
   const [upcomingAppointments, setUpcomingAppointments] = useState(2);
-  const [unreadMessages, setUnreadMessages] = useState(3);
 
   const quickActions = [
+    {
+      name: "AI Assistant",
+      description: "Get instant support and guidance",
+      icon: Bot,
+      href: "/aiassitant",
+      color: "bg-cyan-500",
+    },
     {
       name: "Self-Assessment",
       description: "Assess your mental well-being",
@@ -66,6 +74,13 @@ export default function StudentDashboard() {
       href: "/daily-journal",
       color: "bg-yellow-500",
     },
+    {
+      name: "Sound Scapes",
+      description: "Listen to calming music and sounds",
+      icon: Music,
+      href: "/sound-scapes",
+      color: "bg-indigo-500",
+    },
   ];
 
   const wellnessTools = [
@@ -73,25 +88,25 @@ export default function StudentDashboard() {
       name: "PHQ-9 Assessment",
       description: "Depression screening questionnaire",
       status: "Due",
-      href: "/selfassessment", // Link for assessments
+      href: "/selfassessment",
     },
     {
       name: "GAD-7 Assessment",
       description: "Anxiety screening questionnaire",
       status: "Completed",
-      href: "/selfassessment", // Link for assessments
+      href: "/selfassessment",
     },
     {
       name: "Breathing Exercise",
       description: "5-minute guided breathing",
       status: "Available",
-      href: "/resources", // Link for resources
+      href: "/resources",
     },
     {
       name: "Mindfulness Session",
       description: "10-minute meditation",
       status: "Available",
-      href: "/resources", // Link for resources
+      href: "/resources",
     },
   ];
 
@@ -117,30 +132,9 @@ export default function StudentDashboard() {
         </div>
       </div>
 
-      {/* Emergency Support Banner */}
-      <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg">
-        <div className="flex items-center">
-          <AlertCircle className="h-5 w-5 text-red-400 mr-3" />
-          <div className="flex-1">
-            <h3 className="text-sm font-medium text-red-800">
-              Crisis Support Available 24/7
-            </h3>
-            <p className="text-sm text-red-700">
-              If you're experiencing thoughts of self-harm, please reach out
-              immediately.
-            </p>
-          </div>
-          <Link to="/crisis-support">
-            <button className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors flex items-center">
-              <Phone className="h-4 w-4 mr-2" />
-              Emergency Help
-            </button>
-          </Link>
-        </div>
-      </div>
-
-      {/* Quick Actions */}
+      {/* Main Grid for Quick Actions and Crisis Card */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Quick Actions (first 8 cards) */}
         {quickActions.map((action) => (
           <Link
             key={action.name}
@@ -156,10 +150,24 @@ export default function StudentDashboard() {
             <p className="text-sm text-gray-600">{action.description}</p>
           </Link>
         ))}
+
+        {/* vvv CRISIS SUPPORT CARD WITH RED BORDER vvv */}
+        <Link
+          to="/crisis"
+          className="md:col-span-2 lg:col-span-2 lg:col-start-2 bg-white rounded-lg shadow-sm border-2 border-red-500 p-6 hover:shadow-md transition-shadow group flex flex-col justify-center items-center text-center h-full"
+        >
+          <div className="bg-red-500 rounded-lg p-3 w-fit mb-4 group-hover:scale-110 transition-transform">
+            <AlertTriangle className="h-6 w-6 text-white" />
+          </div>
+          <h3 className="font-semibold text-gray-900 mb-2">Crisis Support</h3>
+          <p className="text-sm text-gray-600">
+            Get immediate help if needed. 24x7 Support.
+          </p>
+        </Link>
+        {/* ^^^ CRISIS SUPPORT CARD WITH RED BORDER ^^^ */}
       </div>
 
       {/* Dashboard Stats */}
-      {/* vvv CHANGE IS HERE: Changed md:grid-cols-3 to md:grid-cols-2 vvv */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <div className="flex items-center">
@@ -174,7 +182,6 @@ export default function StudentDashboard() {
             </div>
           </div>
         </div>
-
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <div className="flex items-center">
             <TrendingUp className="h-8 w-8 text-green-500 mr-3" />

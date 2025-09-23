@@ -15,6 +15,8 @@ import {
   LogOut,
   User,
   Bot,
+  Music,
+  Notebook,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -22,6 +24,7 @@ interface SidebarProps {
   onClose: () => void;
 }
 
+// vvv REORDERED THIS ARRAY TO MATCH YOUR LIST vvv
 const navItems = [
   {
     name: "Dashboard",
@@ -30,16 +33,16 @@ const navItems = [
     allowedRoles: ["admin", "student", "counsellor"],
   },
   {
-    name: "Self-Assessment",
-    href: "/selfassessment",
-    icon: MessageCircle,
-    allowedRoles: ["admin", "student", "counsellor"],
-  },
-  {
     name: "AI Assistant",
     href: "/aiassitant",
     icon: Bot,
-    allowedRoles: ["admin", "student", "counsellor"],
+    allowedRoles: ["student"],
+  },
+  {
+    name: "Self-Assessment",
+    href: "/selfassessment",
+    icon: MessageCircle,
+    allowedRoles: ["student"],
   },
   {
     name: "Appointments",
@@ -47,7 +50,18 @@ const navItems = [
     icon: Calendar,
     allowedRoles: ["student", "counsellor"],
   },
-
+  {
+    name: "Daily Journal",
+    href: "/daily-journal",
+    icon: Notebook,
+    allowedRoles: ["student"],
+  },
+  {
+    name: "Sound Scapes",
+    href: "/sound-scapes",
+    icon: Music,
+    allowedRoles: ["student"],
+  },
   {
     name: "Mood Tracker",
     href: "/mood",
@@ -55,15 +69,9 @@ const navItems = [
     allowedRoles: ["student"],
   },
   {
-    name: "Daily Journal",
-    href: "/daily-journal",
-    icon: BookOpen,
-    allowedRoles: ["student"],
-  },
-  {
     name: "Resources",
     href: "/resources",
-    icon: Brain,
+    icon: BookOpen,
     allowedRoles: ["student", "counsellor"],
   },
   {
@@ -76,7 +84,7 @@ const navItems = [
     name: "Crisis Support",
     href: "/crisis",
     icon: AlertTriangle,
-    allowedRoles: ["admin", "student"],
+    allowedRoles: ["student"],
   },
   {
     name: "Profile",
@@ -84,20 +92,6 @@ const navItems = [
     icon: User,
     allowedRoles: ["admin", "student", "counsellor"],
   },
-  { name: "Students", href: "/students", icon: User, allowedRoles: ["admin"] },
-  {
-    name: "Analytics",
-    href: "/analytics",
-    icon: BarChart3,
-    allowedRoles: ["admin", "counsellor"],
-  },
-  {
-    name: "ML Insights",
-    href: "/ml-insights",
-    icon: Brain,
-    allowedRoles: ["admin", "counsellor"],
-  },
-  { name: "Users", href: "/users", icon: User, allowedRoles: ["admin"] },
   {
     name: "Settings",
     href: "/settings",
@@ -105,11 +99,12 @@ const navItems = [
     allowedRoles: ["admin", "student", "counsellor"],
   },
 ];
+// ^^^ REORDERED THIS ARRAY TO MATCH YOUR LIST ^^^
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const { profile, signOut } = useAuth();
   const location = useLocation();
-  const role = profile?.role || "student"; // default for safety
+  const role = profile?.role || "student";
 
   const filteredNavItems = navItems.filter((item) =>
     item.allowedRoles.includes(role)
