@@ -1,3 +1,5 @@
+// src/components/Router.tsx
+
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import GetStarted from "./GetStarted";
@@ -15,14 +17,15 @@ import Settings from "./Settings";
 import MoodTracker from "./MoodTracker";
 import CrisisSupport from "./CrisisSupport";
 import MLInsights from "./MLInsights";
+import SoundScapes from "./SoundScapes";
 
 export default function Router() {
   return (
     <Routes>
-      {/* Public routes - no layout needed */}
+      {/* Public route */}
       <Route path="/welcome" element={<GetStarted />} />
 
-      {/* Protected routes with layout */}
+      {/* Protected routes wrapped in Layout */}
       <Route
         path="/*"
         element={
@@ -39,7 +42,16 @@ export default function Router() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/daily-journal" element={<DailyJournal />} />
               <Route path="/mood" element={<MoodTracker />} />
+
+              {/* vvv CORRECTED ROUTE vvv */}
               <Route path="/crisis" element={<CrisisSupport />} />
+
+              <Route path="/sound-scapes" element={<SoundScapes />} />
+              <Route path="/analytics" element={<Analytics />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/ml-insights" element={<MLInsights />} />
+
+              {/* Admin/Counsellor specific routes */}
               <Route
                 path="/students"
                 element={
@@ -51,8 +63,6 @@ export default function Router() {
                   </div>
                 }
               />
-
-              <Route path="/analytics" element={<Analytics />} />
               <Route
                 path="/users"
                 element={
@@ -64,10 +74,8 @@ export default function Router() {
                   </div>
                 }
               />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="/ml-insights" element={<MLInsights />} />
 
-              {/* Redirect unknown routes */}
+              {/* Catch-all redirect for any unknown routes */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Layout>

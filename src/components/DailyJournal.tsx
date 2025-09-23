@@ -1,7 +1,5 @@
-// src/components/DailyJournal.tsx
-
 import React, { useState, useEffect } from "react";
-import { Trash2, Edit } from "lucide-react";
+import { Trash2, Edit, Flame } from "lucide-react";
 
 // --- TypeScript type for a single journal entry ---
 type JournalEntry = {
@@ -37,43 +35,45 @@ const DailyJournal: React.FC = () => {
   );
   const [streak, setStreak] = useState<number>(6);
   const [lastEntryDate, setLastEntryDate] = useState<Date | null>(
-    new Date("2025-09-20") // Yesterday's date
+    new Date("2025-09-22") // Yesterday's date
   );
   const [entry, setEntry] = useState<string>("");
   const [feedbackMessage, setFeedbackMessage] = useState<string>("");
 
+  // vvv POPULATED with 6 previous streak posts vvv
   const [pastEntries, setPastEntries] = useState<JournalEntry[]>([
     {
       id: 6,
       text: "Feeling positive about hitting my 7-day goal tomorrow.",
-      date: "9/20/2025",
+      date: "9/22/2025",
     },
     {
       id: 5,
       text: "A bit stressed, but writing it down helped clear my head.",
-      date: "9/19/2025",
+      date: "9/21/2025",
     },
     {
       id: 4,
       text: "Went for a long walk today. The fresh air was wonderful.",
-      date: "9/18/2025",
+      date: "9/20/2025",
     },
     {
       id: 3,
       text: "Felt a bit anxious about the upcoming week, but also hopeful.",
-      date: "9/17/2025",
+      date: "9/19/2025",
     },
     {
       id: 2,
       text: "Had a really productive day. It felt great to check things off my list.",
-      date: "9/16/2025",
+      date: "9/18/2025",
     },
     {
       id: 1,
       text: "A quiet day. Spent some time reading which was relaxing.",
-      date: "9/15/2025",
+      date: "9/17/2025",
     },
   ]);
+  // ^^^ POPULATED with 6 previous streak posts ^^^
 
   const handleSaveEntry = () => {
     if (entry.trim() === "") {
@@ -82,18 +82,21 @@ const DailyJournal: React.FC = () => {
     }
     const today = new Date();
     let newStreak = streak;
+
     if (lastEntryDate) {
       if (isYesterday(lastEntryDate)) {
-        newStreak = streak < 7 ? streak + 1 : 7;
+        newStreak = streak + 1;
       } else if (!isToday(lastEntryDate)) {
         newStreak = 0;
       }
     } else {
       newStreak = 1;
     }
+
     if (streak === 0 && newStreak === 0) {
       newStreak = 1;
     }
+
     const newEntry: JournalEntry = {
       id: Date.now(),
       text: entry,
@@ -124,9 +127,8 @@ const DailyJournal: React.FC = () => {
   return (
     <div className="bg-white p-6 md:p-8 rounded-xl shadow-md border border-gray-200 w-full">
       {/* Header Section */}
-      <div className="flex justify-between items-start mb-6">
+      <div className="flex justify-between items-center mb-6">
         <div>
-          {/* Editable Journal Title */}
           <div className="flex items-center group">
             <h2 className="text-2xl font-bold text-gray-800">{journalTitle}</h2>
             <button
@@ -140,15 +142,21 @@ const DailyJournal: React.FC = () => {
           <p className="text-gray-500">How are you feeling today?</p>
         </div>
 
-        {/* Text-based Streak Counter */}
-        <div className="text-right border border-gray-200 bg-gray-50 rounded-lg px-4 py-2">
-          <p className="text-lg font-medium text-gray-500">Streak</p>
-          <p className="text-2xl font-bold text-teal-600">
-            {streak}{" "}
-            <span className="text-base font-medium text-gray-600">
-              / 7 days
-            </span>
-          </p>
+        {/* Yearly Streak Counter with Fire Icon */}
+        <div className="text-right border border-gray-200 bg-gray-50 rounded-lg px-4 py-2 flex items-center space-x-3">
+          <Flame
+            className={`
+            h-8 w-8 transition-colors duration-500 
+            ${streak >= 3 ? "text-orange-500 animate-pulse" : "text-gray-300"}
+          `}
+          />
+          <div>
+            <p className="text-lg font-medium text-gray-500">Streak</p>
+            <p className="text-2xl font-bold text-teal-600">
+              {streak}{" "}
+              <span className="text-base font-medium text-gray-600">days</span>
+            </p>
+          </div>
         </div>
       </div>
 
@@ -156,9 +164,8 @@ const DailyJournal: React.FC = () => {
         value={entry}
         onChange={(e) => setEntry(e.target.value)}
         placeholder="Write about your thoughts, feelings, or anything on your mind..."
-        className="w-full h-40 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-teal-400"
+        className="w-full h-40 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-400"
       />
-      {/* <<< CHANGE IS HERE: Replaced gradient with solid teal and new hover state */}
       <button
         onClick={handleSaveEntry}
         className="w-full mt-4 py-3 px-6 text-white font-bold rounded-lg bg-teal-600 hover:bg-teal-700 transition-colors"

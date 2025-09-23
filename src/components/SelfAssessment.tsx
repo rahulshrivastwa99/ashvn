@@ -18,6 +18,7 @@ const assessmentQuestions = {
     "Over the last 2 weeks, how often have you been bothered by little interest or pleasure in doing things?",
     "Over the last 2 weeks, how often have you felt down, depressed, or hopeless?",
     "Over the last 2 weeks, how often have you had trouble falling or staying asleep, or sleeping too much?",
+    "Over the last 2 weeks, how often have you felt tired or had little energy?",
     "Over the last 2 weeks, how often have you had poor appetite or been overeating?",
     "Over the last 2 weeks, how often have you felt bad about yourself — or that you are a failure or have let yourself or your family down?",
     "Over the last 2 weeks, how often have you had trouble concentrating on things, such as reading the newspaper or watching television?",
@@ -61,8 +62,9 @@ export default function Assitant() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Note: We remove the useEffect because we don't want scrolling.
-  // The layout will be fixed to a single view.
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const startAssessment = (type: "PHQ-9" | "GAD-7") => {
     setCurrentAssessment({ type, questionIndex: 0, scores: [] });
@@ -238,13 +240,13 @@ export default function Assitant() {
       <div className="bg-white shadow-sm border-b px-6 py-4">
         <div className="flex items-center">
           <div className="bg-teal-100 rounded-full p-3 mr-4">
-            <Brain className="h-6 w-6 text-teal-600" />
+            <Brain className="h-8 w-8 text-teal-600" />
           </div>
           <div>
-            <h1 className="text-xl font-semibold text-gray-900">
+            <h1 className="text-2xl font-bold text-gray-900">
               Mental Health Self-Assessment
             </h1>
-            <p className="text-sm text-gray-600">
+            <p className="text-base text-gray-600">
               Confidential screening tools (PHQ-9 & GAD-7)
             </p>
           </div>
@@ -252,7 +254,7 @@ export default function Assitant() {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 flex flex-col p-6 space-y-4">
+      <div className="flex-1 overflow-y-auto p-6 space-y-6">
         {messages.map((message) => (
           <div
             key={message.id}
@@ -261,13 +263,13 @@ export default function Assitant() {
             }`}
           >
             <div
-              className={`max-w-xs lg:max-w-md xl:max-w-lg px-4 py-3 rounded-2xl ${
+              className={`max-w-md lg:max-w-lg xl:max-w-2xl px-5 py-3 rounded-2xl ${
                 message.sender === "user"
-                  ? "bg-teal-600 text-white ml-auto rounded-br-none"
+                  ? "bg-teal-600 text-white rounded-br-none"
                   : "bg-white text-gray-900 shadow-sm border border-gray-200 rounded-bl-none"
               }`}
             >
-              <p className="text-sm whitespace-pre-wrap">{message.text}</p>
+              <p className="text-base whitespace-pre-wrap">{message.text}</p>
             </div>
           </div>
         ))}
@@ -293,12 +295,12 @@ export default function Assitant() {
       {/* Quick Replies */}
       {!currentAssessment.type && (
         <div className="px-6 pb-4">
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-3">
             {quickReplies.map((reply) => (
               <button
                 key={reply}
                 onClick={() => handleQuickReplyClick(reply)}
-                className="px-4 py-2 text-sm bg-white border border-gray-300 rounded-full hover:bg-gray-100 transition-colors"
+                className="px-4 py-2 text-base bg-white border border-gray-300 rounded-full hover:bg-gray-100 transition-colors"
               >
                 {reply}
               </button>
@@ -321,18 +323,18 @@ export default function Assitant() {
                 ? "Enter a number from 0-3..."
                 : "Click an assessment above or type its name..."
             }
-            className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+            className="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-base focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
           />
           <button
             onClick={sendMessage}
             disabled={!inputText.trim()}
-            className="bg-teal-600 text-white rounded-lg px-4 py-2 hover:bg-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+            className="bg-teal-600 text-white rounded-lg px-5 py-3 hover:bg-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
           >
-            <Send className="h-4 w-4" />
+            <Send className="h-5 w-5" />
           </button>
         </div>
-        <div className="mt-2 flex items-center text-xs text-gray-500">
-          <Shield className="h-3 w-3 mr-1" />
+        <div className="mt-2 flex items-center text-sm text-gray-500">
+          <Shield className="h-4 w-4 mr-1.5" />
           Your assessment results are confidential and secure.
         </div>
       </div>
