@@ -141,15 +141,15 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             className="fixed inset-0 bg-black bg-opacity-25"
             onClick={onClose}
           />
-          <nav className="fixed top-0 left-0 bottom-0 w-64 bg-white shadow-xl">
-            <div className="p-4 border-b">
+          <nav className="fixed top-0 left-0 bottom-0 w-64 bg-white dark:bg-gray-800 shadow-xl">
+            <div className="p-4 border-b dark:border-gray-700">
               <div className="flex items-center justify-between">
                 <h1 className="text-xl font-bold text-teal-600">Ashvaan</h1>
                 <button
                   onClick={onClose}
-                  className="p-2 rounded-md hover:bg-gray-100"
+                  className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
-                  <X className="h-5 w-5" />
+                  <X className="h-5 w-5 text-gray-600 dark:text-gray-300" />
                 </button>
               </div>
             </div>
@@ -163,7 +163,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                     className={`flex items-center px-3 py-2 rounded-md transition-colors ${
                       location.pathname === item.href
                         ? "bg-teal-50 text-teal-600 font-medium"
-                        : "text-gray-700 hover:bg-teal-50 hover:text-teal-600"
+                        : "text-gray-700 dark:text-gray-300 hover:bg-teal-50 dark:hover:bg-gray-700 hover:text-teal-600"
                     }`}
                   >
                     <item.icon className="h-5 w-5 mr-3" />
@@ -186,10 +186,10 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       )}
 
       {/* Desktop sidebar */}
-      <nav className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col bg-white shadow-lg h-screen overflow-y-auto">
-        <div className="p-6 border-b">
+      <nav className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col bg-white dark:bg-gray-800 shadow-lg h-screen overflow-y-auto">
+        <div className="p-6 border-b dark:border-gray-700">
           <h1 className="text-2xl font-bold text-teal-600">Ashvaan</h1>
-          <p className="text-sm text-gray-600 mt-1">Mental Health Support</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Mental Health Support</p>
         </div>
         <div className="flex-1 p-4">
           <div className="space-y-2">
@@ -198,10 +198,10 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 key={item.name}
                 to={item.href}
                 className={`flex items-center px-3 py-2 rounded-md transition-colors ${
-                  location.pathname === item.href
+            <div className="mt-8 pt-8 border-t dark:border-gray-700">
                     ? "bg-teal-50 text-teal-600 font-medium"
-                    : "text-gray-700 hover:bg-teal-50 hover:text-teal-600"
-                }`}
+                    : "text-gray-700 dark:text-gray-300 hover:bg-teal-50 dark:hover:bg-gray-700 hover:text-teal-600"
+                className="flex items-center w-full px-3 py-2 rounded-md text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
               >
                 <item.icon className="h-5 w-5 mr-3" />
                 {item.name}
@@ -209,23 +209,23 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             ))}
           </div>
         </div>
-        <div className="p-4 border-t">
+        <div className="p-4 border-t dark:border-gray-700">
           <div className="flex items-center mb-4">
-            <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
+            <div className="w-8 h-8 bg-teal-100 dark:bg-teal-900 rounded-full flex items-center justify-center">
               <User className="h-4 w-4 text-teal-600" />
             </div>
             <div className="ml-3">
-              <p className="text-sm font-medium text-gray-900">
+              <p className="text-sm font-medium text-gray-900 dark:text-white">
                 {profile?.full_name || "Guest User"}
               </p>
-              <p className="text-xs text-gray-500 capitalize">
+              <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">
                 {profile?.role || "No role"}
               </p>
             </div>
           </div>
           <button
             onClick={handleLogout}
-            className="flex items-center w-full px-3 py-2 rounded-md text-red-600 hover:bg-red-50 transition-colors"
+            className="flex items-center w-full px-3 py-2 rounded-md text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
           >
             <LogOut className="h-5 w-5 mr-3" />
             Sign Out

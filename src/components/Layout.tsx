@@ -12,7 +12,7 @@ export default function Layout({ children }: LayoutProps) {
   const sidebarWidth = "16rem"; // Corresponds to lg:pl-64 in Tailwind CSS
 
   return (
-    <div className="min-h-screen bg-gray-50 relative">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 relative">
       {" "}
       {/* Add 'relative' for positioning the music bar */}
       {/* Sidebar */}
@@ -20,13 +20,13 @@ export default function Layout({ children }: LayoutProps) {
       {/* Main content */}
       <div className="lg:pl-64">
         {/* Mobile header */}
-        <div className="lg:hidden bg-white shadow-sm border-b px-4 py-3 sticky top-0 z-30">
+        <div className="lg:hidden bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700 px-4 py-3 sticky top-0 z-30">
           <div className="flex items-center justify-between">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="p-2 rounded-md hover:bg-gray-100"
+              className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
             >
-              <Menu className="h-6 w-6" />
+              <Menu className="h-6 w-6 text-gray-600 dark:text-gray-300" />
             </button>
             <h1 className="text-lg font-semibold text-teal-600">Ashvaan</h1>
             <div className="w-10" />

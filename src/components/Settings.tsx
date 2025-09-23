@@ -9,9 +9,11 @@ import {
   Globe,
   Save,
   Sun,
+  Moon,
   Shield,
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
+import { useTheme } from "../contexts/ThemeContext";
 
 // --- Type Definitions for Clarity ---
 type NotificationSettingsType = {
@@ -129,29 +131,39 @@ const UserNotificationSettings = ({
 // Sub-component for User's Appearance Settings
 // =================================================================
 const UserAppearanceSettings = ({
-  theme,
-  setTheme,
+  currentTheme,
+  onThemeChange,
 }: {
-  theme: "light" | "dark";
-  setTheme: (theme: "light" | "dark") => void;
+  currentTheme: "light" | "dark";
+  onThemeChange: (theme: "light" | "dark") => void;
 }) => (
-  <div className="p-6 md:p-8">
-    <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+  <div className="p-6 md:p-8 bg-white dark:bg-gray-800 rounded-lg">
+    <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center">
       <Palette className="h-5 w-5 mr-3 text-teal-600" />
       Appearance
     </h2>
-    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-      <span className="text-sm font-medium text-gray-900">Theme Mode</span>
+    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+      <span className="text-sm font-medium text-gray-900 dark:text-white">Theme Mode</span>
       <div className="flex space-x-3">
         <button
-          onClick={() => setTheme("light")}
+          onClick={() => onThemeChange("light")}
           className={`flex items-center px-4 py-2 rounded-md transition ${
-            theme === "light"
+            currentTheme === "light"
               ? "bg-teal-600 text-white shadow-md"
-              : "bg-white border border-gray-300 hover:bg-gray-50"
+              : "bg-white dark:bg-gray-600 border border-gray-300 dark:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-500 text-gray-700 dark:text-gray-200"
           }`}
         >
           <Sun className="h-4 w-4 mr-2" /> Light
+        </button>
+        <button
+          onClick={() => onThemeChange("dark")}
+          className={`flex items-center px-4 py-2 rounded-md transition ${
+            currentTheme === "dark"
+              ? "bg-teal-600 text-white shadow-md"
+              : "bg-white dark:bg-gray-600 border border-gray-300 dark:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-500 text-gray-700 dark:text-gray-200"
+          }`}
+        >
+          <Moon className="h-4 w-4 mr-2" /> Dark
         </button>
       </div>
     </div>
@@ -163,8 +175,8 @@ const UserAppearanceSettings = ({
 // =================================================================
 export default function Settings() {
   const { profile, loading } = useAuth();
+  const { theme, setTheme } = useTheme();
   const [userSettings, setUserSettings] = useState(defaultUserSettings);
-  const [theme, setTheme] = useState<"light" | "dark">("light");
   const [globalSettings, setGlobalSettings] = useState(initialGlobalSettings);
   const userRole = profile?.role || "student";
 
@@ -185,11 +197,6 @@ export default function Settings() {
     setActiveTab(availableTabs[0].id);
   }, [userRole]);
 
-  useEffect(() => {
-    document.documentElement.classList.remove("dark");
-    localStorage.setItem("theme", "light");
-  }, [theme]);
-
   const updateUserSettings = (
     section: "notifications",
     key: string,
@@ -201,6 +208,10 @@ export default function Settings() {
       [section]: { ...prev[section], [key]: value },
     }));
     toast.success(`${settingName} ${value ? "enabled" : "disabled"}.`);
+  };
+
+  const handleThemeChange = (newTheme: "light" | "dark") => {
+    setTheme(newTheme);
   };
 
   const handleSave = () => {
@@ -220,7 +231,7 @@ export default function Settings() {
           />
         );
       case "appearance":
-        return <UserAppearanceSettings theme={theme} setTheme={setTheme} />;
+        return <UserAppearanceSettings currentTheme={theme} onThemeChange={handleThemeChange} />;
       default:
         return <div>Content not found.</div>;
     }
@@ -230,15 +241,15 @@ export default function Settings() {
   if (!profile) return <div>Please log in to access settings.</div>;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Toaster position="bottom-right" />
 
       {/* Header */}
-      <div className="bg-gradient-to-r from-teal-500 to-blue-600 rounded-lg p-6 text-white mb-8">
+      <div className="bg-gradient-to-r from-teal-500 to-blue-600 dark:from-teal-600 dark:to-blue-700 rounded-lg p-6 text-white mb-8">
         <h1 className="text-2xl font-bold mb-2">
           {userRole === "admin" ? "System Settings" : "My Settings"}
         </h1>
-        <p className="text-teal-100">
+        <p className="text-teal-100 dark:text-teal-200">
           Configure platform and personal preferences.
         </p>
       </div>
@@ -246,7 +257,7 @@ export default function Settings() {
       <div className="flex flex-col lg:flex-row gap-8 px-6">
         {/* Sidebar */}
         <nav className="w-full lg:w-64 flex-shrink-0">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4">
             <div className="space-y-2">
               {availableTabs.map((tab) => (
                 <button
@@ -255,7 +266,7 @@ export default function Settings() {
                   className={`w-full flex items-center px-4 py-3 rounded-lg text-left transition-colors ${
                     activeTab === tab.id
                       ? "bg-teal-50 text-teal-600 font-medium shadow-sm"
-                      : "text-gray-700 hover:bg-teal-50 hover:text-teal-600"
+                      : "text-gray-700 dark:text-gray-300 hover:bg-teal-50 dark:hover:bg-gray-700 hover:text-teal-600"
                   }`}
                 >
                   <tab.icon className="h-5 w-5 mr-3" />
@@ -268,7 +279,7 @@ export default function Settings() {
 
         {/* Content */}
         <div className="flex-1">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
             {renderContent()}
           </div>
         </div>
@@ -278,7 +289,7 @@ export default function Settings() {
       <div className="fixed bottom-6 right-6">
         <button
           onClick={handleSave}
-          className="bg-teal-600 text-white px-6 py-3 rounded-lg hover:bg-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 flex items-center shadow-lg hover:shadow-xl transition-all"
+          className="bg-teal-600 text-white px-6 py-3 rounded-lg hover:bg-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 flex items-center shadow-lg hover:shadow-xl transition-all dark:shadow-gray-900"
         >
           <Save className="h-4 w-4 mr-2" />
           Save Changes

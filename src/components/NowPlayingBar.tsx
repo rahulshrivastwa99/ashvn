@@ -61,7 +61,7 @@ const NowPlayingBar = () => {
 
   return (
     // Main container: A fixed card in the bottom-right corner
-    <div className="fixed bottom-5 right-5 z-50 bg-white rounded-lg shadow-2xl p-4 w-full max-w-md flex items-center gap-4 text-left">
+    <div className="fixed bottom-5 right-5 z-50 bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-4 w-full max-w-md flex items-center gap-4 text-left border dark:border-gray-700">
       {/* Album Art */}
       <img
         src={`https://img.youtube.com/vi/${currentTrack.youtubeId}/mqdefault.jpg`}
@@ -74,16 +74,17 @@ const NowPlayingBar = () => {
         {/* Track Info */}
         <div className="mb-2">
           <p className="font-bold text-md text-gray-800 truncate">
+          <p className="font-bold text-md text-gray-800 dark:text-white truncate">
             {currentTrack.title}
           </p>
-          <p className="text-sm text-gray-500 truncate">
+          <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
             {currentTrack.artist}
           </p>
         </div>
 
         {/* Player Controls */}
         <div className="flex items-center gap-3">
-          <button className="text-gray-500 hover:text-gray-800 transition-colors">
+          <button className="text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors">
             <SkipBack size={20} />
           </button>
           <button
@@ -94,7 +95,7 @@ const NowPlayingBar = () => {
           </button>
           <button
             onClick={playNextTrack}
-            className="text-gray-500 hover:text-gray-800 transition-colors"
+            className="text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
           >
             <SkipForward size={20} />
           </button>
@@ -109,9 +110,9 @@ const NowPlayingBar = () => {
           max={duration || 0}
           value={currentTime}
           onChange={handleSeek}
-          className="w-full h-1.5 bg-gray-200 rounded-full cursor-pointer appearance-none accent-blue-500"
+          className="w-full h-1.5 bg-gray-200 dark:bg-gray-600 rounded-full cursor-pointer appearance-none accent-blue-500"
         />
-        <div className="flex justify-between text-xs text-gray-400 mt-1">
+        <div className="flex justify-between text-xs text-gray-400 dark:text-gray-500 mt-1">
           <span>{formatTime(currentTime)}</span>
           <span>{formatTime(duration)}</span>
         </div>
@@ -120,7 +121,7 @@ const NowPlayingBar = () => {
       {/* Close button inside the card */}
       <button
         onClick={handleStopAndClose}
-        className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 transition-colors"
+        className="absolute top-2 right-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
       >
         <X size={20} />
       </button>
