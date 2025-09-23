@@ -130,3 +130,6 @@ const NowPlayingBar = () => {
 };
 
 export default NowPlayingBar;
+
+  )
+}
