@@ -36,7 +36,7 @@ const navItems = [
     name: "AI Assistant",
     href: "/aiassitant",
     icon: Bot,
-    allowedRoles: ["student"],
+    allowedRoles: ["student", "counsellor"],
   },
   {
     name: "Self-Assessment",
@@ -60,7 +60,7 @@ const navItems = [
     name: "Sound Scapes",
     href: "/sound-scapes",
     icon: Music,
-    allowedRoles: ["student"],
+    allowedRoles: ["student", "counsellor"],
   },
   {
     name: "Mood Tracker",
@@ -84,7 +84,7 @@ const navItems = [
     name: "Crisis Support",
     href: "/crisis",
     icon: AlertTriangle,
-    allowedRoles: ["student"],
+    allowedRoles: ["student", "admin"],
   },
   {
     name: "Profile",
@@ -92,6 +92,20 @@ const navItems = [
     icon: User,
     allowedRoles: ["admin", "student", "counsellor"],
   },
+  { name: "Students", href: "/students", icon: User, allowedRoles: ["admin"] },
+  {
+    name: "Analytics",
+    href: "/analytics",
+    icon: BarChart3,
+    allowedRoles: ["admin", "counsellor"],
+  },
+  {
+    name: "ML Insights",
+    href: "/ml-insights",
+    icon: Brain,
+    allowedRoles: ["admin", "counsellor"],
+  },
+  { name: "Users", href: "/users", icon: User, allowedRoles: ["admin"] },
   {
     name: "Settings",
     href: "/settings",
