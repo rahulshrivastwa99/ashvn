@@ -1,0 +1,101 @@
+import React, { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { supabase } from "../lib/supabase";
+import { useAuth } from "../contexts/AuthContext";
+
+export default function Feedback() {
+  const { profile } = useAuth();
+  const [feedback, setFeedback] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!feedback.trim()) {
+      toast.error("Feedback cannot be empty.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      if (!profile?.id) {
+        toast.error("You must be logged in to submit feedback.");
+        return;
+      }
+
+      const { error } = await supabase.from("feedback").insert({
+        message: feedback,
+        user_id: profile.id,
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      toast.success("Thank you for your feedback!");
+      setFeedback("");
+    } catch (error) {
+      console.error("Feedback submission error:", error);
+      toast.error("Failed to submit feedback. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="p-6 max-w-2xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4 text-gray-900">
+        Provide Feedback
+      </h1>
+      <p className="text-gray-600 mb-6">
+        We would love to hear your thoughts, suggestions, or any issues you've
+        encountered. Your feedback helps us improve!
+      </p>
+
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-6 rounded-lg shadow-md border border-gray-200"
+      >
+        <div className="mb-4">
+          <label
+            htmlFor="feedback"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
+            Your Feedback
+          </label>
+          <textarea
+            id="feedback"
+            rows={6}
+            className="w-full px-3 py-2 text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+            placeholder="Type your feedback here..."
+            value={feedback}
+            onChange={(e) => setFeedback(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            className="bg-teal-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-teal-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Submitting..." : "Submit"}
+          </button>
+        </div>
+      </form>
+
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+    </div>
+  );
+}

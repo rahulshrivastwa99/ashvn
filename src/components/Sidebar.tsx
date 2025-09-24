@@ -17,6 +17,7 @@ import {
   Bot,
   Music,
   Notebook,
+  MessageSquare,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -24,7 +25,6 @@ interface SidebarProps {
   onClose: () => void;
 }
 
-// vvv REORDERED THIS ARRAY TO MATCH YOUR LIST vvv
 const navItems = [
   {
     name: "Dashboard",
@@ -113,7 +113,13 @@ const navItems = [
     allowedRoles: ["admin", "student", "counsellor"],
   },
 ];
-// ^^^ REORDERED THIS ARRAY TO MATCH YOUR LIST ^^^
+
+const studentNavItems = navItems.filter((item) =>
+  item.allowedRoles.includes("student")
+);
+const adminNavItems = navItems.filter((item) =>
+  item.allowedRoles.includes("admin")
+);
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const { profile, signOut } = useAuth();
@@ -172,6 +178,17 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 ))}
               </div>
               <div className="mt-8 pt-8 border-t">
+                {/* Mobile version has the Provide Feedback link here */}
+                {profile?.role === "student" && (
+                  <Link
+                    to="/feedback"
+                    onClick={onClose}
+                    className="flex items-center w-full px-3 py-2 rounded-md transition-colors text-gray-700 hover:bg-teal-50 hover:text-teal-600"
+                  >
+                    <MessageSquare className="h-5 w-5 mr-3" />
+                    Feedback
+                  </Link>
+                )}
                 <button
                   onClick={handleLogout}
                   className="flex items-center w-full px-3 py-2 rounded-md text-red-600 hover:bg-red-50 transition-colors"
@@ -210,7 +227,21 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           </div>
         </div>
         <div className="p-4 border-t">
-          <div className="flex items-center mb-4">
+          {/* Feedback link for both admin and student */}
+          <Link
+            to={role === "admin" ? "/admin-feedback" : "/feedback"}
+            className={`flex items-center w-full px-3 py-2 rounded-md transition-colors text-gray-700 hover:bg-teal-50 hover:text-teal-600 ${
+              location.pathname === "/feedback" ||
+              location.pathname === "/admin-feedback"
+                ? "bg-teal-50 text-teal-600 font-medium"
+                : "text-gray-700 hover:bg-teal-50 hover:text-teal-600"
+            } mb-4`}
+          >
+            <MessageSquare className="h-5 w-5 mr-3" />
+            {role === "admin" ? "Feedback Provided" : "Feedback"}
+          </Link>
+
+          <div className="flex items-center my-4">
             <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
               <User className="h-4 w-4 text-teal-600" />
             </div>
