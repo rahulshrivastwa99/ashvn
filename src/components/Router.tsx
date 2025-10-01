@@ -1,5 +1,3 @@
-// src/components/Router.tsx
-
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import GetStarted from "./GetStarted";
@@ -18,22 +16,19 @@ import MoodTracker from "./MoodTracker";
 import CrisisSupport from "./CrisisSupport";
 import MLInsights from "./MLInsights";
 import SoundScapes from "./SoundScapes";
+import Feedback from "./Feedback";
+import AdminFeedback from "./AdminFeedback";
 
 export default function Router() {
   return (
     <Routes>
-      {/* Public route */}
       <Route path="/welcome" element={<GetStarted />} />
-
-      {/* Protected routes wrapped in Layout */}
       <Route
         path="/*"
         element={
           <Layout>
             <Routes>
               <Route path="/" element={<Dashboard />} />
-
-              {/* All routes accessible after login */}
               <Route path="/selfassessment" element={<SelfAssessment />} />
               <Route path="/aiassitant" element={<AiAssitant />} />
               <Route path="/appointments" element={<Appointments />} />
@@ -42,16 +37,13 @@ export default function Router() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/daily-journal" element={<DailyJournal />} />
               <Route path="/mood" element={<MoodTracker />} />
-
-              {/* vvv CORRECTED ROUTE vvv */}
               <Route path="/crisis" element={<CrisisSupport />} />
-
               <Route path="/sound-scapes" element={<SoundScapes />} />
               <Route path="/analytics" element={<Analytics />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/ml-insights" element={<MLInsights />} />
-
-              {/* Admin/Counsellor specific routes */}
+              <Route path="/feedback" element={<Feedback />} />
+              <Route path="/admin-feedback" element={<AdminFeedback />} />
               <Route
                 path="/students"
                 element={
@@ -74,8 +66,6 @@ export default function Router() {
                   </div>
                 }
               />
-
-              {/* Catch-all redirect for any unknown routes */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Layout>

@@ -6,6 +6,7 @@ import studentMentalHealth from "../assets/Homepage.jpg";
 import {
   Heart,
   Shield,
+  Music,
   Users,
   Brain,
   MessageCircle,
@@ -362,6 +363,19 @@ export default function GetStarted() {
               <p className="text-gray-600 text-sm">
                 Gain insight into your emotions and build awareness with simple
                 mood tracking.
+              </p>
+            </div>
+            {/* Sound Scapes */}
+            <div className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-xl hover:scale-[1.05] transition-shadow transition-transform duration-300">
+              <div className="bg-indigo-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center shadow-md">
+                <Music className="h-8 w-8 text-indigo-600" />
+              </div>
+              <h4 className="font-semibold text-lg mb-2 text-gray-900">
+                Sound Scapes
+              </h4>
+              <p className="text-gray-600 text-sm">
+                Listen to calming music and ambient sounds to relax your mind
+                and improve focus.
               </p>
             </div>
 
