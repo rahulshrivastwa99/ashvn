@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Menu } from "lucide-react";
+import { Menu, Moon, Sun } from "lucide-react";
 import Sidebar from "./Sidebar";
-import NowPlayingBar from "./NowPlayingBar"; // Import the music bar component
+import NowPlayingBar from "./NowPlayingBar";
+import { useTheme } from "../contexts/ThemeContext";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -9,34 +10,40 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const sidebarWidth = "16rem"; // Corresponds to lg:pl-64 in Tailwind CSS
+  const { theme, toggleTheme } = useTheme();
+  const sidebarWidth = "16rem";
 
   return (
-    <div className="min-h-screen bg-gray-50 relative">
-      {" "}
-      {/* Add 'relative' for positioning the music bar */}
-      {/* Sidebar */}
+    <div className="min-h-screen relative" style={{ backgroundColor: 'var(--bg-secondary)' }}>
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      {/* Main content */}
       <div className="lg:pl-64">
-        {/* Mobile header */}
-        <div className="lg:hidden bg-white shadow-sm border-b px-4 py-3 sticky top-0 z-30">
+        <div className="lg:hidden shadow-sm sticky top-0 z-30 px-4 py-3" style={{ backgroundColor: 'var(--surface)', borderBottom: '1px solid var(--border-color)' }}>
           <div className="flex items-center justify-between">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="p-2 rounded-md hover:bg-gray-100"
+              className="p-2 rounded-md"
+              style={{ backgroundColor: 'var(--bg-tertiary)' }}
             >
-              <Menu className="h-6 w-6" />
+              <Menu className="h-6 w-6" style={{ color: 'var(--text-primary)' }} />
             </button>
             <h1 className="text-lg font-semibold text-teal-600">Ashvaan</h1>
-            <div className="w-10" />
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-md"
+              style={{ backgroundColor: 'var(--bg-tertiary)' }}
+              aria-label="Toggle theme"
+            >
+              {theme === 'light' ? (
+                <Moon className="h-5 w-5" style={{ color: 'var(--text-primary)' }} />
+              ) : (
+                <Sun className="h-5 w-5" style={{ color: 'var(--text-primary)' }} />
+              )}
+            </button>
           </div>
         </div>
 
-        {/* Page content */}
         <main className="p-6">{children}</main>
       </div>
-      {/* Fixed Music Bar */}
       <div
         className="fixed bottom-0 z-10 hidden lg:block"
         style={{

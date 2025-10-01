@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { useTheme } from "../contexts/ThemeContext";
 import {
   X,
   Heart,
@@ -18,6 +19,8 @@ import {
   Music,
   Notebook,
   MessageSquare,
+  Moon,
+  Sun,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -123,6 +126,7 @@ const adminNavItems = navItems.filter((item) =>
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const { profile, signOut } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const location = useLocation();
   const role = profile?.role || "student";
 
@@ -203,10 +207,26 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       )}
 
       {/* Desktop sidebar */}
-      <nav className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col bg-white shadow-lg h-screen overflow-y-auto">
-        <div className="p-6 border-b">
-          <h1 className="text-2xl font-bold text-teal-600">Ashvaan</h1>
-          <p className="text-sm text-gray-600 mt-1">Mental Health Support</p>
+      <nav className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col shadow-lg h-screen overflow-y-auto" style={{ backgroundColor: 'var(--surface)' }}>
+        <div className="p-6" style={{ borderBottom: '1px solid var(--border-color)' }}>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-teal-600">Ashvaan</h1>
+              <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>Mental Health Support</p>
+            </div>
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-md"
+              style={{ backgroundColor: 'var(--bg-tertiary)' }}
+              aria-label="Toggle theme"
+            >
+              {theme === 'light' ? (
+                <Moon className="h-5 w-5" style={{ color: 'var(--text-primary)' }} />
+              ) : (
+                <Sun className="h-5 w-5" style={{ color: 'var(--text-primary)' }} />
+              )}
+            </button>
+          </div>
         </div>
         <div className="flex-1 p-4">
           <div className="space-y-2">
@@ -217,8 +237,9 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 className={`flex items-center px-3 py-2 rounded-md transition-colors ${
                   location.pathname === item.href
                     ? "bg-teal-50 text-teal-600 font-medium"
-                    : "text-gray-700 hover:bg-teal-50 hover:text-teal-600"
+                    : "hover:bg-teal-50 hover:text-teal-600"
                 }`}
+                style={location.pathname !== item.href ? { color: 'var(--text-primary)' } : {}}
               >
                 <item.icon className="h-5 w-5 mr-3" />
                 {item.name}
@@ -226,16 +247,22 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             ))}
           </div>
         </div>
-        <div className="p-4 border-t">
+        <div className="p-4" style={{ borderTop: '1px solid var(--border-color)' }}>
           {/* Feedback link for both admin and student */}
           <Link
             to={role === "admin" ? "/admin-feedback" : "/feedback"}
-            className={`flex items-center w-full px-3 py-2 rounded-md transition-colors text-gray-700 hover:bg-teal-50 hover:text-teal-600 ${
+            className={`flex items-center w-full px-3 py-2 rounded-md transition-colors hover:bg-teal-50 hover:text-teal-600 ${
               location.pathname === "/feedback" ||
               location.pathname === "/admin-feedback"
                 ? "bg-teal-50 text-teal-600 font-medium"
-                : "text-gray-700 hover:bg-teal-50 hover:text-teal-600"
+                : ""
             } mb-4`}
+            style={
+              location.pathname !== "/feedback" &&
+              location.pathname !== "/admin-feedback"
+                ? { color: 'var(--text-primary)' }
+                : {}
+            }
           >
             <MessageSquare className="h-5 w-5 mr-3" />
             {role === "admin" ? "Feedback Provided" : "Feedback"}
@@ -246,10 +273,10 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               <User className="h-4 w-4 text-teal-600" />
             </div>
             <div className="ml-3">
-              <p className="text-sm font-medium text-gray-900">
+              <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
                 {profile?.full_name || "Guest User"}
               </p>
-              <p className="text-xs text-gray-500 capitalize">
+              <p className="text-xs capitalize" style={{ color: 'var(--text-secondary)' }}>
                 {profile?.role || "No role"}
               </p>
             </div>
