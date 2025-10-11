@@ -3,13 +3,14 @@ import { useAuth } from "../contexts/AuthContext";
 import {
   Calendar,
   Clock,
-  User,
   MapPin,
   Phone,
   Video,
   Plus,
   CheckCircle,
   XCircle,
+  AlertTriangle,
+  User as UserIcon, // Renamed to avoid conflict with mockCounsellors type
 } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -143,15 +144,16 @@ export default function Appointments() {
   };
 
   const getStatusColor = (status: string) => {
+    // Using themed badge classes
     switch (status) {
       case "scheduled":
-        return "bg-blue-100 text-blue-800";
+        return "badge-info";
       case "completed":
-        return "bg-green-100 text-green-800";
+        return "badge-success";
       case "cancelled":
-        return "bg-red-100 text-red-800";
+        return "badge-danger";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "badge-secondary";
     }
   };
 
@@ -189,51 +191,55 @@ export default function Appointments() {
     (apt) => apt.status !== "scheduled"
   );
 
+  // --- Booking Modal (Renders when showBooking is true) ---
+  const bookingInputClass =
+    "w-full border border-theme-divider rounded-md px-3 py-2 text-primary bg-secondary placeholder-themed focus:ring-accent focus:border-accent";
+  const bookingLabelClass = "block text-sm font-medium text-secondary mb-2";
+
   if (showBooking) {
     return (
       <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        {/* KEY FIX 1: Modal uses feature-card background */}
+        <div className="feature-card p-6 rounded-lg shadow-md">
           <div className="flex items-center justify-between mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-2xl font-bold text-primary">
               Book New Appointment
             </h1>
             <button
               onClick={() => setShowBooking(false)}
-              className="text-gray-500 hover:text-gray-700"
+              className="text-secondary hover:text-primary"
             >
               ✕
             </button>
           </div>
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                Select a Counsellor
-              </label>
+              <label className={bookingLabelClass}>Select a Counsellor</label>
               <div className="grid gap-4">
                 {mockCounsellors.map((counsellor) => (
                   <div
                     key={counsellor.id}
                     className={`border-2 rounded-lg p-4 cursor-pointer transition-colors ${
                       selectedCounsellor === counsellor.id
-                        ? "border-teal-500 bg-teal-50"
-                        : "border-gray-200 hover:border-gray-300"
+                        ? "border-accent bg-active-bg" // Selected state theme
+                        : "border-theme-divider hover:border-accent hover-bg-secondary" // Default state theme
                     }`}
                     onClick={() => setSelectedCounsellor(counsellor.id)}
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <h3 className="font-medium text-gray-900">
+                        <h3 className="font-medium text-primary">
                           {counsellor.name}
                         </h3>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-secondary">
                           {counsellor.specialization}
                         </p>
                       </div>
                       <div className="text-right">
-                        <div className="text-sm font-medium text-gray-900">
+                        <div className="text-sm font-medium text-primary">
                           ★ {counsellor.rating}
                         </div>
-                        <div className="text-xs text-gray-500">Rating</div>
+                        <div className="text-xs text-secondary">Rating</div>
                       </div>
                     </div>
                   </div>
@@ -241,21 +247,17 @@ export default function Appointments() {
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Select Date
-              </label>
+              <label className={bookingLabelClass}>Select Date</label>
               <input
                 type="date"
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
                 min={new Date().toISOString().split("T")[0]}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-teal-500 focus:border-teal-500"
+                className={bookingInputClass}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Select Time
-              </label>
+              <label className={bookingLabelClass}>Select Time</label>
               <div className="grid grid-cols-3 gap-2">
                 {availableTimes.map((time) => (
                   <button
@@ -263,8 +265,8 @@ export default function Appointments() {
                     onClick={() => setSelectedTime(time)}
                     className={`py-2 px-3 text-sm rounded-md border ${
                       selectedTime === time
-                        ? "bg-teal-600 text-white border-teal-600"
-                        : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                        ? "bg-accent text-white border-accent" // Selected state theme
+                        : "bg-secondary text-primary border-theme-divider hover-bg-secondary" // Default state theme
                     }`}
                   >
                     {time}
@@ -273,9 +275,7 @@ export default function Appointments() {
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Appointment Type
-              </label>
+              <label className={bookingLabelClass}>Appointment Type</label>
               <div className="grid grid-cols-3 gap-4">
                 {["video", "phone", "in-person"].map((type) => (
                   <button
@@ -283,8 +283,8 @@ export default function Appointments() {
                     onClick={() => setAppointmentType(type as any)}
                     className={`flex items-center justify-center py-3 px-4 border rounded-lg ${
                       appointmentType === type
-                        ? "bg-teal-600 text-white border-teal-600"
-                        : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                        ? "bg-accent text-white border-accent" // Selected state theme
+                        : "bg-secondary text-primary border-theme-divider hover-bg-secondary" // Default state theme
                     }`}
                   >
                     {getTypeIcon(type)}
@@ -296,7 +296,7 @@ export default function Appointments() {
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className={bookingLabelClass}>
                 Additional Notes (Optional)
               </label>
               <textarea
@@ -304,19 +304,19 @@ export default function Appointments() {
                 onChange={(e) => setNotes(e.target.value)}
                 rows={3}
                 placeholder="Any specific concerns or topics you'd like to discuss..."
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-teal-500 focus:border-teal-500"
+                className={bookingInputClass}
               />
             </div>
             <div className="flex space-x-4">
               <button
                 onClick={handleBookAppointment}
-                className="flex-1 bg-teal-600 text-white py-3 px-4 rounded-md hover:bg-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+                className="flex-1 bg-accent text-white py-3 px-4 rounded-md hover:opacity-90 focus:ring-2 focus:ring-accent focus:ring-offset-2"
               >
                 Book Appointment
               </button>
               <button
                 onClick={() => setShowBooking(false)}
-                className="px-6 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
+                className="px-6 py-3 border border-theme-divider text-primary rounded-md hover-bg-secondary"
               >
                 Cancel
               </button>
@@ -327,57 +327,63 @@ export default function Appointments() {
     );
   }
 
+  // --- Main Appointments List View ---
   return (
     <div className="space-y-8">
       <Toaster position="bottom-right" />
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">My Appointments</h1>
-          <p className="text-gray-600">Manage your counselling sessions</p>
+          <h1 className="text-2xl font-bold text-primary">My Appointments</h1>
+          <p className="text-secondary">Manage your counselling sessions</p>
         </div>
         <button
           onClick={() => setShowBooking(true)}
-          className="bg-teal-600 text-white px-4 py-2 rounded-md hover:bg-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 flex items-center"
+          className="bg-accent text-white px-4 py-2 rounded-md hover:opacity-90 focus:ring-2 focus:ring-accent focus:ring-offset-2 flex items-center"
         >
           <Plus className="h-4 w-4 mr-2" />
           Book New Appointment
         </button>
       </div>
 
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+      {/* Immediate Help Banner */}
+      {/* KEY FIX 2: Banner uses themed colors, preserving red urgency */}
+      <div className="feature-card border-l-4 border-red-500 p-4">
         <div className="flex items-center">
-          <Phone className="h-5 w-5 text-red-600 mr-3" />
+          <AlertTriangle className="h-5 w-5 text-red-500 mr-3" />
           <div>
-            <h3 className="text-sm font-medium text-red-800">
+            <h3 className="text-sm font-medium text-primary">
               Need Immediate Help?
             </h3>
-            <p className="text-sm text-red-700">
+            <p className="text-sm text-secondary">
               Crisis Helpline: 1-800-273-8255 (Available 24/7)
             </p>
           </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-        <div className="p-6 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900">
+      {/* Upcoming Appointments List */}
+      <div className="feature-card">
+        <div className="p-6 border-b border-theme-divider">
+          <h2 className="text-lg font-semibold text-primary">
             Upcoming Appointments
           </h2>
         </div>
         {upcomingAppointments.length > 0 ? (
-          <div className="divide-y divide-gray-200">
+          <div className="divide-y divide-theme-divider">
             {upcomingAppointments.map((appointment) => (
               <div key={appointment.id} className="p-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
-                    <div className="bg-teal-100 rounded-full p-3">
-                      {getTypeIcon(appointment.type)}
+                    {/* Themed Avatar */}
+                    <div className="sidebar-avatar-bg rounded-full p-3 text-accent">
+                      <UserIcon className="h-4 w-4" />
                     </div>
                     <div>
                       <div className="flex items-center space-x-2">
-                        <h3 className="font-medium text-gray-900">
+                        <h3 className="font-medium text-primary">
                           {appointment.counsellor}
                         </h3>
+                        {/* Themed Status Badge */}
                         <span
                           className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
                             appointment.status
@@ -389,7 +395,7 @@ export default function Appointments() {
                           </span>
                         </span>
                       </div>
-                      <div className="flex items-center space-x-4 mt-1 text-sm text-gray-600">
+                      <div className="flex items-center space-x-4 mt-1 text-sm text-secondary">
                         <span className="flex items-center">
                           <Calendar className="h-4 w-4 mr-1" />
                           {new Date(appointment.date).toLocaleDateString()}
@@ -408,12 +414,12 @@ export default function Appointments() {
                         </span>
                       </div>
                       {appointment.notes && (
-                        <p className="text-sm text-gray-600 mt-2">
+                        <p className="text-sm text-secondary mt-2">
                           {appointment.notes}
                         </p>
                       )}
                       {appointment.location && (
-                        <p className="text-sm text-gray-600 mt-1 flex items-center">
+                        <p className="text-sm text-secondary mt-1 flex items-center">
                           <MapPin className="h-4 w-4 mr-1" />
                           {appointment.location}
                         </p>
@@ -422,7 +428,7 @@ export default function Appointments() {
                   </div>
                   <div className="flex space-x-2">
                     {appointment.status === "scheduled" && (
-                      <button className="text-gray-500 hover:text-gray-700 text-sm font-medium">
+                      <button className="text-accent hover:opacity-80 text-sm font-medium">
                         Reschedule
                       </button>
                     )}
@@ -433,36 +439,39 @@ export default function Appointments() {
           </div>
         ) : (
           <div className="p-12 text-center">
-            <Calendar className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-sm font-medium text-gray-900 mb-1">
+            <Calendar className="h-12 w-12 text-secondary mx-auto mb-4" />
+            <h3 className="text-sm font-medium text-primary mb-1">
               No upcoming appointments
             </h3>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-secondary">
               Book your first session to get started
             </p>
           </div>
         )}
       </div>
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-        <div className="p-6 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900">
+      {/* Past Appointments List */}
+      <div className="feature-card">
+        <div className="p-6 border-b border-theme-divider">
+          <h2 className="text-lg font-semibold text-primary">
             Past Appointments
           </h2>
         </div>
-        <div className="divide-y divide-gray-200">
+        <div className="divide-y divide-theme-divider">
           {pastAppointments.map((appointment) => (
             <div key={appointment.id} className="p-6 opacity-75">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
-                  <div className="bg-gray-100 rounded-full p-3">
+                  {/* Themed Avatar */}
+                  <div className="sidebar-avatar-bg rounded-full p-3 text-secondary">
                     {getTypeIcon(appointment.type)}
                   </div>
                   <div>
                     <div className="flex items-center space-x-2">
-                      <h3 className="font-medium text-gray-900">
+                      <h3 className="font-medium text-primary">
                         {appointment.counsellor}
                       </h3>
+                      {/* Themed Status Badge */}
                       <span
                         className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
                           appointment.status
@@ -474,7 +483,7 @@ export default function Appointments() {
                         </span>
                       </span>
                     </div>
-                    <div className="flex items-center space-x-4 mt-1 text-sm text-gray-600">
+                    <div className="flex items-center space-x-4 mt-1 text-sm text-secondary">
                       <span className="flex items-center">
                         <Calendar className="h-4 w-4 mr-1" />
                         {new Date(appointment.date).toLocaleDateString()}
@@ -485,14 +494,14 @@ export default function Appointments() {
                       </span>
                     </div>
                     {appointment.location && (
-                      <p className="text-sm text-gray-600 mt-1 flex items-center">
+                      <p className="text-sm text-secondary mt-1 flex items-center">
                         <MapPin className="h-4 w-4 mr-1" />
                         {appointment.location}
                       </p>
                     )}
                   </div>
                 </div>
-                <button className="text-gray-500 hover:text-gray-700 text-sm font-medium">
+                <button className="text-accent hover:opacity-80 text-sm font-medium">
                   View Notes
                 </button>
               </div>

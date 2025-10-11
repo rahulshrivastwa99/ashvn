@@ -7,7 +7,7 @@ import Router from "./components/Router";
 
 // --- Step 2 Imports ---
 import { MusicPlayerProvider } from "./contexts/MusicPlayerContext";
-import NowPlayingBar from "./components/NowPlayingBar"; // You will create this in the next step
+import NowPlayingBar from "./components/NowPlayingBar";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -17,10 +17,13 @@ function App() {
     <BrowserRouter>
       <ThemeProvider>
         <AuthProvider>
-          {/* 1. Wrap your app with the MusicPlayerProvider */}
           <MusicPlayerProvider>
-            {/* 2. Add a layout wrapper to position the page content and the player bar */}
-            <div className="flex flex-col h-screen bg-gray-100">
+            {/* KEY CHANGE: 
+              1. Removed hardcoded 'bg-gray-100' so the theme class on the <html> element 
+                 (which your ThemeProvider handles) can control the background via CSS variables.
+              2. Added 'app-container' for global theme-based styling via CSS.
+            */}
+            <div className="flex flex-col h-screen app-container">
               {/* This container will hold your pages and allow them to scroll */}
               <div className="flex-1 overflow-y-auto">
                 <ToastContainer
@@ -39,7 +42,7 @@ function App() {
                 </AuthGuard>
               </div>
 
-              {/* 3. Place the NowPlayingBar at the bottom, outside of the router */}
+              {/* Place the NowPlayingBar at the bottom */}
               <NowPlayingBar />
             </div>
           </MusicPlayerProvider>

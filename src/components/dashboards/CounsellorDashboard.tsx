@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import ChatbotEmbed from "../index/ChatbotEmbed"; // Added import
 import ChatbotWidget from "../index/ChatbotWidget";
+// Assuming useTheme is available if needed, but not strictly required here
 
 export default function CounsellorDashboard() {
   const { profile } = useAuth();
@@ -95,30 +96,31 @@ export default function CounsellorDashboard() {
   ];
 
   const getPriorityColor = (priority: string) => {
+    // Using theme badge classes for the schedule priority
     switch (priority.toLowerCase()) {
       case "critical":
-        return "bg-red-100 text-red-800 border-red-200";
+        return "badge-danger";
       case "high":
-        return "bg-orange-100 text-orange-800 border-orange-200";
+        return "badge-danger";
       case "medium":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+        return "badge-info";
       case "low":
-        return "bg-green-100 text-green-800 border-green-200";
+        return "badge-success";
       default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
+        return "badge-secondary";
     }
   };
 
   const getRiskColor = (risk: string) => {
+    // Using theme badge classes for risk alerts
     switch (risk.toLowerCase()) {
       case "critical":
-        return "bg-red-100 text-red-800";
       case "high":
-        return "bg-orange-100 text-orange-800";
+        return "badge-danger";
       case "medium":
-        return "bg-yellow-100 text-yellow-800";
+        return "badge-info";
       default:
-        return "bg-green-100 text-green-800";
+        return "badge-success";
     }
   };
 
@@ -126,20 +128,24 @@ export default function CounsellorDashboard() {
     <div className="space-y-8">
       {/* Welcome Header */}
       <div className="bg-gradient-to-r from-blue-500 to-teal-600 rounded-lg p-6 text-white">
-        <h1 className="text-2xl font-bold mb-2">
+        <h1 className="text-2xl font-bold mb-2 text-header-primary">
           Good morning, Dr. {profile?.full_name?.split(" ")[0]}!
         </h1>
-        <p className="text-blue-100">
+        <p className="text-header-secondary">
           You have 4 appointments scheduled today.
         </p>
         <div className="mt-4 flex items-center space-x-4">
           <div className="bg-white/20 rounded-lg px-4 py-2">
-            <div className="text-sm text-blue-100">This Week</div>
-            <div className="text-xl font-bold">18 Sessions</div>
+            <div className="text-sm text-header-secondary">This Week</div>
+            <div className="text-xl font-bold text-header-primary">
+              18 Sessions
+            </div>
           </div>
           <div className="bg-white/20 rounded-lg px-4 py-2">
-            <div className="text-sm text-blue-100">Satisfaction Rate</div>
-            <div className="text-xl font-bold">94%</div>
+            <div className="text-sm text-header-secondary">
+              Satisfaction Rate
+            </div>
+            <div className="text-xl font-bold text-header-primary">94%</div>
           </div>
         </div>
       </div>
@@ -147,15 +153,14 @@ export default function CounsellorDashboard() {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat) => (
-          <div
-            key={stat.name}
-            className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
-          >
+          <div key={stat.name} className="feature-card p-6">
             <div className="flex items-center">
               <stat.icon className={`h-8 w-8 ${stat.color} mr-3`} />
               <div>
-                <p className="text-sm font-medium text-gray-600">{stat.name}</p>
-                <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+                <p className="text-sm font-medium text-secondary">
+                  {stat.name}
+                </p>
+                <p className="text-2xl font-bold text-primary">{stat.value}</p>
               </div>
             </div>
           </div>
@@ -164,27 +169,27 @@ export default function CounsellorDashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Today's Schedule */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-          <div className="p-6 border-b border-gray-200">
+        <div className="feature-card">
+          <div className="p-6 border-b border-theme-divider">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <Calendar className="h-6 w-6 text-blue-500 mr-3" />
-                <h2 className="text-lg font-semibold text-gray-900">
+                <h2 className="text-lg font-semibold text-primary">
                   Today's Schedule
                 </h2>
               </div>
-              <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
+              <button className="text-accent hover:opacity-80 text-sm font-medium">
                 View All
               </button>
             </div>
           </div>
-          <div className="divide-y divide-gray-200">
+          <div className="divide-y divide-theme-divider">
             {todaysAppointments.map((appointment) => (
               <div key={appointment.id} className="p-6">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center">
-                    <Clock className="h-4 w-4 text-gray-400 mr-2" />
-                    <span className="font-medium text-gray-900">
+                    <Clock className="h-4 w-4 text-secondary mr-2" />
+                    <span className="font-medium text-primary">
                       {appointment.time}
                     </span>
                   </div>
@@ -196,10 +201,10 @@ export default function CounsellorDashboard() {
                     {appointment.priority}
                   </span>
                 </div>
-                <p className="text-sm text-gray-600 mb-1">
+                <p className="text-sm text-secondary mb-1">
                   {appointment.student}
                 </p>
-                <p className="text-sm font-medium text-gray-900">
+                <p className="text-sm font-medium text-primary">
                   {appointment.type}
                 </p>
               </div>
@@ -208,25 +213,25 @@ export default function CounsellorDashboard() {
         </div>
 
         {/* Risk Alerts */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-          <div className="p-6 border-b border-gray-200">
+        <div className="feature-card">
+          <div className="p-6 border-b border-theme-divider">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <AlertTriangle className="h-6 w-6 text-red-500 mr-3" />
-                <h2 className="text-lg font-semibold text-gray-900">
+                <h2 className="text-lg font-semibold text-primary">
                   Risk Alerts
                 </h2>
               </div>
-              <button className="text-red-600 hover:text-red-700 text-sm font-medium">
+              <button className="text-red-600 hover:opacity-80 text-sm font-medium">
                 View All
               </button>
             </div>
           </div>
-          <div className="divide-y divide-gray-200">
+          <div className="divide-y divide-theme-divider">
             {recentAlerts.map((alert, index) => (
               <div key={index} className="p-6">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="font-medium text-gray-900">
+                  <span className="font-medium text-primary">
                     {alert.student}
                   </span>
                   <span
@@ -237,8 +242,10 @@ export default function CounsellorDashboard() {
                     {alert.risk} Risk
                   </span>
                 </div>
-                <p className="text-sm text-gray-600 mb-1">{alert.assessment}</p>
-                <p className="text-xs text-gray-500">{alert.time}</p>
+                <p className="text-sm text-secondary mb-1">
+                  {alert.assessment}
+                </p>
+                <p className="text-xs text-secondary">{alert.time}</p>
               </div>
             ))}
           </div>
@@ -247,35 +254,32 @@ export default function CounsellorDashboard() {
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <button className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-left hover:shadow-md transition-shadow">
-          <MessageCircle className="h-8 w-8 text-teal-500 mb-4" />
-          <h3 className="font-semibold text-gray-900 mb-2">Message Students</h3>
-          <p className="text-sm text-gray-600">
+        <button className="w-full feature-card p-6 text-left hover:shadow-md transition-shadow">
+          <MessageCircle className="h-8 w-8 text-accent mb-4" />
+          <h3 className="font-semibold text-primary mb-2">Message Students</h3>
+          <p className="text-sm text-secondary">
             Send secure messages to your students
           </p>
         </button>
 
-        <button className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-left hover:shadow-md transition-shadow">
+        <button className="w-full feature-card p-6 text-left hover:shadow-md transition-shadow">
           <TrendingUp className="h-8 w-8 text-green-500 mb-4" />
-          <h3 className="font-semibold text-gray-900 mb-2">Progress Reports</h3>
-          <p className="text-sm text-gray-600">
+          <h3 className="font-semibold text-primary mb-2">Progress Reports</h3>
+          <p className="text-sm text-secondary">
             View student progress and assessments
           </p>
         </button>
 
-        <button className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-left hover:shadow-md transition-shadow">
+        <button className="w-full feature-card p-6 text-left hover:shadow-md transition-shadow">
           <CheckCircle className="h-8 w-8 text-blue-500 mb-4" />
-          <h3 className="font-semibold text-gray-900 mb-2">Session Notes</h3>
-          <p className="text-sm text-gray-600">
+          <h3 className="font-semibold text-primary mb-2">Session Notes</h3>
+          <p className="text-sm text-secondary">
             Add and review session documentation
           </p>
         </button>
       </div>
-      {/* Chatbot Integrate*/}
+      {/* Chatbot Integrate */}
       <ChatbotWidget />
-      {/* <div className="flex justify-end">
-        <ChatbotPanel />
-      </div> */}
     </div>
   );
 }

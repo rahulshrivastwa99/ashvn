@@ -87,7 +87,7 @@ export default function AdminFeedback() {
 
   if (isLoading) {
     return (
-      <div className="p-6 text-center text-gray-500">
+      <div className="p-6 text-center text-secondary">
         <p>Loading feedback...</p>
       </div>
     );
@@ -103,13 +103,17 @@ export default function AdminFeedback() {
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Feedback Dashboard</h1>
-      <p className="text-gray-600 mb-6">
+      {/* KEY FIX 1: Headers use theme primary/secondary text color */}
+      <h1 className="text-2xl font-bold text-primary mb-6">
+        Feedback Dashboard
+      </h1>
+      <p className="text-secondary mb-6">
         Review feedback submitted by students.
       </p>
 
       {feedbackList.length === 0 ? (
-        <div className="bg-white p-6 rounded-lg text-center text-gray-500 border border-gray-200">
+        // KEY FIX 2: Empty state uses feature-card background and theme text
+        <div className="feature-card p-6 rounded-lg text-center text-secondary border border-theme-divider">
           No feedback has been received yet.
         </div>
       ) : (
@@ -117,13 +121,15 @@ export default function AdminFeedback() {
           {feedbackList.map((item) => (
             <div
               key={item.id}
-              className="bg-white p-4 rounded-lg shadow-sm border border-gray-200"
+              // KEY FIX 3: Individual feedback items use feature-card background and border
+              className="feature-card p-4 rounded-lg shadow-sm"
             >
-              <div className="flex items-center text-sm text-gray-500 mb-2">
+              <div className="flex items-center text-sm text-secondary mb-2">
                 <Clock size={16} className="mr-2" />
                 <span>{formatTimestamp(item.created_at)}</span>
               </div>
-              <p className="text-gray-800 break-words whitespace-pre-wrap">
+              {/* KEY FIX 4: Message text uses theme primary color */}
+              <p className="text-primary break-words whitespace-pre-wrap">
                 {item.message}
               </p>
             </div>

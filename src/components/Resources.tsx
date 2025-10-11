@@ -7,7 +7,6 @@ import {
   Video,
   Globe,
   Search,
-  Star,
   X,
 } from "lucide-react";
 
@@ -191,41 +190,105 @@ export default function Resources() {
   };
 
   const getTypeColor = (type: string) => {
+    // We rely on the custom badge styles in index.css for the actual colors
     switch (type) {
       case "video":
-        return "bg-purple-100 text-purple-800";
+        return "badge-info";
       case "audio":
-        return "bg-green-100 text-green-800";
+        return "badge-success";
       case "article":
-        return "bg-blue-100 text-blue-800";
+        return "badge-info";
       case "guide":
-        return "bg-orange-100 text-orange-800";
+        return "badge-danger";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "badge-secondary";
     }
   };
 
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+      <div className="feature-card p-6 rounded-lg">
+        <h1 className="text-2xl font-bold text-primary mb-2">
           Mental Health Resources
         </h1>
-        <p className="text-gray-600">
+        <p className="text-secondary">
           Access evidence-based mental health resources in multiple languages
         </p>
       </div>
 
       {/* Search & Filters */}
-      {/* ... keep your existing filter code ... */}
+      <div className="flex items-center space-x-4">
+        {/* Search Input - Themed input box */}
+        <div className="relative flex-1">
+          <Search className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary" />
+          <input
+            type="text"
+            placeholder="Search resources, topics, or keywords..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            // KEY FIX: This input is now fully themed (bg, text, placeholder)
+            className="w-full pl-10 pr-4 py-2 border border-theme-divider rounded-lg bg-secondary text-primary placeholder-themed focus:ring-accent focus:border-accent"
+          />
+          {searchTerm && (
+            <button
+              onClick={() => setSearchTerm("")}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-secondary hover:text-primary"
+              aria-label="Clear search"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+
+        {/* Filter Dropdowns - Themed dropdown boxes */}
+        {/* KEY FIX: The background and text color are applied using theme variables on SELECT elements */}
+        <select
+          value={selectedType}
+          onChange={(e) => setSelectedType(e.target.value)}
+          className="p-2 border border-theme-divider rounded-lg bg-secondary text-primary"
+        >
+          <option value="All">All Types</option>
+          <option value="video">Video</option>
+          <option value="audio">Audio</option>
+          <option value="article">Article</option>
+          <option value="guide">Guide</option>
+        </select>
+        <select
+          value={selectedLanguage}
+          onChange={(e) => setSelectedLanguage(e.target.value)}
+          className="p-2 border border-theme-divider rounded-lg bg-secondary text-primary"
+        >
+          <option value="All">All Languages</option>
+          {languages
+            .filter((l) => l !== "All")
+            .map((lang) => (
+              // Option text color is inherited from <select> text-primary
+              <option key={lang} value={lang}>
+                {lang}
+              </option>
+            ))}
+        </select>
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          className="p-2 border border-theme-divider rounded-lg bg-secondary text-primary"
+        >
+          {categories.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </select>
+      </div>
 
       {/* Resources Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredResources.map((resource) => (
           <div
             key={resource.id}
-            className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
+            // Resource Card uses feature-card class
+            className="feature-card rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
           >
             {resource.thumbnail && (
               <div className="aspect-video relative">
@@ -241,6 +304,7 @@ export default function Resources() {
               {/* Resource Info */}
               <div className="flex items-center justify-between mb-3">
                 <span
+                  // Badge uses themed colors from getTypeColor
                   className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(
                     resource.type
                   )}`}
@@ -248,57 +312,58 @@ export default function Resources() {
                   {getTypeIcon(resource.type)}
                   <span className="ml-1 capitalize">{resource.type}</span>
                 </span>
-                <div className="flex items-center text-xs text-gray-500">
+                {/* Language tag uses secondary text */}
+                <div className="flex items-center text-xs text-secondary">
                   <Globe className="h-3 w-3 mr-1" />
                   {resource.language}
                 </div>
               </div>
 
-              <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
+              {/* Title and Description */}
+              <h3 className="font-semibold text-primary mb-2 line-clamp-2">
                 {resource.title}
               </h3>
-              <p className="text-sm text-gray-600 mb-4 line-clamp-3">
+              <p className="text-sm text-secondary mb-4 line-clamp-3">
                 {resource.description}
               </p>
 
               {/* Action Buttons */}
               <div className="space-y-3">
-                {resource.type === "video" && resource.url && (
-                  <button
-                    onClick={() => setVideoUrl(resource.url!)}
-                    className="w-full bg-teal-600 text-white px-4 py-2 rounded-md hover:bg-teal-700 transition-colors text-sm flex items-center justify-center"
-                  >
-                    <Play className="h-4 w-4 mr-2" /> Watch
-                  </button>
-                )}
-                {resource.type === "audio" && resource.url && (
-                  <div className="space-y-2">
-                    <audio controls className="w-full">
-                      <source src={resource.url} type="audio/mpeg" />
-                      Your browser does not support the audio element.
-                    </audio>
-                    {resource.downloadUrl && (
-                      <a
-                        href={resource.downloadUrl}
-                        download
-                        className="w-full border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors text-sm flex items-center justify-center"
-                      >
-                        <Download className="h-4 w-4 mr-2" /> Download
-                      </a>
-                    )}
-                  </div>
-                )}
-                {(resource.type === "article" || resource.type === "guide") &&
+                {/* Watch/Read Buttons */}
+                {(resource.type === "video" ||
+                  resource.type === "article" ||
+                  resource.type === "guide") &&
                   resource.url && (
-                    <a
-                      href={resource.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full bg-teal-600 text-white px-4 py-2 rounded-md hover:bg-teal-700 transition-colors text-sm flex items-center justify-center"
+                    <button
+                      onClick={() => {
+                        if (resource.type === "video")
+                          setVideoUrl(resource.url!);
+                        else window.open(resource.url, "_blank");
+                      }}
+                      // Primary action button uses accent color
+                      className="w-full bg-accent text-white px-4 py-2 rounded-md hover:opacity-90 transition-colors text-sm flex items-center justify-center"
                     >
-                      <BookOpen className="h-4 w-4 mr-2" /> Read
-                    </a>
+                      {resource.type === "article" ||
+                      resource.type === "guide" ? (
+                        <BookOpen className="h-4 w-4 mr-2" />
+                      ) : (
+                        <Play className="h-4 w-4 mr-2" />
+                      )}
+                      {resource.type === "video" ? "Watch" : "Read"}
+                    </button>
                   )}
+
+                {/* Audio Download Button */}
+                {resource.type === "audio" && resource.downloadUrl && (
+                  <a
+                    href={resource.downloadUrl}
+                    download
+                    // Secondary action button uses themed border/text/hover
+                    className="w-full border border-theme-divider text-primary px-4 py-2 rounded-md hover-bg-secondary transition-colors text-sm flex items-center justify-center"
+                  >
+                    <Download className="h-4 w-4 mr-2" /> Download
+                  </a>
+                )}
               </div>
             </div>
           </div>
@@ -308,12 +373,13 @@ export default function Resources() {
       {/* Video Modal */}
       {videoUrl && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg overflow-hidden shadow-xl max-w-3xl w-full relative">
+          <div className="feature-card rounded-lg overflow-hidden shadow-xl max-w-3xl w-full relative">
             <button
               onClick={() => setVideoUrl(null)}
-              className="absolute top-2 right-2 bg-gray-200 rounded-full p-1 hover:bg-gray-300"
+              // Modal close button uses themed background/text/hover
+              className="absolute top-2 right-2 bg-secondary rounded-full p-1 text-primary hover:bg-hover-bg z-10"
             >
-              <X className="h-5 w-5 text-gray-700" />
+              <X className="h-5 w-5" />
             </button>
             <iframe
               width="100%"

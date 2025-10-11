@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useMusicPlayer } from "../contexts/MusicPlayerContext";
 import { Play, Pause, SkipForward, SkipBack, X } from "lucide-react";
 
-// Helper function to format time
+// Helper function to format time (Unchanged)
 const formatTime = (seconds: number) => {
   if (isNaN(seconds) || seconds === 0) return "00:00";
   const floorSeconds = Math.floor(seconds);
@@ -60,9 +60,9 @@ const NowPlayingBar = () => {
   if (!currentTrack) return null;
 
   return (
-    // Main container: A fixed card in the bottom-right corner
-    <div className="fixed bottom-5 right-5 z-50 bg-white rounded-lg shadow-2xl p-4 w-full max-w-md flex items-center gap-4 text-left">
-      {/* Album Art */}
+    // KEY FIX 1: Main container uses feature-card class for theme background/shadow
+    <div className="fixed bottom-5 right-5 z-50 feature-card p-4 w-full max-w-md flex items-center gap-4 text-left">
+      {/* Album Art (No thematic change needed) */}
       <img
         src={`https://img.youtube.com/vi/${currentTrack.youtubeId}/mqdefault.jpg`}
         alt={currentTrack.title}
@@ -73,35 +73,38 @@ const NowPlayingBar = () => {
       <div className="flex-grow flex flex-col justify-center">
         {/* Track Info */}
         <div className="mb-2">
-          <p className="font-bold text-md text-gray-800 truncate">
+          {/* KEY FIX 2: Text uses theme primary/secondary colors */}
+          <p className="font-bold text-md text-primary truncate">
             {currentTrack.title}
           </p>
-          <p className="text-sm text-gray-500 truncate">
+          <p className="text-sm text-secondary truncate">
             {currentTrack.artist}
           </p>
         </div>
 
         {/* Player Controls */}
         <div className="flex items-center gap-3">
-          <button className="text-gray-500 hover:text-gray-800 transition-colors">
+          {/* KEY FIX 3: Skip buttons use secondary/primary theme colors */}
+          <button className="text-secondary hover:text-primary transition-colors">
             <SkipBack size={20} />
           </button>
           <button
             onClick={() => setIsPlaying(!isPlaying)}
-            className="p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-colors shadow-md"
+            // KEY FIX 4: Play/Pause button uses accent color
+            className="p-2 rounded-full bg-accent text-white hover:opacity-90 transition-colors shadow-md"
           >
             {isPlaying ? <Pause size={22} /> : <Play size={22} />}
           </button>
           <button
             onClick={playNextTrack}
-            className="text-gray-500 hover:text-gray-800 transition-colors"
+            className="text-secondary hover:text-primary transition-colors"
           >
             <SkipForward size={20} />
           </button>
         </div>
       </div>
 
-      {/* Progress Bar & Time (now vertical) */}
+      {/* Progress Bar & Time */}
       <div className="w-full flex-grow mx-4">
         <input
           type="range"
@@ -109,9 +112,12 @@ const NowPlayingBar = () => {
           max={duration || 0}
           value={currentTime}
           onChange={handleSeek}
-          className="w-full h-1.5 bg-gray-200 rounded-full cursor-pointer appearance-none accent-blue-500"
+          // KEY FIX 5: Slider track uses secondary background color
+          // The accent-blue-500 (track fill) will be overridden by custom CSS
+          className="w-full h-1.5 bg-secondary rounded-full cursor-pointer appearance-none accent-accent"
         />
-        <div className="flex justify-between text-xs text-gray-400 mt-1">
+        {/* KEY FIX 6: Time text uses secondary color */}
+        <div className="flex justify-between text-xs text-secondary mt-1">
           <span>{formatTime(currentTime)}</span>
           <span>{formatTime(duration)}</span>
         </div>
@@ -120,7 +126,8 @@ const NowPlayingBar = () => {
       {/* Close button inside the card */}
       <button
         onClick={handleStopAndClose}
-        className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 transition-colors"
+        // KEY FIX 7: Close button uses secondary/primary theme colors
+        className="absolute top-2 right-2 text-secondary hover:text-primary transition-colors"
       >
         <X size={20} />
       </button>
