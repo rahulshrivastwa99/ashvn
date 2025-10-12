@@ -4,6 +4,100 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ashvaan - Student Mental Health Support</title>
+    <style>
+      /* --- Custom Icon Colors (Matching your theme) --- */
+      .icon-bg-teal {
+        background-color: #e6f6f5;
+        color: #14b8a6;
+        border: 1px solid #c2e2e0;
+      }
+      .icon-bg-blue {
+        background-color: #e0e6ff;
+        color: #5c62ec;
+        border: 1px solid #c9cce8;
+      }
+      .icon-bg-green {
+        background-color: #e1f5ef;
+        color: #438883;
+        border: 1px solid #c7e0dc;
+      }
+      .icon-bg-purple {
+        background-color: #f3e5ff;
+        color: #a275e0;
+        border: 1px solid #d9c8ed;
+      }
+      .icon-bg-cyan {
+        background-color: #e0f2ff;
+        color: #3b82f6;
+        border: 1px solid #c8e0f2;
+      }
+      .icon-bg-yellow {
+        background-color: #fff8e1;
+        color: #f59e0b;
+        border: 1px solid #eee1c4;
+      }
+      .icon-bg-orange {
+        background-color: #ffe6d9;
+        color: #f97316;
+        border: 1px solid #ecc9b7;
+      }
+      .icon-bg-red {
+        background-color: #fee2e2;
+        color: #dc2626;
+        border: 1px solid #fbd2d2;
+      }
+
+      /* --- Interactive Hover Effect --- */
+      .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      /* --- Animation and Global Styles --- */
+      .animate-gradient {
+        background-size: 200% 200%;
+        animation: gradientShift 6s ease infinite;
+      }
+      .animate-slide-up {
+        animation: slideUp 2s ease-out forwards;
+      }
+      @keyframes gradientShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+      @keyframes slideUp {
+        0% {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Typing Cursor effect */
+      .typing-effect::after {
+        content: "|";
+        animation: blink 1s step-end infinite;
+      }
+      @keyframes blink {
+        from,
+        to {
+          color: transparent;
+        }
+        50% {
+          color: inherit;
+        }
+      }
+    </style>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -11,6 +105,7 @@
           extend: {
             colors: {
               primary: "rgb(13,148,136)", // custom Ashvaan teal
+              secondary_bg: "rgba(13, 148, 136, 0.05)", // Light accent background for hero
             },
           },
         },
@@ -18,161 +113,274 @@
     </script>
   </head>
   <body
-    class="text-gray-800 flex flex-col min-h-screen bg-gradient-to-b from-primary/10 via-white to-gray-50"
+    class="text-gray-800 flex flex-col min-h-screen bg-secondary_bg dark:bg-gray-900 dark:text-gray-200 transition-colors duration-500"
   >
-    <!-- Hero Section with Floating Icons -->
+    <div
+      class="flex justify-between items-center px-6 py-4 max-w-6xl mx-auto w-full sticky top-0 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm z-50 shadow-sm border-b border-gray-100 dark:border-gray-800"
+    >
+      <div class="flex items-center text-primary text-xl font-semibold">
+        <svg class="w-6 h-6 mr-1" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            d="M10 2a8 8 0 100 16A8 8 0 0010 2zm0 14a6 6 0 110-12 6 6 0 010 12zM9 9h2v4H9zM9 6h2v2H9z"
+          ></path>
+        </svg>
+        Ashvaan
+      </div>
+      <div class="flex items-center space-x-4">
+        <span
+          class="text-gray-600 dark:text-gray-400 hover:text-primary cursor-pointer"
+          >Sign In</span
+        >
+        <a
+          href="dashboard.html"
+          class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-teal-700 shadow-md"
+          >Get Started</a
+        >
+      </div>
+    </div>
+
+    <main
+      class="relative flex flex-col items-center justify-center flex-1 px-6 pt-16 pb-12 text-center"
+    >
+      <h1
+        class="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-primary via-teal-500 to-primary bg-clip-text text-transparent animate-gradient"
+      >
+        Welcome to Ashvaan
+      </h1>
+
+      <p class="text-lg text-gray-700 dark:text-gray-400 mt-4 animate-slide-up">
+        A safe space for students to prioritize mental health and well-being.
+      </p>
+
+      <div class="mt-6 mb-10 h-8">
+        <h2 class="text-2xl md:text-3xl font-bold text-primary">
+          <span id="typing-text" class="typing-effect"></span>
+        </h2>
+      </div>
+
+      <a
+        href="dashboard.html"
+        class="px-8 py-3 bg-primary text-white text-lg rounded-lg shadow-lg hover:bg-teal-700 transition-all transform hover:scale-[1.02] mb-12"
+      >
+        Start Your Journey
+      </a>
+
+      <img
+        src="https://i.pinimg.com/736x/d5/8a/40/d58a40beb662a26002434b4c1fcbe600.jpg"
+        alt="Mental Health Illustration"
+        class="w-64 h-64 md:w-80 md:h-80 object-cover rounded-full shadow-xl transform hover:scale-105 transition-transform duration-500 border-4 border-primary"
+      />
+    </main>
+
+    <section class="py-16 w-full max-w-6xl mx-auto px-6">
+      <h2
+        class="text-3xl font-extrabold text-center text-gray-800 dark:text-gray-200 mb-12"
+      >
+        How Ashvaan Supports Your Mental Health
+      </h2>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+        <div
+          class="feature-card bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 text-center transition-transform duration-300 hover:shadow-lg"
+        >
+          <div
+            class="icon-bg-teal w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-4"
+          >
+            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+            Self-Assessment
+          </h3>
+          <p class="text-gray-600 dark:text-gray-400 text-sm leading-snug">
+            Take control by understanding your mental health better with guided
+            self-assessments.
+          </p>
+        </div>
+
+        <div
+          class="feature-card bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 text-center transition-transform duration-300 hover:shadow-lg"
+        >
+          <div
+            class="icon-bg-blue w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-4"
+          >
+            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9v-2h2v2zm0-4H9V8h2v4z"
+              ></path>
+            </svg>
+          </div>
+          <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+            AI Assistant
+          </h3>
+          <p class="text-gray-600 dark:text-gray-400 text-sm leading-snug">
+            Receive personalized, compassionate AI support anytime to help you
+            cope and thrive.
+          </p>
+        </div>
+
+        <div
+          class="feature-card bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 text-center transition-transform duration-300 hover:shadow-lg"
+        >
+          <div
+            class="icon-bg-green w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-4"
+          >
+            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M19 4h-2V2h-2v2H9V2H7v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.89-2-2-2zm0 16H5V9h14v11zM7 11h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2z"
+              ></path>
+            </svg>
+          </div>
+          <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+            Appointments
+          </h3>
+          <p class="text-gray-600 dark:text-gray-400 text-sm leading-snug">
+            Easily book private sessions with trusted mental health
+            professionals.
+          </p>
+        </div>
+
+        <div
+          class="feature-card bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 text-center transition-transform duration-300 hover:shadow-lg"
+        >
+          <div
+            class="icon-bg-purple w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-4"
+          >
+            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM15.5 8c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zM8.5 8c-.83 0-1.5.67-1.5 1.5S7.67 11 8.5 11s1.5-.67 1.5-1.5S9.33 8 8.5 8zM12 16.5c-2.33 0-4.32-1.42-5.18-3.5h10.36c-.86 2.08-2.85 3.5-5.18 3.5z"
+              ></path>
+            </svg>
+          </div>
+          <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+            Mood Tracker
+          </h3>
+          <p class="text-gray-600 dark:text-gray-400 text-sm leading-snug">
+            Gain insight into your emotions and build awareness with simple mood
+            tracking.
+          </p>
+        </div>
+
+        <div
+          class="feature-card bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 text-center transition-transform duration-300 hover:shadow-lg"
+        >
+          <div
+            class="icon-bg-cyan w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-4"
+          >
+            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M12 3v10.55c-.59-.32-1.27-.5-2-.5-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"
+              ></path>
+            </svg>
+          </div>
+          <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+            Sound Scapes
+          </h3>
+          <p class="text-gray-600 dark:text-gray-400 text-sm leading-snug">
+            Listen to calming music and ambient sounds to relax your mind and
+            improve focus.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 mt-6">
+        <div
+          class="feature-card bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 text-center transition-transform duration-300 hover:shadow-lg lg:col-start-2"
+        >
+          <div
+            class="icon-bg-yellow w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-4"
+          >
+            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm7 16H5V5h14v14zM7 17h10v-2H7v2zm0-4h10v-2H7v2zm0-4h10V7H7v2z"
+              ></path>
+            </svg>
+          </div>
+          <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+            Daily Journal
+          </h3>
+          <p class="text-gray-600 dark:text-gray-400 text-sm leading-snug">
+            Reflect safely on your day and nurture your mental wellness through
+            journaling.
+          </p>
+        </div>
+
+        <div
+          class="feature-card bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 text-center transition-transform duration-300 hover:shadow-lg"
+        >
+          <div
+            class="icon-bg-orange w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-4"
+          >
+            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 15c-2.33 0-4.32-1.42-5.18-3.5h10.36c-.86 2.08-2.85 3.5-5.18 3.5zm3.5-5c.83 0 1.5-.67 1.5-1.5S16.33 9 15.5 9s-1.5.67-1.5 1.5.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 9 8.5 9s-1.5.67-1.5 1.5.67 1.5 1.5 1.5z"
+              ></path>
+            </svg>
+          </div>
+          <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+            Peer Support
+          </h3>
+          <p class="text-gray-600 dark:text-gray-400 text-sm leading-snug">
+            Join a compassionate community that understands your journey and
+            supports you anonymously.
+          </p>
+        </div>
+
+        <div
+          class="feature-card bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 text-center transition-transform duration-300 hover:shadow-lg"
+        >
+          <div
+            class="icon-bg-red w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-4"
+          >
+            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+              ></path>
+            </svg>
+          </div>
+          <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+            Crisis Support
+          </h3>
+          <p class="text-gray-600 dark:text-gray-400 text-sm leading-snug">
+            Get immediate, reliable help in times of need from trusted crisis
+            resources.
+          </p>
+        </div>
+      </div>
+    </section>
+
     <main
       class="relative flex flex-col items-center justify-between flex-1 px-6 py-16 overflow-hidden"
     >
-      <!-- Floating Background Icons -->
-      <div class="absolute top-10 left-10 text-6xl opacity-10">🧠</div>
-      <div class="absolute bottom-20 right-16 text-7xl opacity-10">❤️</div>
-      <div class="absolute top-40 right-1/3 text-5xl opacity-10">💬</div>
-      <div class="absolute bottom-10 left-1/4 text-6xl opacity-10">🤝</div>
-
-      <!-- Header / Title -->
       <div class="text-center mb-10 relative z-10">
         <h1
           class="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-primary via-teal-500 to-primary bg-clip-text text-transparent animate-gradient"
         >
           Welcome to Ashvaan
         </h1>
-        <p class="text-lg text-gray-700 mt-3 animate-slide-up">
+        <p
+          class="text-lg text-gray-700 dark:text-gray-400 mt-3 animate-slide-up"
+        >
           A safe space for students to prioritize mental health and well-being
           💬
         </p>
       </div>
-
-      <!-- Custom Animations -->
-      <style>
-        /* Smooth gradient animation */
-        @keyframes gradientShift {
-          0% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-          100% {
-            background-position: 0% 50%;
-          }
-        }
-        .animate-gradient {
-          background-size: 200% 200%;
-          animation: gradientShift 6s ease infinite;
-        }
-
-        /* Subtle slide-up animation */
-        @keyframes slideUp {
-          0% {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-slide-up {
-          animation: slideUp 2s ease-out forwards;
-        }
-      </style>
-
-      <!-- Content (Text + Image) -->
       <div
         class="flex flex-col md:flex-row items-center justify-between w-full max-w-6xl relative z-10"
       >
-        <!-- Text Section -->
         <div class="max-w-xl text-center md:text-left">
-          <!-- Tagline Section with Typing Effect -->
           <div class="flex items-center justify-center md:justify-start mt-6">
             <h2 class="text-2xl md:text-3xl font-bold text-primary">
               <span id="typing-text" class="typing-effect"></span>
             </h2>
           </div>
 
-          <!-- Gradient Animation CSS -->
-          <style>
-            @keyframes gradientTagline {
-              0% {
-                background-position: 0% 50%;
-              }
-              50% {
-                background-position: 100% 50%;
-              }
-              100% {
-                background-position: 0% 50%;
-              }
-            }
-
-            .animate-gradient-tagline {
-              background: linear-gradient(90deg, #0dbd88, #7c3aed, #ff6b6b);
-              background-size: 200% 200%;
-              animation: gradientTagline 6s ease infinite;
-            }
-
-            /* Cursor remains same */
-            .cursor {
-              display: inline-block;
-              color: #0db488; /* matches primary teal */
-              font-weight: bold;
-            }
-          </style>
-          <!-- Script for Typing Animation -->
-          <script>
-            const texts = [
-              "Helping You Thrive, Not Just Survive ",
-              "You Are Not Alone ",
-              "Mental Health Matters ",
-              "Take a Break, Breathe, Restart ",
-            ];
-
-            let textIndex = 0;
-            let charIndex = 0;
-            let currentText = "";
-            let isDeleting = false;
-            const typingSpeed = 100; // typing speed (ms per char)
-            const erasingSpeed = 60; // erasing speed
-            const delayBetween = 1500; // pause between texts
-
-            const typingElement = document.getElementById("typing-text");
-
-            function type() {
-              if (charIndex < texts[textIndex].length && !isDeleting) {
-                // typing forward
-                currentText += texts[textIndex][charIndex];
-                typingElement.textContent = currentText;
-                charIndex++;
-                setTimeout(type, typingSpeed);
-              } else if (isDeleting && charIndex > 0) {
-                // deleting backward
-                currentText = currentText.slice(0, -1);
-                typingElement.textContent = currentText;
-                charIndex--;
-                setTimeout(type, erasingSpeed);
-              } else {
-                // finished typing or erasing
-                if (!isDeleting) {
-                  isDeleting = true;
-                  setTimeout(type, delayBetween);
-                } else {
-                  isDeleting = false;
-                  textIndex = (textIndex + 1) % texts.length; // move to next text
-                  setTimeout(type, typingSpeed);
-                }
-              }
-            }
-
-            type();
-          </script>
-
-          <!-- Paragraph -->
-          <p class="text-lg text-gray-600 mb-6 mt-4">
+          <p class="text-lg text-gray-600 dark:text-gray-400 mb-6 mt-4">
             College life can be exciting, but also overwhelming. Whether it’s
             exams, homesickness, or stress, you don’t have to face it alone.
           </p>
 
-          <!-- Button -->
           <a
             href="dashboard.html"
             class="px-6 py-3 bg-primary text-white rounded-lg hover:opacity-90 shadow-md"
@@ -181,109 +389,69 @@
           </a>
         </div>
 
-        <!-- Image -->
         <div class="mt-10 md:mt-0 flex justify-center md:justify-end">
           <img
             src="https://i.pinimg.com/736x/d5/8a/40/d58a40beb662a26002434b4c1fcbe600.jpg"
-            alt="Student Mental Health"
+            alt="Student Mental Health Illustration"
             class="w-80 h-80 object-cover rounded-full shadow-xl hover:scale-105 transition-transform duration-300 border-4 border-primary"
           />
         </div>
       </div>
     </main>
 
-    <!-- Quotes Section with Icons -->
     <section class="mt-16 w-full max-w-5xl mx-auto">
       <h3 class="text-2xl font-bold text-center mb-6 text-primary">
         Supportive Words for Students ✨
       </h3>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="bg-white shadow-md rounded-lg p-6 text-center">
+        <div
+          class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 text-center"
+        >
           <img
             src="https://cdn-icons-png.flaticon.com/512/3448/3448440.png"
             class="w-12 mx-auto mb-3"
           />
-          <p class="text-gray-700 italic">
+          <p class="text-gray-700 dark:text-gray-300 italic">
             "It's okay to not have it all figured out. College is a journey, not
             a race."
           </p>
         </div>
-        <div class="bg-white shadow-md rounded-lg p-6 text-center">
+        <div
+          class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 text-center"
+        >
           <img
             src="https://cdn-icons-png.flaticon.com/512/4149/4149670.png"
             class="w-12 mx-auto mb-3"
           />
-          <p class="text-gray-700 italic">
+          <p class="text-gray-700 dark:text-gray-300 italic">
             "Asking for help is a sign of strength, not weakness."
           </p>
         </div>
-        <div class="bg-white shadow-md rounded-lg p-6 text-center">
+        <div
+          class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 text-center"
+        >
           <img
             src="https://cdn-icons-png.flaticon.com/512/3408/3408543.png"
             class="w-12 mx-auto mb-3"
           />
-          <p class="text-gray-700 italic">
+          <p class="text-gray-700 dark:text-gray-300 italic">
             "Exams are important, but so is your well-being."
           </p>
         </div>
-        <div class="bg-white shadow-md rounded-lg p-6 text-center">
+        <div
+          class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 text-center"
+        >
           <img
             src="https://cdn-icons-png.flaticon.com/512/2762/2762410.png"
             class="w-12 mx-auto mb-3"
           />
-          <p class="text-gray-700 italic">
+          <p class="text-gray-700 dark:text-gray-300 italic">
             "Take breaks, breathe, and remember—you are not alone."
           </p>
         </div>
       </div>
     </section>
 
-    <!-- Features Section with Icons -->
-    <section class="mt-16 max-w-5xl text-center mx-auto">
-      <h3 class="text-2xl font-bold mb-6 text-primary">
-        How Ashvaan Helps Students 💡
-      </h3>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-primary/10 p-6 rounded-lg shadow">
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/4712/4712100.png"
-            class="w-14 mx-auto mb-3"
-          />
-          <h4 class="font-semibold text-lg mb-2 text-primary">
-            🤖 AI Assistant
-          </h4>
-          <p class="text-gray-600 text-sm">
-            Chat with an AI assistant trained to provide psychological guidance.
-          </p>
-        </div>
-        <div class="bg-primary/10 p-6 rounded-lg shadow">
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/456/456212.png"
-            class="w-14 mx-auto mb-3"
-          />
-          <h4 class="font-semibold text-lg mb-2 text-primary">
-            🤝 Peer Support
-          </h4>
-          <p class="text-gray-600 text-sm">
-            Connect with other students who understand your struggles.
-          </p>
-        </div>
-        <div class="bg-primary/10 p-6 rounded-lg shadow">
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/562/562678.png"
-            class="w-14 mx-auto mb-3"
-          />
-          <h4 class="font-semibold text-lg mb-2 text-primary">
-            🚨 Crisis Support
-          </h4>
-          <p class="text-gray-600 text-sm">
-            Get quick access to professional help when you need it most.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Illustration at Bottom -->
     <div class="mt-16 mb-6">
       <img
         src="https://i.pinimg.com/736x/d5/8a/40/d58a40beb662a26002434b4c1fcbe600.jpg"
@@ -291,5 +459,50 @@
         class="w-72 md:w-96 mx-auto rounded-lg shadow-lg"
       />
     </div>
+
+    <script>
+      const texts = [
+        "Helping You Thrive, Not Just Survive",
+        "You Are Not Alone",
+        "Mental Health Matters",
+        "Take a Break, Breathe, Restart",
+      ];
+
+      let textIndex = 0;
+      let charIndex = 0;
+      let currentText = "";
+      let isDeleting = false;
+      const typingSpeed = 100;
+      const erasingSpeed = 60;
+      const delayBetween = 1500;
+
+      const typingElement = document.getElementById("typing-text");
+
+      if (typingElement) {
+        function type() {
+          if (charIndex < texts[textIndex].length && !isDeleting) {
+            currentText += texts[textIndex][charIndex];
+            typingElement.textContent = currentText;
+            charIndex++;
+            setTimeout(type, typingSpeed);
+          } else if (isDeleting && charIndex > 0) {
+            currentText = currentText.slice(0, -1);
+            typingElement.textContent = currentText;
+            charIndex--;
+            setTimeout(type, erasingSpeed);
+          } else {
+            if (!isDeleting) {
+              isDeleting = true;
+              setTimeout(type, delayBetween);
+            } else {
+              isDeleting = false;
+              textIndex = (textIndex + 1) % texts.length;
+              setTimeout(type, typingSpeed);
+            }
+          }
+        }
+        type();
+      }
+    </script>
   </body>
 </html>

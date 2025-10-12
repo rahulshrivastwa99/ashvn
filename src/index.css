@@ -2,7 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* -------------------------------------------------------------------------- */
+/* LIGHT THEME BASE (:root)                             */
+/* -------------------------------------------------------------------------- */
 :root {
+  /* Your Existing Generic Tailwind-Style Variables */
   --bg-primary: #ffffff;
   --bg-secondary: #f9fafb;
   --bg-tertiary: #f3f4f6;
@@ -11,9 +15,39 @@
   --border-color: #e5e7eb;
   --surface: #ffffff;
   --shadow: rgba(0, 0, 0, 0.1);
+
+  /* MAPPED/SPECIFIC VARIABLES USED BY COMPONENTS */
+  --color-primary-bg: var(--bg-secondary);
+  --color-secondary-bg: var(--surface);
+  --color-sidebar-bg: var(--surface);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-border: var(--border-color);
+  --color-shadow: var(--shadow);
+  
+  --color-accent: rgb(13, 148, 136);
+  --color-hover-bg: #f3f4f6;
+  --color-active-bg: #e0f2f7;
+  --color-avatar-bg: #e0f2f7;
+
+  /* Dashboard Header Specifics (Colors used in the gradient header) */
+  --color-header-primary: #ffffff;
+  --color-header-secondary: #e5e7eb;
+
+  /* Status Badges - Light Theme */
+  --badge-danger-bg: #fee2e2;
+  --badge-danger-text: #b91c1c;
+  --badge-success-bg: #dcfce7;
+  --badge-success-text: #15803d;
+  --badge-info-bg: #eff6ff;
+  --badge-info-text: #1d4ed8;
 }
 
-.dark {
+/* -------------------------------------------------------------------------- */
+/* DARK THEME (html.dark)                               */
+/* -------------------------------------------------------------------------- */
+html.dark {
+  /* Your Existing Generic Tailwind-Style Variables */
   --bg-primary: #111827;
   --bg-secondary: #1f2937;
   --bg-tertiary: #374151;
@@ -21,5 +55,177 @@
   --text-secondary: #d1d5db;
   --border-color: #374151;
   --surface: #1f2937;
-  --shadow: rgba(0, 0, 0, 0.3);
+  --shadow: rgba(0, 0, 0, 0.5); 
+
+  /* MAPPED/SPECIFIC VARIABLES USED BY COMPONENTS */
+  --color-primary-bg: var(--bg-primary);
+  --color-secondary-bg: var(--surface);
+  --color-sidebar-bg: var(--bg-tertiary);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-border: var(--border-color);
+  --color-shadow: var(--shadow);
+
+  --color-accent: #33b8a8;
+  --color-hover-bg: #374151;
+  --color-active-bg: #4a5568;
+  --color-avatar-bg: #374151;
+
+  /* Dashboard Header Specifics */
+  --color-header-primary: #ffffff;
+  --color-header-secondary: #9ca3af;
+
+  /* Status Badges - Dark Theme */
+  --badge-danger-bg: #451a1a;
+  --badge-danger-text: #fca5a5;
+  --badge-success-bg: #14532d;
+  --badge-success-text: #a7f3d0;
+  --badge-info-bg: #1e3a8a;
+  --badge-info-text: #bfdbfe;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 🔥 CRITICAL OVERRIDE FIXES 🔥 (Ensures visibility in both modes)          */
+/* -------------------------------------------------------------------------- */
+
+/* FIX 1: Force dark background on all dynamic input fields/selects */
+html.dark input[type="text"],
+html.dark select,
+html.dark textarea {
+    background-color: var(--color-secondary-bg) !important;
+}
+
+/* FIX 2: Force light color for typed text */
+html.dark input[type="text"],
+html.dark textarea {
+    color: var(--color-text-primary) !important;
+}
+
+/* FIX 3: 🚀 FINAL CHATBOT ICON VISIBILITY FIX 🚀 */
+/* Targets the floating button (which uses .bg-accent and .rounded-full) */
+html:not(.dark) .bg-accent.rounded-full:not(.p-2) {
+    /* Sets background to white for contrast */
+    background-color: var(--color-secondary-bg) !important;
+    /* Sets the border to the dark teal accent color */
+    border-color: rgb(13, 148, 136) !important; 
+    border-width: 2px !important;
+}
+
+/* FIX 4: Ensures the icon inside the floating button is the dark teal color */
+html:not(.dark) .bg-accent.rounded-full > svg {
+    color: rgb(13, 148, 136) !important; 
+}
+
+
+/* -------------------------------------------------------------------------- */
+/* CUSTOM UTILITIES (Used by all components)     */
+/* -------------------------------------------------------------------------- */
+
+/* 1. Global App Background and Text */
+.app-container {
+    background-color: var(--color-primary-bg);
+    color: var(--color-text-primary);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* 2. Sidebar Specific Styles */
+.sidebar-container {
+  background-color: var(--color-sidebar-bg);
+  color: var(--color-text-secondary);
+  transition: background-color 0.3s, color 0.3s;
+}
+.sidebar-header-container,
+.sidebar-footer-container {
+  border-bottom: 1px solid var(--color-border);
+}
+.sidebar-footer-container {
+  border-top: 1px solid var(--color-border);
+}
+
+/* Sidebar Navigation Items */
+.sidebar-default-link {
+  color: var(--color-text-primary);
+}
+.sidebar-default-link:hover {
+  background-color: var(--color-hover-bg);
+  color: var(--color-accent);
+}
+.sidebar-active-link {
+  background-color: var(--color-active-bg);
+  color: var(--color-accent);
+  font-weight: 600;
+}
+.sidebar-avatar-bg {
+    background-color: var(--color-avatar-bg);
+}
+
+/* 3. Dashboard Card/Feature Styles */
+.feature-card {
+  background-color: var(--color-secondary-bg);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 6px var(--color-shadow);
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+.feature-card:hover {
+  box-shadow: 0 8px 12px var(--color-shadow);
+}
+
+/* Dashboard Header (Gradient and Mood Boxes) */
+.dashboard-header-bg {
+    background-image: linear-gradient(to right, #20c997, #4c7cff);
+}
+.mood-tracker-box {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 4. Text and Divider Utilities (Used in Dashboard and Sidebar) */
+.text-primary {
+    color: var(--color-text-primary);
+}
+.text-secondary {
+    color: var(--color-text-secondary);
+}
+.text-accent {
+    color: var(--color-accent);
+}
+.text-header-primary {
+    color: var(--color-header-primary);
+}
+.text-header-secondary {
+    color: var(--color-header-secondary);
+}
+.border-b-theme-divider {
+    border-bottom: 1px solid var(--color-border);
+}
+.divide-theme-divider > * + * {
+    border-top: 1px solid var(--color-border);
+}
+.hover-bg-secondary:hover {
+    background-color: var(--color-hover-bg);
+}
+
+/* 5. Status Badges */
+.badge-danger {
+    background-color: var(--badge-danger-bg);
+    color: var(--badge-danger-text);
+}
+.badge-success {
+    background-color: var(--badge-success-bg);
+    color: var(--badge-success-text);
+}
+.badge-info {
+    background-color: var(--badge-info-bg);
+    color: var(--badge-info-text);
+}
+
+/* 6. Placeholder Text Fix */
+.placeholder-themed::placeholder {
+    color: var(--color-text-secondary);
+    opacity: 1;
+}
+
+html.dark .placeholder-themed::placeholder {
+    color: #8c95a3;
+    opacity: 1;
 }

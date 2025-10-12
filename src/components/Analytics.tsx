@@ -25,8 +25,19 @@ import {
   Activity,
   Download,
 } from "lucide-react";
+// Assuming you have access to the useTheme hook from your ThemeContext
+import { useTheme } from "../contexts/ThemeContext";
 
 export default function Analytics() {
+  const { theme } = useTheme(); // Get theme state
+
+  // Define chart styling based on theme
+  const chartAxisColor = theme === "dark" ? "#9CA3AF" : "#6B7280";
+  const chartGridColor = theme === "dark" ? "#374151" : "#E5E7EB";
+  const tooltipBackground = theme === "dark" ? "#1F2937" : "#FFFFFF";
+  const tooltipTextColor = theme === "dark" ? "#F9FAFB" : "#111827";
+
+  // --- Data Definitions (Unchanged) ---
   const monthlyTrends = [
     {
       month: "Aug 2024",
@@ -168,19 +179,23 @@ export default function Analytics() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-primary">
             Analytics Dashboard
           </h1>
-          <p className="text-gray-600">
+          <p className="text-secondary">
             Monitor mental health trends and platform effectiveness
           </p>
         </div>
         <div className="flex space-x-3">
-          <button className="flex items-center px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50">
+          <button
+            // Themed button
+            className="flex items-center px-4 py-2 border border-theme-divider rounded-md text-primary hover-bg-secondary"
+          >
             <Download className="h-4 w-4 mr-2" />
             Export Report
           </button>
-          <select className="border border-gray-300 rounded-md px-3 py-2 focus:ring-teal-500 focus:border-teal-500">
+          {/* Themed Select Input */}
+          <select className="border border-theme-divider rounded-md px-3 py-2 text-primary bg-secondary focus:ring-accent focus:border-accent">
             <option>Last 6 Months</option>
             <option>Last 3 Months</option>
             <option>Last Month</option>
@@ -194,13 +209,18 @@ export default function Analytics() {
         {stats.map((stat) => (
           <div
             key={stat.name}
-            className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
+            // KEY FIX 1: Use feature-card for dashboard stats
+            className="feature-card p-6"
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">{stat.name}</p>
+                {/* Themed text */}
+                <p className="text-sm font-medium text-secondary">
+                  {stat.name}
+                </p>
                 <div className="flex items-baseline">
-                  <p className="text-2xl font-bold text-gray-900">
+                  {/* Themed text */}
+                  <p className="text-2xl font-bold text-primary">
                     {stat.value}
                   </p>
                   <p
@@ -209,7 +229,7 @@ export default function Analytics() {
                         ? "text-green-600"
                         : stat.change.startsWith("-")
                         ? "text-red-600"
-                        : "text-gray-600"
+                        : "text-secondary" // Default change color
                     }`}
                   >
                     {stat.change}
@@ -224,21 +244,30 @@ export default function Analytics() {
 
       {/* Mental Health Trends */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        {/* Monthly Engagement Trends Chart */}
+        <div className="feature-card p-6">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
               <TrendingUp className="h-6 w-6 text-blue-500 mr-3" />
-              <h2 className="text-lg font-semibold text-gray-900">
+              <h2 className="text-lg font-semibold text-primary">
                 Monthly Engagement Trends
               </h2>
             </div>
           </div>
           <ResponsiveContainer width="100%" height={300}>
             <AreaChart data={monthlyTrends}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip />
+              {/* KEY FIX 2: Theme Chart Grid and Axis text color */}
+              <CartesianGrid stroke={chartGridColor} strokeDasharray="3 3" />
+              <XAxis dataKey="month" stroke={chartAxisColor} />
+              <YAxis stroke={chartAxisColor} />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: tooltipBackground,
+                  borderColor: chartGridColor,
+                  color: tooltipTextColor,
+                }}
+                itemStyle={{ color: tooltipTextColor }}
+              />
               <Area
                 type="monotone"
                 dataKey="sessions"
@@ -259,11 +288,12 @@ export default function Analytics() {
           </ResponsiveContainer>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        {/* Risk Level Distribution Chart */}
+        <div className="feature-card p-6">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
               <AlertTriangle className="h-6 w-6 text-red-500 mr-3" />
-              <h2 className="text-lg font-semibold text-gray-900">
+              <h2 className="text-lg font-semibold text-primary">
                 Risk Level Distribution
               </h2>
             </div>
@@ -283,9 +313,18 @@ export default function Analytics() {
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip formatter={(value, name) => [`${value}%`, name]} />
+              <Tooltip
+                formatter={(value, name) => [`${value}%`, name]}
+                contentStyle={{
+                  backgroundColor: tooltipBackground,
+                  borderColor: chartGridColor,
+                  color: tooltipTextColor,
+                }}
+                itemStyle={{ color: tooltipTextColor }}
+              />
             </PieChart>
           </ResponsiveContainer>
+          {/* Risk Legend */}
           <div className="grid grid-cols-2 gap-4 mt-4">
             {riskDistribution.map((item) => (
               <div
@@ -297,9 +336,9 @@ export default function Analytics() {
                     className="w-3 h-3 rounded-full mr-2"
                     style={{ backgroundColor: item.color }}
                   />
-                  <span className="text-sm text-gray-700">{item.name}</span>
+                  <span className="text-sm text-secondary">{item.name}</span>
                 </div>
-                <span className="text-sm font-medium text-gray-900">
+                <span className="text-sm font-medium text-primary">
                   {item.count}
                 </span>
               </div>
@@ -308,22 +347,30 @@ export default function Analytics() {
         </div>
       </div>
 
-      {/* Assessment Trends */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      {/* Assessment Trends Chart */}
+      <div className="feature-card p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
             <Brain className="h-6 w-6 text-purple-500 mr-3" />
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-lg font-semibold text-primary">
               Assessment Score Trends (PHQ-9 & GAD-7)
             </h2>
           </div>
         </div>
         <ResponsiveContainer width="100%" height={350}>
           <LineChart data={assessmentTrends}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="month" />
-            <YAxis domain={[0, 15]} />
-            <Tooltip />
+            {/* KEY FIX 3: Theme Chart Grid and Axis text color */}
+            <CartesianGrid stroke={chartGridColor} strokeDashArray="3 3" />
+            <XAxis dataKey="month" stroke={chartAxisColor} />
+            <YAxis domain={[0, 15]} stroke={chartAxisColor} />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: tooltipBackground,
+                borderColor: chartGridColor,
+                color: tooltipTextColor,
+              }}
+              itemStyle={{ color: tooltipTextColor }}
+            />
             <Line
               type="monotone"
               dataKey="avgPhq9"
@@ -344,22 +391,30 @@ export default function Analytics() {
         </ResponsiveContainer>
       </div>
 
-      {/* Daily Usage Pattern */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      {/* Daily Usage Pattern Chart */}
+      <div className="feature-card p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
             <Activity className="h-6 w-6 text-teal-500 mr-3" />
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-lg font-semibold text-primary">
               Feature Usage by Day
             </h2>
           </div>
         </div>
         <ResponsiveContainer width="100%" height={350}>
           <BarChart data={dailyUsage}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="day" />
-            <YAxis />
-            <Tooltip />
+            {/* KEY FIX 4: Theme Chart Grid and Axis text color */}
+            <CartesianGrid stroke={chartGridColor} strokeDasharray="3 3" />
+            <XAxis dataKey="day" stroke={chartAxisColor} />
+            <YAxis stroke={chartAxisColor} />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: tooltipBackground,
+                borderColor: chartGridColor,
+                color: tooltipTextColor,
+              }}
+              itemStyle={{ color: tooltipTextColor }}
+            />
             <Bar dataKey="ai_chat" stackId="a" fill="#14B8A6" name="AI Chat" />
             <Bar
               dataKey="appointments"
@@ -379,11 +434,11 @@ export default function Analytics() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Top Concerns */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        {/* Top Concerns List */}
+        <div className="feature-card p-6">
           <div className="flex items-center mb-6">
             <Heart className="h-6 w-6 text-pink-500 mr-3" />
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-lg font-semibold text-primary">
               Top Student Concerns
             </h2>
           </div>
@@ -395,14 +450,15 @@ export default function Analytics() {
               >
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-medium text-gray-900">
+                    <span className="text-sm font-medium text-primary">
                       {concern.concern}
                     </span>
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-secondary">
                       {concern.count}
                     </span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
+                  {/* Progress Bar (Themed) */}
+                  <div className="w-full bg-secondary rounded-full h-2">
                     <div
                       className="bg-pink-500 h-2 rounded-full"
                       style={{ width: `${concern.percentage}%` }}
@@ -414,11 +470,11 @@ export default function Analytics() {
           </div>
         </div>
 
-        {/* Intervention Effectiveness */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        {/* Intervention Effectiveness List */}
+        <div className="feature-card p-6">
           <div className="flex items-center mb-6">
             <TrendingUp className="h-6 w-6 text-green-500 mr-3" />
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-lg font-semibold text-primary">
               Intervention Effectiveness
             </h2>
           </div>
@@ -426,19 +482,20 @@ export default function Analytics() {
             {interventionEffectiveness.map((item) => (
               <div key={item.intervention}>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-900">
+                  <span className="text-sm font-medium text-primary">
                     {item.intervention}
                   </span>
-                  <span className="text-sm text-gray-600">
+                  <span className="text-sm text-secondary">
                     {item.effectiveness}% effective
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <div className="text-xs text-gray-500 mb-1">
+                    <div className="text-xs text-secondary mb-1">
                       Effectiveness
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    {/* Progress Bar (Themed) */}
+                    <div className="w-full bg-secondary rounded-full h-2">
                       <div
                         className="bg-green-500 h-2 rounded-full"
                         style={{ width: `${item.effectiveness}%` }}
@@ -446,8 +503,11 @@ export default function Analytics() {
                     </div>
                   </div>
                   <div>
-                    <div className="text-xs text-gray-500 mb-1">Usage Rate</div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="text-xs text-secondary mb-1">
+                      Usage Rate
+                    </div>
+                    {/* Progress Bar (Themed) */}
+                    <div className="w-full bg-secondary rounded-full h-2">
                       <div
                         className="bg-blue-500 h-2 rounded-full"
                         style={{ width: `${item.usage}%` }}
@@ -461,51 +521,53 @@ export default function Analytics() {
         </div>
       </div>
 
-      {/* Key Insights */}
-      <div className="bg-gradient-to-r from-teal-50 to-blue-50 border border-teal-200 rounded-lg p-6">
+      {/* Key Insights (Themed) */}
+      <div className="feature-card border border-theme-divider p-6">
         <div className="flex items-start">
-          <Brain className="h-6 w-6 text-teal-600 mr-3 mt-1" />
+          <Brain className="h-6 w-6 text-accent mr-3 mt-1" />
           <div>
-            <h3 className="text-lg font-medium text-teal-800 mb-3">
+            <h3 className="text-lg font-medium text-primary mb-3">
               Key Insights & Recommendations
             </h3>
+            {/* The background inside the insight boxes needs to be subtly themed */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Insight Cards */}
               <div className="space-y-3">
-                <div className="bg-white bg-opacity-70 rounded p-3">
-                  <h4 className="font-medium text-teal-800 mb-1">
+                <div className="bg-secondary rounded p-3">
+                  <h4 className="font-medium text-primary mb-1">
                     Increased Stress Levels
                   </h4>
-                  <p className="text-sm text-teal-700">
+                  <p className="text-sm text-secondary">
                     Average PHQ-9 scores peaked at 10.2 in November. Consider
                     implementing stress management workshops during exam
                     periods.
                   </p>
                 </div>
-                <div className="bg-white bg-opacity-70 rounded p-3">
-                  <h4 className="font-medium text-teal-800 mb-1">
+                <div className="bg-secondary rounded p-3">
+                  <h4 className="font-medium text-primary mb-1">
                     High AI Chat Engagement
                   </h4>
-                  <p className="text-sm text-teal-700">
+                  <p className="text-sm text-secondary">
                     Students heavily utilize AI support (92% usage rate). Expand
                     chatbot capabilities with more specialized interventions.
                   </p>
                 </div>
               </div>
               <div className="space-y-3">
-                <div className="bg-white bg-opacity-70 rounded p-3">
-                  <h4 className="font-medium text-teal-800 mb-1">
+                <div className="bg-secondary rounded p-3">
+                  <h4 className="font-medium text-primary mb-1">
                     Weekend Usage Drop
                   </h4>
-                  <p className="text-sm text-teal-700">
+                  <p className="text-sm text-secondary">
                     Significant decrease in weekend engagement. Consider
                     targeted outreach and weekend support programs.
                   </p>
                 </div>
-                <div className="bg-white bg-opacity-70 rounded p-3">
-                  <h4 className="font-medium text-teal-800 mb-1">
+                <div className="bg-secondary rounded p-3">
+                  <h4 className="font-medium text-primary mb-1">
                     Counselor Session Effectiveness
                   </h4>
-                  <p className="text-sm text-teal-700">
+                  <p className="text-sm text-secondary">
                     94% effectiveness rate for counselor sessions. Increase
                     counselor availability to meet growing demand.
                   </p>

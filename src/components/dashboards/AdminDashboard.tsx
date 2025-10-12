@@ -26,9 +26,19 @@ import {
 } from "recharts";
 import ChatbotEmbed from "../index/ChatbotEmbed"; // Added import
 import ChatbotWidget from "../index/ChatbotWidget";
+// Assuming useTheme is available for dynamic chart colors
+import { useTheme } from "../../contexts/ThemeContext";
 
 export default function AdminDashboard() {
   const { profile } = useAuth();
+  // Assuming useTheme is implemented to dynamically set chart colors
+  const { theme } = useTheme();
+
+  // Define chart styling based on theme
+  const chartAxisColor = theme === "dark" ? "#9CA3AF" : "#6B7280";
+  const chartGridColor = theme === "dark" ? "#374151" : "#E5E7EB";
+  const tooltipBackground = theme === "dark" ? "#1F2937" : "#FFFFFF";
+  const tooltipTextColor = theme === "dark" ? "#F9FAFB" : "#111827";
 
   const monthlyData = [
     { month: "Jan", students: 120, sessions: 240, assessments: 180 },
@@ -115,15 +125,16 @@ export default function AdminDashboard() {
   ];
 
   const getSeverityColor = (severity: string) => {
+    // Using themed badge classes for text and background
     switch (severity) {
       case "critical":
-        return "bg-red-100 text-red-800 border-l-red-500";
+        return "badge-danger border-l-4 border-red-500";
       case "high":
-        return "bg-orange-100 text-orange-800 border-l-orange-500";
+        return "badge-danger border-l-4 border-orange-500";
       case "medium":
-        return "bg-yellow-100 text-yellow-800 border-l-yellow-500";
+        return "badge-info border-l-4 border-yellow-500";
       default:
-        return "bg-green-100 text-green-800 border-l-green-500";
+        return "badge-success border-l-4 border-green-500";
     }
   };
 
@@ -131,18 +142,24 @@ export default function AdminDashboard() {
     <div className="space-y-8">
       {/* Welcome Header */}
       <div className="bg-gradient-to-r from-purple-500 to-blue-600 rounded-lg p-6 text-white">
-        <h1 className="text-2xl font-bold mb-2">Admin Dashboard</h1>
-        <p className="text-purple-100">
+        <h1 className="text-2xl font-bold mb-2 text-header-primary">
+          Admin Dashboard
+        </h1>
+        <p className="text-header-secondary">
           Monitor platform health and student wellbeing trends
         </p>
         <div className="mt-4 flex items-center space-x-4">
           <div className="bg-white/20 rounded-lg px-4 py-2">
-            <div className="text-sm text-purple-100">This Month</div>
-            <div className="text-xl font-bold">420 Sessions</div>
+            <div className="text-sm text-header-secondary">This Month</div>
+            <div className="text-xl font-bold text-header-primary">
+              420 Sessions
+            </div>
           </div>
           <div className="bg-white/20 rounded-lg px-4 py-2">
-            <div className="text-sm text-purple-100">Platform Health</div>
-            <div className="text-xl font-bold">Excellent</div>
+            <div className="text-sm text-header-secondary">Platform Health</div>
+            <div className="text-xl font-bold text-header-primary">
+              Excellent
+            </div>
           </div>
         </div>
       </div>
@@ -152,16 +169,27 @@ export default function AdminDashboard() {
         {stats.map((stat) => (
           <div
             key={stat.name}
-            className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
+            // KEY FIX 1: Use feature-card for dashboard stats
+            className="feature-card p-6"
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">{stat.name}</p>
+                <p className="text-sm font-medium text-secondary">
+                  {stat.name}
+                </p>
                 <div className="flex items-baseline">
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-2xl font-bold text-primary">
                     {stat.value}
                   </p>
-                  <p className="ml-2 text-sm font-medium text-green-600">
+                  <p
+                    className={`ml-2 text-sm font-medium ${
+                      stat.change.startsWith("+")
+                        ? "text-green-600"
+                        : stat.change.startsWith("-")
+                        ? "text-red-600"
+                        : "text-secondary"
+                    }`}
+                  >
                     {stat.change}
                   </p>
                 </div>
@@ -173,31 +201,39 @@ export default function AdminDashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Monthly Trends */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        {/* Monthly Trends Chart */}
+        <div className="feature-card p-6">
           <div className="flex items-center mb-6">
             <TrendingUp className="h-6 w-6 text-blue-500 mr-3" />
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-lg font-semibold text-primary">
               Monthly Trends
             </h2>
           </div>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={monthlyData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip />
+              {/* KEY FIX 2: Theme Chart Grid and Axis text color */}
+              <CartesianGrid stroke={chartGridColor} strokeDasharray="3 3" />
+              <XAxis dataKey="month" stroke={chartAxisColor} />
+              <YAxis stroke={chartAxisColor} />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: tooltipBackground,
+                  borderColor: chartGridColor,
+                  color: tooltipTextColor,
+                }}
+                itemStyle={{ color: tooltipTextColor }}
+              />
               <Bar dataKey="students" fill="#3B82F6" name="Active Students" />
               <Bar dataKey="sessions" fill="#14B8A6" name="Sessions" />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
-        {/* Risk Distribution */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        {/* Risk Distribution Chart */}
+        <div className="feature-card p-6">
           <div className="flex items-center mb-6">
             <AlertTriangle className="h-6 w-6 text-red-500 mr-3" />
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-lg font-semibold text-primary">
               Risk Distribution
             </h2>
           </div>
@@ -216,7 +252,14 @@ export default function AdminDashboard() {
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: tooltipBackground,
+                  borderColor: chartGridColor,
+                  color: tooltipTextColor,
+                }}
+                itemStyle={{ color: tooltipTextColor }}
+              />
             </PieChart>
           </ResponsiveContainer>
           <div className="mt-4 grid grid-cols-2 gap-4">
@@ -226,7 +269,7 @@ export default function AdminDashboard() {
                   className="w-3 h-3 rounded-full mr-2"
                   style={{ backgroundColor: item.color }}
                 />
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-secondary">
                   {item.name}: {item.value}%
                 </span>
               </div>
@@ -235,20 +278,28 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Weekly Usage Pattern */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      {/* Weekly Usage Pattern Chart */}
+      <div className="feature-card p-6">
         <div className="flex items-center mb-6">
           <BarChart3 className="h-6 w-6 text-purple-500 mr-3" />
-          <h2 className="text-lg font-semibold text-gray-900">
+          <h2 className="text-lg font-semibold text-primary">
             Weekly Usage Pattern
           </h2>
         </div>
         <ResponsiveContainer width="100%" height={200}>
           <LineChart data={weeklyUsage}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="day" />
-            <YAxis />
-            <Tooltip />
+            {/* KEY FIX 3: Theme Chart Grid and Axis text color */}
+            <CartesianGrid stroke={chartGridColor} strokeDasharray="3 3" />
+            <XAxis dataKey="day" stroke={chartAxisColor} />
+            <YAxis stroke={chartAxisColor} />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: tooltipBackground,
+                borderColor: chartGridColor,
+                color: tooltipTextColor,
+              }}
+              itemStyle={{ color: tooltipTextColor }}
+            />
             <Line
               type="monotone"
               dataKey="usage"
@@ -261,34 +312,35 @@ export default function AdminDashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Recent Alerts */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-          <div className="p-6 border-b border-gray-200">
+        {/* Recent Alerts List */}
+        <div className="feature-card">
+          <div className="p-6 border-b border-theme-divider">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <AlertTriangle className="h-6 w-6 text-red-500 mr-3" />
-                <h2 className="text-lg font-semibold text-gray-900">
+                <h2 className="text-lg font-semibold text-primary">
                   Recent Alerts
                 </h2>
               </div>
-              <button className="text-red-600 hover:text-red-700 text-sm font-medium">
+              <button className="text-red-600 hover:opacity-80 text-sm font-medium">
                 View All
               </button>
             </div>
           </div>
-          <div className="divide-y divide-gray-200 max-h-80 overflow-y-auto">
+          <div className="divide-y divide-theme-divider max-h-80 overflow-y-auto">
             {recentAlerts.map((alert, index) => (
               <div
                 key={index}
+                // KEY FIX 4: Themed Alert background, border, and text
                 className={`p-4 border-l-4 ${getSeverityColor(alert.severity)}`}
               >
                 <div className="flex justify-between items-start">
                   <div>
-                    <h4 className="font-medium text-gray-900">{alert.type}</h4>
-                    <p className="text-sm text-gray-600 mt-1">
+                    <h4 className="font-medium text-primary">{alert.type}</h4>
+                    <p className="text-sm text-secondary mt-1">
                       {alert.message}
                     </p>
-                    <p className="text-xs text-gray-500 mt-2">{alert.time}</p>
+                    <p className="text-xs text-secondary mt-2">{alert.time}</p>
                   </div>
                 </div>
               </div>
@@ -296,54 +348,53 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Quick Actions */}
+        {/* Quick Actions List */}
         <div className="space-y-4">
-          <h2 className="text-lg font-semibold text-gray-900">Quick Actions</h2>
+          <h2 className="text-lg font-semibold text-primary">Quick Actions</h2>
 
-          <button className="w-full bg-white rounded-lg shadow-sm border border-gray-200 p-4 text-left hover:shadow-md transition-shadow">
+          {/* Individual Quick Action Buttons */}
+          <button className="w-full feature-card p-4 text-left hover:shadow-md transition-shadow">
             <div className="flex items-center">
               <Users className="h-8 w-8 text-blue-500 mr-4" />
               <div>
-                <h3 className="font-semibold text-gray-900">User Management</h3>
-                <p className="text-sm text-gray-600">
+                <h3 className="font-semibold text-primary">User Management</h3>
+                <p className="text-sm text-secondary">
                   Manage students, counsellors, and permissions
                 </p>
               </div>
             </div>
           </button>
 
-          <button className="w-full bg-white rounded-lg shadow-sm border border-gray-200 p-4 text-left hover:shadow-md transition-shadow">
+          <button className="w-full feature-card p-4 text-left hover:shadow-md transition-shadow">
             <div className="flex items-center">
-              <Settings className="h-8 w-8 text-gray-500 mr-4" />
+              <Settings className="h-8 w-8 text-secondary mr-4" />
               <div>
-                <h3 className="font-semibold text-gray-900">System Settings</h3>
-                <p className="text-sm text-gray-600">
+                <h3 className="font-semibold text-primary">System Settings</h3>
+                <p className="text-sm text-secondary">
                   Configure platform settings and preferences
                 </p>
               </div>
             </div>
           </button>
 
-          <button className="w-full bg-white rounded-lg shadow-sm border border-gray-200 p-4 text-left hover:shadow-md transition-shadow">
+          <button className="w-full feature-card p-4 text-left hover:shadow-md transition-shadow">
             <div className="flex items-center">
               <BarChart3 className="h-8 w-8 text-green-500 mr-4" />
               <div>
-                <h3 className="font-semibold text-gray-900">
-                  Generate Reports
-                </h3>
-                <p className="text-sm text-gray-600">
+                <h3 className="font-semibold text-primary">Generate Reports</h3>
+                <p className="text-sm text-secondary">
                   Create detailed analytics and usage reports
                 </p>
               </div>
             </div>
           </button>
 
-          <button className="w-full bg-white rounded-lg shadow-sm border border-gray-200 p-4 text-left hover:shadow-md transition-shadow">
+          <button className="w-full feature-card p-4 text-left hover:shadow-md transition-shadow">
             <div className="flex items-center">
               <Shield className="h-8 w-8 text-purple-500 mr-4" />
               <div>
-                <h3 className="font-semibold text-gray-900">Security Audit</h3>
-                <p className="text-sm text-gray-600">
+                <h3 className="font-semibold text-primary">Security Audit</h3>
+                <p className="text-sm text-secondary">
                   Review security logs and user activity
                 </p>
               </div>
@@ -351,11 +402,8 @@ export default function AdminDashboard() {
           </button>
         </div>
       </div>
-      {/* Chatbot Integrate*/}
+      {/* Chatbot Integrate */}
       <ChatbotWidget />
-      {/* <div className="flex justify-end">
-        <ChatbotPanel />
-      </div> */}
     </div>
   );
 }

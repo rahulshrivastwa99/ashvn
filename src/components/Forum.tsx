@@ -6,7 +6,6 @@ import {
   Shield,
   Plus,
   Search,
-  Filter,
   Clock,
   ThumbsUp,
   ThumbsDown,
@@ -37,6 +36,7 @@ interface Reply {
   isPeerVolunteer?: boolean;
 }
 
+// --- MOCK DATA (Unchanged) ---
 const mockPosts: ForumPost[] = [
   {
     id: "1",
@@ -132,7 +132,7 @@ const mockPosts: ForumPost[] = [
 ];
 
 const mockReplies: Reply[] = [
-  // Replies for Post ID: 1 (Exam Anxiety) - 2 Replies
+  // ... (mock replies data remains unchanged) ...
   {
     id: "1",
     postId: "1",
@@ -154,8 +154,6 @@ const mockReplies: Reply[] = [
     isAnonymous: true,
     likes: 3,
   },
-
-  // Replies for Post ID: 2 (Feeling Lonely) - 3 Replies
   {
     id: "3",
     postId: "2",
@@ -187,8 +185,6 @@ const mockReplies: Reply[] = [
     isAnonymous: false,
     likes: 9,
   },
-
-  // Replies for Post ID: 3 (Sleep Schedule) - 4 Replies
   {
     id: "5",
     postId: "3",
@@ -229,8 +225,6 @@ const mockReplies: Reply[] = [
     isAnonymous: true,
     likes: 1,
   },
-
-  // Replies for Post ID: 4 (Making friends in new city) - 1 Reply
   {
     id: "7",
     postId: "4",
@@ -241,8 +235,6 @@ const mockReplies: Reply[] = [
     isAnonymous: false,
     likes: 11,
   },
-
-  // Replies for Post ID: 5 (Struggling after breakup) - 2 Replies
   {
     id: "9",
     postId: "5",
@@ -263,8 +255,6 @@ const mockReplies: Reply[] = [
     isAnonymous: false,
     likes: 6,
   },
-
-  // Replies for Post ID: 6 (Zero Motivation) - 3 Replies
   {
     id: "11",
     postId: "6",
@@ -296,8 +286,6 @@ const mockReplies: Reply[] = [
     isAnonymous: false,
     likes: 15,
   },
-
-  // Replies for Post ID: 7 (Family Pressure) - 2 Replies
   {
     id: "13",
     postId: "7",
@@ -319,6 +307,7 @@ const mockReplies: Reply[] = [
     likes: 4,
   },
 ];
+
 const categories = [
   "All",
   "Academic Stress",
@@ -406,18 +395,48 @@ export default function Forum() {
     return replies.filter((reply) => reply.postId === postId);
   };
 
+  // --- THEME UTILITY FUNCTIONS (Needed for consistent theming) ---
+  const getBadgeColor = (status: string) => {
+    switch (status) {
+      case "Academic Stress":
+        return "badge-info";
+      case "Social Connection":
+        return "badge-danger";
+      case "Sleep & Wellness":
+        return "badge-success";
+      case "Social Anxiety":
+        return "badge-info";
+      case "Relationship Advice":
+        return "badge-info";
+      case "Motivation":
+        return "badge-success";
+      case "Family Issues":
+        return "badge-danger";
+      default:
+        return "badge-secondary";
+    }
+  };
+
+  const getPeerColor = (isVolunteer: boolean) => {
+    return isVolunteer ? "text-accent" : "text-primary";
+  };
+
+  // ====================================================================================
+  // VIEW 1: Create New Post Form
+  // ====================================================================================
   if (showNewPost) {
     return (
       <div className="max-w-3xl mx-auto">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-          <div className="p-6 border-b border-gray-200">
+        {/* KEY FIX 1: Form container uses feature-card for dark background/border */}
+        <div className="feature-card rounded-lg shadow-sm">
+          <div className="p-6 border-b border-theme-divider">
             <div className="flex items-center justify-between">
-              <h1 className="text-xl font-semibold text-gray-900">
+              <h1 className="text-xl font-semibold text-primary">
                 Create New Post
               </h1>
               <button
                 onClick={() => setShowNewPost(false)}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-secondary hover:text-red-500"
               >
                 ✕
               </button>
@@ -426,14 +445,14 @@ export default function Forum() {
 
           <div className="p-6 space-y-6">
             {/* Anonymous Toggle */}
-            <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
+            <div className="flex items-center justify-between p-4 bg-secondary rounded-lg border border-theme-divider">
               <div className="flex items-center">
-                <Shield className="h-5 w-5 text-blue-600 mr-3" />
+                <Shield className="h-5 w-5 text-accent mr-3" />
                 <div>
-                  <h3 className="text-sm font-medium text-blue-800">
+                  <h3 className="text-sm font-medium text-primary">
                     Anonymous Posting
                   </h3>
-                  <p className="text-xs text-blue-600">
+                  <p className="text-xs text-secondary">
                     Your identity will be protected
                   </p>
                 </div>
@@ -443,9 +462,9 @@ export default function Forum() {
                   type="checkbox"
                   checked={isAnonymous}
                   onChange={(e) => setIsAnonymous(e.target.checked)}
-                  className="rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                  className="rounded border-theme-divider text-accent focus:ring-accent bg-secondary"
                 />
-                <span className="ml-2 text-sm text-gray-700">
+                <span className="ml-2 text-sm text-secondary">
                   Post anonymously
                 </span>
               </label>
@@ -453,13 +472,14 @@ export default function Forum() {
 
             {/* Category */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-primary mb-2">
                 Category *
               </label>
               <select
                 value={newPostCategory}
                 onChange={(e) => setNewPostCategory(e.target.value)}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-teal-500 focus:border-teal-500"
+                // Themed input/select box
+                className="w-full border border-theme-divider rounded-md px-3 py-2 text-primary bg-secondary focus:ring-accent focus:border-accent"
               >
                 {categories.slice(1).map((category) => (
                   <option key={category} value={category}>
@@ -471,7 +491,7 @@ export default function Forum() {
 
             {/* Title */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-primary mb-2">
                 Title *
               </label>
               <input
@@ -479,17 +499,18 @@ export default function Forum() {
                 value={newPostTitle}
                 onChange={(e) => setNewPostTitle(e.target.value)}
                 placeholder="What would you like to discuss?"
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-teal-500 focus:border-teal-500"
+                // Themed input box
+                className="w-full border border-theme-divider rounded-md px-3 py-2 text-primary bg-secondary placeholder-themed focus:ring-accent focus:border-accent"
                 maxLength={100}
               />
-              <div className="text-xs text-gray-500 mt-1">
+              <div className="text-xs text-secondary mt-1">
                 {newPostTitle.length}/100 characters
               </div>
             </div>
 
             {/* Content */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-primary mb-2">
                 Content *
               </label>
               <textarea
@@ -497,17 +518,18 @@ export default function Forum() {
                 onChange={(e) => setNewPostContent(e.target.value)}
                 placeholder="Share your thoughts, experiences, or questions..."
                 rows={6}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-teal-500 focus:border-teal-500"
+                // Themed textarea
+                className="w-full border border-theme-divider rounded-md px-3 py-2 text-primary bg-secondary placeholder-themed focus:ring-accent focus:border-accent"
                 maxLength={1000}
               />
-              <div className="text-xs text-gray-500 mt-1">
+              <div className="text-xs text-secondary mt-1">
                 {newPostContent.length}/1000 characters
               </div>
             </div>
 
             {/* Tags */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-primary mb-2">
                 Tags (Optional)
               </label>
               <input
@@ -515,22 +537,23 @@ export default function Forum() {
                 value={newPostTags}
                 onChange={(e) => setNewPostTags(e.target.value)}
                 placeholder="e.g. anxiety, stress, friendship (comma-separated)"
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-teal-500 focus:border-teal-500"
+                // Themed input box
+                className="w-full border border-theme-divider rounded-md px-3 py-2 text-primary bg-secondary placeholder-themed focus:ring-accent focus:border-accent"
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-secondary mt-1">
                 Tags help others find your post
               </p>
             </div>
 
-            {/* Community Guidelines */}
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            {/* Community Guidelines (Themed) */}
+            <div className="bg-yellow-50 dark:bg-yellow-800/20 border border-theme-divider rounded-lg p-4">
               <div className="flex">
-                <Shield className="h-5 w-5 text-yellow-600 mr-3 mt-0.5" />
+                <Shield className="h-5 w-5 text-yellow-600 dark:text-yellow-400 mr-3 mt-0.5" />
                 <div>
-                  <h4 className="text-sm font-medium text-yellow-800">
+                  <h4 className="text-sm font-medium text-primary">
                     Community Guidelines
                   </h4>
-                  <ul className="text-xs text-yellow-700 mt-1 space-y-1">
+                  <ul className="text-xs text-secondary mt-1 space-y-1">
                     <li>• Be respectful and supportive</li>
                     <li>• No personal attacks or discrimination</li>
                     <li>• Share experiences, not personal details</li>
@@ -540,17 +563,19 @@ export default function Forum() {
               </div>
             </div>
 
-            {/* Action Buttons */}
+            {/* Action Buttons (Themed) */}
             <div className="flex space-x-4">
               <button
                 onClick={handleNewPost}
-                className="flex-1 bg-teal-600 text-white py-3 px-4 rounded-md hover:bg-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+                // Themed accent button
+                className="flex-1 bg-accent text-white py-3 px-4 rounded-md hover:opacity-90 focus:ring-2 focus:ring-accent focus:ring-offset-2"
               >
                 Post to Community
               </button>
               <button
                 onClick={() => setShowNewPost(false)}
-                className="px-6 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
+                // Themed secondary button
+                className="px-6 py-3 border border-theme-divider text-primary rounded-md hover-bg-secondary"
               >
                 Cancel
               </button>
@@ -561,6 +586,9 @@ export default function Forum() {
     );
   }
 
+  // ====================================================================================
+  // VIEW 2: Single Post and Replies
+  // ====================================================================================
   if (selectedPost) {
     const post = posts.find((p) => p.id === selectedPost);
     const postReplies = getPostReplies(selectedPost);
@@ -572,20 +600,25 @@ export default function Forum() {
         <div className="mb-4">
           <button
             onClick={() => setSelectedPost(null)}
-            className="text-teal-600 hover:text-teal-700 text-sm font-medium flex items-center"
+            className="text-accent hover:opacity-80 text-sm font-medium flex items-center"
           >
             ← Back to Forum
           </button>
         </div>
 
         {/* Original Post */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+        {/* KEY FIX 5: Post container uses feature-card background/border */}
+        <div className="feature-card mb-6">
           <div className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">
+              <span
+                className={`px-3 py-1 rounded-full text-xs font-medium ${getBadgeColor(
+                  post.category
+                )}`}
+              >
                 {post.category}
               </span>
-              <div className="flex items-center space-x-4 text-sm text-gray-500">
+              <div className="flex items-center space-x-4 text-sm text-secondary">
                 <span>{formatTimeAgo(post.timestamp)}</span>
                 <button className="flex items-center hover:text-red-500">
                   <Flag className="h-4 w-4 mr-1" />
@@ -594,87 +627,97 @@ export default function Forum() {
               </div>
             </div>
 
-            <h1 className="text-xl font-semibold text-gray-900 mb-3">
+            <h1 className="text-xl font-semibold text-primary mb-3">
               {post.title}
             </h1>
-            <p className="text-gray-700 mb-4">{post.content}</p>
+            <p className="text-secondary mb-4">{post.content}</p>
 
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-1">
-                  <button className="flex items-center text-gray-500 hover:text-teal-600">
+                  <button className="flex items-center text-secondary hover:text-accent">
                     <ThumbsUp className="h-4 w-4 mr-1" />
                     <span>{post.likes}</span>
                   </button>
                 </div>
-                <div className="flex items-center text-gray-500">
+                <div className="flex items-center text-secondary">
                   <MessageCircle className="h-4 w-4 mr-1" />
                   <span>{post.replies} replies</span>
                 </div>
               </div>
               <div className="flex flex-wrap gap-2">
-                {post.tags.map((tag) => (
+                {post.tags.slice(0, 3).map((tag) => (
                   <span
                     key={tag}
-                    className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs"
+                    className="bg-secondary text-secondary px-2 py-1 rounded text-xs"
                   >
                     #{tag}
                   </span>
                 ))}
+                {post.tags.length > 3 && (
+                  <span className="text-xs text-secondary">
+                    +{post.tags.length - 3}
+                  </span>
+                )}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Replies */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-          <div className="p-6 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">
+        {/* Replies Container */}
+        <div className="feature-card">
+          <div className="p-6 border-b border-theme-divider">
+            <h2 className="text-lg font-semibold text-primary">
               Replies ({postReplies.length})
             </h2>
           </div>
 
-          <div className="divide-y divide-gray-200">
+          <div className="divide-y divide-theme-divider">
             {postReplies.map((reply) => (
               <div key={reply.id} className="p-6">
                 <div className="flex items-start space-x-4">
                   <div className="flex-shrink-0">
+                    {/* Themed Avatar */}
                     <div
                       className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                        reply.isPeerVolunteer ? "bg-green-100" : "bg-gray-100"
+                        reply.isPeerVolunteer ? "bg-accent/10" : "bg-secondary"
                       }`}
                     >
                       {reply.isPeerVolunteer ? (
-                        <Shield className="h-4 w-4 text-green-600" />
+                        <Shield className="h-4 w-4 text-accent" />
                       ) : (
-                        <MessageCircle className="h-4 w-4 text-gray-600" />
+                        <MessageCircle className="h-4 w-4 text-secondary" />
                       )}
                     </div>
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
-                      <span className="font-medium text-gray-900">
+                      <span
+                        className={`font-medium ${getPeerColor(
+                          reply.isPeerVolunteer
+                        )}`}
+                      >
                         {reply.author}
                       </span>
                       {reply.isPeerVolunteer && (
-                        <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
+                        <span className="badge-success px-2 py-1 rounded-full text-xs font-medium">
                           Peer Volunteer
                         </span>
                       )}
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-secondary">
                         {formatTimeAgo(reply.timestamp)}
                       </span>
                     </div>
-                    <p className="text-gray-700 mb-3">{reply.content}</p>
+                    <p className="text-primary mb-3">{reply.content}</p>
                     <div className="flex items-center space-x-4">
-                      <button className="flex items-center text-gray-500 hover:text-teal-600 text-sm">
+                      <button className="flex items-center text-secondary hover:text-accent text-sm">
                         <ThumbsUp className="h-3 w-3 mr-1" />
                         <span>{reply.likes}</span>
                       </button>
-                      <button className="text-sm text-gray-500 hover:text-teal-600">
+                      <button className="text-sm text-secondary hover:text-accent">
                         Reply
                       </button>
-                      <button className="text-sm text-gray-500 hover:text-red-500">
+                      <button className="text-sm text-secondary hover:text-red-500">
                         Report
                       </button>
                     </div>
@@ -685,23 +728,24 @@ export default function Forum() {
           </div>
 
           {/* Reply Form */}
-          <div className="p-6 border-t border-gray-200 bg-gray-50">
+          <div className="p-6 border-t border-theme-divider bg-secondary">
             <div className="space-y-4">
               <textarea
                 placeholder="Share your thoughts or support..."
                 rows={3}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-teal-500 focus:border-teal-500"
+                // Themed textarea
+                className="w-full border border-theme-divider rounded-md px-3 py-2 text-primary bg-secondary placeholder-themed focus:ring-accent focus:border-accent"
               />
               <div className="flex items-center justify-between">
-                <label className="flex items-center text-sm text-gray-600">
+                <label className="flex items-center text-sm text-secondary">
                   <input
                     type="checkbox"
-                    className="rounded border-gray-300 text-teal-600 focus:ring-teal-500 mr-2"
+                    className="rounded border-theme-divider text-accent focus:ring-accent bg-secondary mr-2"
                     defaultChecked
                   />
                   Reply anonymously
                 </label>
-                <button className="bg-teal-600 text-white px-4 py-2 rounded-md hover:bg-teal-700">
+                <button className="bg-accent text-white px-4 py-2 rounded-md hover:opacity-90">
                   Post Reply
                 </button>
               </div>
@@ -712,36 +756,39 @@ export default function Forum() {
     );
   }
 
+  // ====================================================================================
+  // VIEW 3: Main Post List
+  // ====================================================================================
   return (
     <div className="space-y-8">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-primary">
             Peer Support Forum
           </h1>
-          <p className="text-gray-600">
+          <p className="text-secondary">
             Connect with other students in a safe, moderated environment
           </p>
         </div>
         <button
           onClick={() => setShowNewPost(true)}
-          className="bg-teal-600 text-white px-4 py-2 rounded-md hover:bg-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 flex items-center"
+          className="bg-accent text-white px-4 py-2 rounded-md hover:opacity-90 focus:ring-2 focus:ring-accent focus:ring-offset-2 flex items-center"
         >
           <Plus className="h-4 w-4 mr-2" />
           New Post
         </button>
       </div>
 
-      {/* Safety Notice */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+      {/* Safety Notice (Themed) */}
+      <div className="feature-card border border-theme-divider rounded-lg p-4 bg-secondary">
         <div className="flex items-start">
-          <Shield className="h-5 w-5 text-blue-600 mr-3 mt-0.5 flex-shrink-0" />
+          <Shield className="h-5 w-5 text-accent mr-3 mt-0.5 flex-shrink-0" />
           <div>
-            <h3 className="text-sm font-medium text-blue-800 mb-1">
+            <h3 className="text-sm font-medium text-primary mb-1">
               Safe Space Guidelines
             </h3>
-            <p className="text-sm text-blue-700">
+            <p className="text-sm text-secondary">
               This forum is monitored by trained peer volunteers and moderators.
               All posts are anonymous by default. If you're in crisis, please
               use the emergency resources or speak directly with a counselor.
@@ -750,18 +797,19 @@ export default function Forum() {
         </div>
       </div>
 
-      {/* Search and Filters */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      {/* Search and Filters (Themed) */}
+      <div className="feature-card p-6">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
           <div className="lg:col-span-2">
             <div className="relative">
-              <Search className="h-5 w-5 absolute left-3 top-3 text-gray-400" />
+              <Search className="h-5 w-5 absolute left-3 top-3 text-secondary" />
               <input
                 type="text"
                 placeholder="Search posts..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                // Themed input
+                className="w-full pl-10 pr-4 py-2 border border-theme-divider rounded-lg bg-secondary text-primary placeholder-themed focus:ring-accent focus:border-accent"
               />
             </div>
           </div>
@@ -770,7 +818,8 @@ export default function Forum() {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-teal-500 focus:border-teal-500"
+              // Themed select
+              className="w-full border border-theme-divider rounded-md px-3 py-2 text-primary bg-secondary focus:ring-accent focus:border-accent"
             >
               {categories.map((category) => (
                 <option key={category} value={category}>
@@ -784,7 +833,8 @@ export default function Forum() {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-teal-500 focus:border-teal-500"
+              // Themed select
+              className="w-full border border-theme-divider rounded-md px-3 py-2 text-primary bg-secondary focus:ring-accent focus:border-accent"
             >
               <option value="recent">Most Recent</option>
               <option value="popular">Most Liked</option>
@@ -799,59 +849,69 @@ export default function Forum() {
         {filteredPosts.map((post) => (
           <div
             key={post.id}
-            className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow"
+            // Themed post card
+            className="feature-card rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer"
           >
-            <div className="p-6">
+            <div className="p-6" onClick={() => setSelectedPost(post.id)}>
               <div className="flex items-center justify-between mb-3">
-                <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">
+                <span
+                  className={`px-3 py-1 rounded-full text-xs font-medium ${getBadgeColor(
+                    post.category
+                  )}`}
+                >
                   {post.category}
                 </span>
-                <div className="flex items-center space-x-4 text-sm text-gray-500">
+                <div className="flex items-center space-x-4 text-sm text-secondary">
                   <span className="flex items-center">
                     <Clock className="h-4 w-4 mr-1" />
                     {formatTimeAgo(post.timestamp)}
                   </span>
-                  <button className="hover:text-red-500">
+                  <button
+                    className="hover:text-red-500"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      alert(`Reporting post: ${post.id}`);
+                    }}
+                  >
                     <Flag className="h-4 w-4" />
                   </button>
                 </div>
               </div>
 
-              <h3
-                className="font-semibold text-gray-900 mb-2 cursor-pointer hover:text-teal-600"
-                onClick={() => setSelectedPost(post.id)}
-              >
+              <h3 className="font-semibold text-primary mb-2 hover:text-accent">
                 {post.title}
               </h3>
 
-              <p className="text-gray-700 mb-4 line-clamp-2">{post.content}</p>
+              <p className="text-secondary mb-4 line-clamp-2">{post.content}</p>
 
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
-                  <button className="flex items-center text-gray-500 hover:text-teal-600">
+                  <button
+                    className="flex items-center text-secondary hover:text-accent"
+                    onClick={(e) => {
+                      e.stopPropagation(); /* Add like logic here */
+                    }}
+                  >
                     <Heart className="h-4 w-4 mr-1" />
                     <span>{post.likes}</span>
                   </button>
-                  <button
-                    className="flex items-center text-gray-500 hover:text-teal-600"
-                    onClick={() => setSelectedPost(post.id)}
-                  >
+                  <div className="flex items-center text-secondary">
                     <MessageCircle className="h-4 w-4 mr-1" />
                     <span>{post.replies}</span>
-                  </button>
+                  </div>
                 </div>
 
                 <div className="flex flex-wrap gap-1">
                   {post.tags.slice(0, 3).map((tag) => (
                     <span
                       key={tag}
-                      className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs"
+                      className="bg-secondary text-secondary px-2 py-1 rounded text-xs"
                     >
                       #{tag}
                     </span>
                   ))}
                   {post.tags.length > 3 && (
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-secondary">
                       +{post.tags.length - 3}
                     </span>
                   )}
@@ -862,19 +922,19 @@ export default function Forum() {
         ))}
       </div>
 
-      {/* Empty State */}
+      {/* Empty State (Themed) */}
       {filteredPosts.length === 0 && (
-        <div className="text-center py-12">
-          <MessageCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+        <div className="feature-card text-center py-12">
+          <MessageCircle className="h-12 w-12 text-secondary mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-primary mb-2">
             No posts found
           </h3>
-          <p className="text-gray-600 mb-4">
+          <p className="text-secondary mb-4">
             Try adjusting your search terms or filters
           </p>
           <button
             onClick={() => setShowNewPost(true)}
-            className="bg-teal-600 text-white px-4 py-2 rounded-md hover:bg-teal-700"
+            className="bg-accent text-white px-4 py-2 rounded-md hover:opacity-90"
           >
             Create the first post
           </button>

@@ -94,17 +94,18 @@ export default function CrisisSupport() {
   };
 
   const getTypeColor = (type: string) => {
+    // We rely on the themed badge classes defined in index.css
     switch (type) {
       case "hotline":
-        return "bg-red-100 text-red-800";
+        return "badge-danger";
       case "text":
-        return "bg-blue-100 text-blue-800";
+        return "badge-info";
       case "chat":
-        return "bg-green-100 text-green-800";
+        return "badge-success";
       case "local":
-        return "bg-purple-100 text-purple-800";
+        return "badge-info";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "badge-secondary";
     }
   };
 
@@ -115,14 +116,15 @@ export default function CrisisSupport() {
   return (
     <div className="space-y-8">
       {/* Emergency Banner */}
-      <div className="bg-red-50 border-l-4 border-red-400 p-6 rounded-r-lg">
+      {/* KEY FIX 1: Use feature-card for the main banner background and theme text colors */}
+      <div className="feature-card border-l-4 border-red-400 p-6 rounded-r-lg">
         <div className="flex items-center">
           <AlertTriangle className="h-8 w-8 text-red-400 mr-4" />
           <div>
-            <h1 className="text-2xl font-bold text-red-800 mb-2">
+            <h1 className="text-2xl font-bold text-primary mb-2">
               Crisis Support Resources
             </h1>
-            <p className="text-red-700 mb-4">
+            <p className="text-secondary mb-4">
               If you're having thoughts of self-harm or suicide, please reach
               out for help immediately. You are not alone, and support is
               available 24/7.
@@ -148,15 +150,17 @@ export default function CrisisSupport() {
       </div>
 
       {/* Language Filter */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      {/* KEY FIX 2: Use feature-card for background and theme text/input styles */}
+      <div className="feature-card p-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-900">
+          <h2 className="text-lg font-semibold text-primary">
             Available Support Resources
           </h2>
           <select
             value={selectedLanguage}
             onChange={(e) => setSelectedLanguage(e.target.value)}
-            className="border border-gray-300 rounded-md px-3 py-2 focus:ring-teal-500 focus:border-teal-500"
+            // Themed SELECT input
+            className="border border-theme-divider rounded-md px-3 py-2 focus:ring-accent focus:border-accent bg-secondary text-primary"
           >
             <option value="English">English</option>
             <option value="Hindi">हिंदी (Hindi)</option>
@@ -168,15 +172,17 @@ export default function CrisisSupport() {
         </div>
       </div>
 
-      {/* Crisis Resources */}
+      {/* Crisis Resources Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {filteredResources.map((resource, index) => (
           <div
             key={index}
-            className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
+            // KEY FIX 3: Resource Card uses feature-card
+            className="feature-card p-6"
           >
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center">
+                {/* Type Badge uses themed badge colors */}
                 <span
                   className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getTypeColor(
                     resource.type
@@ -186,36 +192,39 @@ export default function CrisisSupport() {
                   <span className="ml-2 capitalize">{resource.type}</span>
                 </span>
               </div>
-              <div className="flex items-center text-sm text-gray-500">
+              {/* Availability uses secondary text color */}
+              <div className="flex items-center text-sm text-secondary">
                 <Clock className="h-4 w-4 mr-1" />
                 {resource.availability}
               </div>
             </div>
 
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            {/* Resource details use primary/secondary text colors */}
+            <h3 className="text-lg font-semibold text-primary mb-2">
               {resource.name}
             </h3>
-            <p className="text-gray-600 mb-4">{resource.description}</p>
+            <p className="text-secondary mb-4">{resource.description}</p>
 
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-700">
+                <span className="text-sm font-medium text-secondary">
                   Contact:
                 </span>
-                <span className="text-lg font-bold text-gray-900">
+                <span className="text-lg font-bold text-primary">
                   {resource.contact}
                 </span>
               </div>
 
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-700">
+                <span className="text-sm font-medium text-secondary">
                   Languages:
                 </span>
                 <div className="flex flex-wrap gap-1">
                   {resource.language.map((lang) => (
+                    // Language tags use themed secondary background/text
                     <span
                       key={lang}
-                      className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs"
+                      className="bg-secondary text-secondary px-2 py-1 rounded text-xs"
                     >
                       {lang}
                     </span>
@@ -223,7 +232,8 @@ export default function CrisisSupport() {
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-gray-200">
+              <div className="pt-4 border-t border-theme-divider">
+                {/* Action Buttons: Remain brightly colored for urgency */}
                 {resource.type === "hotline" && (
                   <a
                     href={`tel:${resource.contact.replace(/[^\d]/g, "")}`}
@@ -236,7 +246,6 @@ export default function CrisisSupport() {
 
                 {resource.type === "text" && (
                   <div className="flex flex-col gap-3">
-                    {/* SMS Option */}
                     <a
                       href={`sms:${resource.contact.replace(
                         /[^\d]/g,
@@ -247,7 +256,6 @@ export default function CrisisSupport() {
                       <MessageCircle className="h-4 w-4 mr-2" />
                       Send SMS
                     </a>
-                    {/* WhatsApp Option */}
                     <a
                       href={`https://wa.me/${resource.contact.replace(
                         /[^\d]/g,
@@ -291,20 +299,20 @@ export default function CrisisSupport() {
       </div>
 
       {/* Safety Planning */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div className="feature-card p-6">
         <div className="flex items-center mb-6">
-          <Shield className="h-6 w-6 text-green-600 mr-3" />
-          <h2 className="text-lg font-semibold text-gray-900">
+          <Shield className="h-6 w-6 text-accent mr-3" />
+          <h2 className="text-lg font-semibold text-primary">
             Safety Planning
           </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <h3 className="font-medium text-gray-900 mb-3">
+            <h3 className="font-medium text-primary mb-3">
               Warning Signs to Watch For:
             </h3>
-            <ul className="space-y-2 text-sm text-gray-600">
+            <ul className="space-y-2 text-sm text-secondary">
               <li className="flex items-start">
                 <span className="w-2 h-2 bg-red-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
                 Thoughts of death or suicide
@@ -329,10 +337,10 @@ export default function CrisisSupport() {
           </div>
 
           <div>
-            <h3 className="font-medium text-gray-900 mb-3">
+            <h3 className="font-medium text-primary mb-3">
               Immediate Coping Strategies:
             </h3>
-            <ul className="space-y-2 text-sm text-gray-600">
+            <ul className="space-y-2 text-sm text-secondary">
               <li className="flex items-start">
                 <span className="w-2 h-2 bg-green-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
                 Call a crisis hotline or trusted person
@@ -359,23 +367,23 @@ export default function CrisisSupport() {
       </div>
 
       {/* Support Message */}
-      <div className="bg-teal-50 border border-teal-200 rounded-lg p-6">
+      <div className="feature-card border border-theme-divider p-6">
         <div className="flex items-start">
-          <Heart className="h-6 w-6 text-teal-600 mr-3 mt-1" />
+          <Heart className="h-6 w-6 text-accent mr-3 mt-1" />
           <div>
-            <h3 className="text-lg font-medium text-teal-800 mb-2">
+            <h3 className="text-lg font-medium text-primary mb-2">
               You Are Not Alone
             </h3>
-            <p className="text-teal-700 mb-4">
+            <p className="text-secondary mb-4">
               Mental health struggles are real, but they are treatable. Reaching
               out for help is a sign of strength, not weakness. Every person
               deserves support, understanding, and hope for recovery.
             </p>
             <div className="flex flex-wrap gap-3">
-              <button className="bg-teal-600 text-white px-4 py-2 rounded-md hover:bg-teal-700 transition-colors">
+              <button className="bg-accent text-white px-4 py-2 rounded-md hover:opacity-90 transition-colors">
                 Find Local Support
               </button>
-              <button className="border border-teal-600 text-teal-600 px-4 py-2 rounded-md hover:bg-teal-50 transition-colors">
+              <button className="border border-accent text-accent px-4 py-2 rounded-md hover-bg-secondary transition-colors">
                 Learn More About Mental Health
               </button>
             </div>

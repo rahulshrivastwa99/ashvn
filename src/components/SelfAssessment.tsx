@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Send, Bot, User, AlertCircle, Shield, Brain } from "lucide-react";
+import { Send, Shield, Brain } from "lucide-react";
 
 interface Message {
   id: string;
@@ -42,7 +42,7 @@ const offTopicReplies = [
   "I'm here to support you with a self-assessment. To get started, please select either the PHQ-9 or GAD-7 tool.",
 ];
 
-export default function Assitant() {
+export default function SelfAssessment() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -235,18 +235,18 @@ export default function Assitant() {
   const quickReplies = ["Start PHQ-9 assessment", "Start GAD-7 assessment"];
 
   return (
-    <div className="h-screen flex flex-col bg-gray-50">
+    <div className="h-screen flex flex-col">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b px-6 py-4">
+      <div className="feature-card shadow-sm border-b border-theme-divider px-6 py-4 flex-shrink-0">
         <div className="flex items-center">
-          <div className="bg-teal-100 rounded-full p-3 mr-4">
-            <Brain className="h-8 w-8 text-teal-600" />
+          <div className="sidebar-avatar-bg rounded-full p-3 mr-4">
+            <Brain className="h-8 w-8 text-accent" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-2xl font-bold text-primary">
               Mental Health Self-Assessment
             </h1>
-            <p className="text-base text-gray-600">
+            <p className="text-base text-secondary">
               Confidential screening tools (PHQ-9 & GAD-7)
             </p>
           </div>
@@ -254,7 +254,7 @@ export default function Assitant() {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6">
+      <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-secondary">
         {messages.map((message) => (
           <div
             key={message.id}
@@ -265,8 +265,8 @@ export default function Assitant() {
             <div
               className={`max-w-md lg:max-w-lg xl:max-w-2xl px-5 py-3 rounded-2xl ${
                 message.sender === "user"
-                  ? "bg-teal-600 text-white rounded-br-none"
-                  : "bg-white text-gray-900 shadow-sm border border-gray-200 rounded-bl-none"
+                  ? "bg-accent text-white rounded-br-none" // User messages keep teal background
+                  : "bg-secondary text-primary shadow-sm border border-theme-divider rounded-bl-none"
               }`}
             >
               <p className="text-base whitespace-pre-wrap">{message.text}</p>
@@ -275,21 +275,22 @@ export default function Assitant() {
         ))}
         {isTyping && (
           <div className="flex justify-start">
-            <div className="bg-white text-gray-900 shadow-sm border border-gray-200 px-4 py-3 rounded-2xl rounded-bl-none">
+            <div className="bg-secondary text-primary shadow-sm border border-theme-divider px-4 py-3 rounded-2xl rounded-bl-none">
               <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                <div className="w-2 h-2 bg-secondary rounded-full animate-bounce"></div>
                 <div
-                  className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                  className="w-2 h-2 bg-secondary rounded-full animate-bounce"
                   style={{ animationDelay: "0.1s" }}
                 ></div>
                 <div
-                  className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                  className="w-2 h-2 bg-secondary rounded-full animate-bounce"
                   style={{ animationDelay: "0.2s" }}
                 ></div>
               </div>
             </div>
           </div>
         )}
+        <div ref={messagesEndRef} />
       </div>
 
       {/* Quick Replies */}
@@ -300,7 +301,7 @@ export default function Assitant() {
               <button
                 key={reply}
                 onClick={() => handleQuickReplyClick(reply)}
-                className="px-4 py-2 text-base bg-white border border-gray-300 rounded-full hover:bg-gray-100 transition-colors"
+                className="px-4 py-2 text-base bg-secondary text-primary border border-theme-divider rounded-full hover-bg-secondary transition-colors"
               >
                 {reply}
               </button>
@@ -310,7 +311,7 @@ export default function Assitant() {
       )}
 
       {/* Input */}
-      <div className="bg-white border-t px-6 py-4">
+      <div className="feature-card border-t border-theme-divider px-6 py-4 flex-shrink-0">
         <div className="flex space-x-4">
           <input
             ref={inputRef}
@@ -323,17 +324,19 @@ export default function Assitant() {
                 ? "Enter a number from 0-3..."
                 : "Click an assessment above or type its name..."
             }
-            className="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-base focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+            // FIX: Added placeholder-themed class to fix placeholder visibility
+            // and maintained text-primary for typed text visibility.
+            className="flex-1 border border-theme-divider rounded-lg px-4 py-3 text-base text-primary bg-secondary focus:ring-2 focus:ring-accent focus:border-accent placeholder-themed"
           />
           <button
             onClick={sendMessage}
             disabled={!inputText.trim()}
-            className="bg-teal-600 text-white rounded-lg px-5 py-3 hover:bg-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+            className="bg-accent text-white rounded-lg px-5 py-3 hover:opacity-90 focus:ring-2 focus:ring-accent focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
           >
             <Send className="h-5 w-5" />
           </button>
         </div>
-        <div className="mt-2 flex items-center text-sm text-gray-500">
+        <div className="mt-2 flex items-center text-sm text-secondary">
           <Shield className="h-4 w-4 mr-1.5" />
           Your assessment results are confidential and secure.
         </div>

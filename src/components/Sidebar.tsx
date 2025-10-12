@@ -29,6 +29,7 @@ interface SidebarProps {
 }
 
 const navItems = [
+  // ... (navItems array remains unchanged) ...
   {
     name: "Dashboard",
     href: "/",
@@ -142,6 +143,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     }
   };
 
+  const isActive = (href: string) => location.pathname === href;
+
   return (
     <>
       {/* Mobile sidebar overlay */}
@@ -151,15 +154,18 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             className="fixed inset-0 bg-black bg-opacity-25"
             onClick={onClose}
           />
-          <nav className="fixed top-0 left-0 bottom-0 w-64 bg-white shadow-xl">
-            <div className="p-4 border-b">
+          {/* THEME APPLIED: Using custom class for container */}
+          <nav className="fixed top-0 left-0 bottom-0 w-64 shadow-xl sidebar-container">
+            {/* THEME APPLIED: Header uses custom border/text classes */}
+            <div className="p-4 sidebar-header-container">
               <div className="flex items-center justify-between">
-                <h1 className="text-xl font-bold text-teal-600">Ashvaan</h1>
+                {/* Text accent for the logo */}
+                <h1 className="text-xl font-bold text-accent">Ashvaan</h1>
                 <button
                   onClick={onClose}
-                  className="p-2 rounded-md hover:bg-gray-100"
+                  className="p-2 rounded-md transition-colors sidebar-close-button"
                 >
-                  <X className="h-5 w-5" />
+                  <X className="h-5 w-5 lucide-icon-primary" />
                 </button>
               </div>
             </div>
@@ -170,10 +176,10 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                     key={item.name}
                     to={item.href}
                     onClick={onClose}
-                    className={`flex items-center px-3 py-2 rounded-md transition-colors ${
-                      location.pathname === item.href
-                        ? "bg-teal-50 text-teal-600 font-medium"
-                        : "text-gray-700 hover:bg-teal-50 hover:text-teal-600"
+                    className={`flex items-center px-3 py-2 rounded-md transition-colors sidebar-nav-item ${
+                      isActive(item.href)
+                        ? "sidebar-active-link"
+                        : "sidebar-default-link"
                     }`}
                   >
                     <item.icon className="h-5 w-5 mr-3" />
@@ -181,18 +187,19 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                   </Link>
                 ))}
               </div>
-              <div className="mt-8 pt-8 border-t">
-                {/* Mobile version has the Provide Feedback link here */}
+              {/* THEME APPLIED: Separator uses custom class */}
+              <div className="mt-8 pt-8 sidebar-separator">
                 {profile?.role === "student" && (
                   <Link
                     to="/feedback"
                     onClick={onClose}
-                    className="flex items-center w-full px-3 py-2 rounded-md transition-colors text-gray-700 hover:bg-teal-50 hover:text-teal-600"
+                    className="flex items-center w-full px-3 py-2 rounded-md transition-colors sidebar-default-link"
                   >
                     <MessageSquare className="h-5 w-5 mr-3" />
                     Feedback
                   </Link>
                 )}
+                {/* Logout uses hardcoded red for safety/visibility */}
                 <button
                   onClick={handleLogout}
                   className="flex items-center w-full px-3 py-2 rounded-md text-red-600 hover:bg-red-50 transition-colors"
@@ -207,23 +214,29 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       )}
 
       {/* Desktop sidebar */}
-      <nav className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col shadow-lg h-screen overflow-y-auto" style={{ backgroundColor: 'var(--surface)' }}>
-        <div className="p-6" style={{ borderBottom: '1px solid var(--border-color)' }}>
+      {/* THEME APPLIED: Using custom class for container, replaces bg-white and inline style */}
+      <nav className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col shadow-lg h-screen overflow-y-auto sidebar-container">
+        {/* THEME APPLIED: Header uses custom border class */}
+        <div className="p-6 sidebar-header-container">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-teal-600">Ashvaan</h1>
-              <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>Mental Health Support</p>
+              {/* Text accent for the logo */}
+              <h1 className="text-2xl font-bold text-accent">Ashvaan</h1>
+              {/* Text secondary for the description */}
+              <p className="text-sm mt-1 text-secondary">
+                Mental Health Support
+              </p>
             </div>
+            {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-md"
-              style={{ backgroundColor: 'var(--bg-tertiary)' }}
+              className="p-2 rounded-md sidebar-toggle-button"
               aria-label="Toggle theme"
             >
-              {theme === 'light' ? (
-                <Moon className="h-5 w-5" style={{ color: 'var(--text-primary)' }} />
+              {theme === "light" ? (
+                <Moon className="h-5 w-5 lucide-icon-primary" />
               ) : (
-                <Sun className="h-5 w-5" style={{ color: 'var(--text-primary)' }} />
+                <Sun className="h-5 w-5 lucide-icon-primary" />
               )}
             </button>
           </div>
@@ -234,12 +247,11 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               <Link
                 key={item.name}
                 to={item.href}
-                className={`flex items-center px-3 py-2 rounded-md transition-colors ${
-                  location.pathname === item.href
-                    ? "bg-teal-50 text-teal-600 font-medium"
-                    : "hover:bg-teal-50 hover:text-teal-600"
+                className={`flex items-center px-3 py-2 rounded-md transition-colors sidebar-nav-item ${
+                  isActive(item.href)
+                    ? "sidebar-active-link"
+                    : "sidebar-default-link"
                 }`}
-                style={location.pathname !== item.href ? { color: 'var(--text-primary)' } : {}}
               >
                 <item.icon className="h-5 w-5 mr-3" />
                 {item.name}
@@ -247,40 +259,38 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             ))}
           </div>
         </div>
-        <div className="p-4" style={{ borderTop: '1px solid var(--border-color)' }}>
-          {/* Feedback link for both admin and student */}
+        {/* THEME APPLIED: Footer uses custom border class */}
+        <div className="p-4 sidebar-footer-container">
+          {/* Feedback link */}
           <Link
             to={role === "admin" ? "/admin-feedback" : "/feedback"}
-            className={`flex items-center w-full px-3 py-2 rounded-md transition-colors hover:bg-teal-50 hover:text-teal-600 ${
-              location.pathname === "/feedback" ||
-              location.pathname === "/admin-feedback"
-                ? "bg-teal-50 text-teal-600 font-medium"
-                : ""
-            } mb-4`}
-            style={
-              location.pathname !== "/feedback" &&
-              location.pathname !== "/admin-feedback"
-                ? { color: 'var(--text-primary)' }
-                : {}
-            }
+            className={`flex items-center w-full px-3 py-2 rounded-md transition-colors mb-4 sidebar-nav-item ${
+              isActive("/feedback") || isActive("/admin-feedback")
+                ? "sidebar-active-link"
+                : "sidebar-default-link"
+            }`}
           >
             <MessageSquare className="h-5 w-5 mr-3" />
             {role === "admin" ? "Feedback Provided" : "Feedback"}
           </Link>
 
+          {/* User Profile Info */}
           <div className="flex items-center my-4">
-            <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
-              <User className="h-4 w-4 text-teal-600" />
+            {/* THEME APPLIED: Avatar background uses custom class */}
+            <div className="w-8 h-8 rounded-full flex items-center justify-center sidebar-avatar-bg">
+              <User className="h-4 w-4 text-accent" />
             </div>
             <div className="ml-3">
-              <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+              {/* THEME APPLIED: Text uses custom classes */}
+              <p className="text-sm font-medium text-primary">
                 {profile?.full_name || "Guest User"}
               </p>
-              <p className="text-xs capitalize" style={{ color: 'var(--text-secondary)' }}>
+              <p className="text-xs capitalize text-secondary">
                 {profile?.role || "No role"}
               </p>
             </div>
           </div>
+          {/* Logout uses hardcoded red for safety/visibility */}
           <button
             onClick={handleLogout}
             className="flex items-center w-full px-3 py-2 rounded-md text-red-600 hover:bg-red-50 transition-colors"
