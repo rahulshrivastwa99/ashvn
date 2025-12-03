@@ -182,6 +182,15 @@ To run from source:
 go run . help
 ``` -->
 
+<h1 align="center">
+         Ashvaan - Mental HealthCare Web App
+</h1>
+
+## 📊 Overview of the App
+
+Welcome to Ashvaan. <br> Ashvaan is a web app that analyses the psychological and mental health conditions of an individual and provide solutions to the problems.
+Ashvaan is a mental health solution that aims to provide users with easy access to resources related to mental wellbeing. Ashvaan will help people to identify these issues timely and take necessary steps to improve the conditions of the victims and provide care to those, who are at risk of serious mental complications. The purpose of Ashvaan is to assist its users by providing solutions to their mental health conditions without requiring professional help in most cases. We have observed that these solutions work efficiently in bettering their mental health conditions. Users can also track their habits and keep a record of how often they have been doing the same. In serious cases, users will be able to book an appointment with a psychologist for consultation and get timely help.
+
 ## make .env file in global directory
 
 ### take env variable content  and paste it into .env created file
